@@ -4,6 +4,22 @@
         <description>ServletContextListener</description>
         <listener-class>org.coopeagro.listener.ConfigurationLoadListener</listener-class>
     </listener>
+    <servlet>
+        <servlet-name>ServletAgricultor</servlet-name>
+        <servlet-class>org.coopeagro.servlets.ServletAgricultor</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletProducto</servlet-name>
+        <servlet-class>org.coopeagro.servlets.ServletProducto</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ServletAgricultor</servlet-name>
+        <url-pattern>/ServletAgricultor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletProducto</servlet-name>
+        <url-pattern>/ServletProducto</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
