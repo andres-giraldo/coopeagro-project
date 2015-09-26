@@ -63,4 +63,9 @@ public class Venta extends Pedido implements Serializable{
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
+
+    @Override
+    public String toString() {
+        return "Venta{" + "fechaEstimadaEntrega=" + fechaEstimadaEntrega + ", cliente=" + cliente + ", direccion=" + direccion + ", remitente=" + remitente + '}';
+    }
 }

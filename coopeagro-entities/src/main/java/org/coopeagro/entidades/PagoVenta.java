@@ -34,4 +34,9 @@ public class PagoVenta implements Serializable{
     public void setCantidadCancelada(BigDecimal cantidadCancelada) {
         this.cantidadCancelada = cantidadCancelada;
     }
+
+    @Override
+    public String toString() {
+        return "PagoVenta{" + "llavePrimaria=" + llavePrimaria + ", cantidadCancelada=" + cantidadCancelada + '}';
+    }
 }

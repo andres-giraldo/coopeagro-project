@@ -18,6 +18,11 @@ public class PersonaPK implements Serializable {
     public PersonaPK() {
     }
 
+    public PersonaPK(String documento, TiposDocumento tipoDocumento) {
+        this.documento = documento;
+        this.tipoDocumento = tipoDocumento;
+    }
+
     public String getDocumento() {
         return documento;
     }

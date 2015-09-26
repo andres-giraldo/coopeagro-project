@@ -28,4 +28,9 @@ public class Compra extends Pedido implements Serializable{
     public void setProveedor(Agricultor proveedor) {
         this.proveedor = proveedor;
     }
+
+    @Override
+    public String toString() {
+        return "Compra{" + "proveedor=" + proveedor + '}';
+    }
 }

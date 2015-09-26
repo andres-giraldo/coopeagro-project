@@ -25,19 +25,26 @@ public class Producto implements Serializable{
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE, generator="ProductoGen")
     @Column(name="DNIPRODUCTO")
-    private Integer codigo;
+    private Integer id;
+    @Column(name="DSCODIGO")
+    private String codigo;
     @Column(name="DSNOMBRE")
     private String nombre;
     
     public Producto(){
     }
 
-    public Integer getCodigo() {
-        return codigo;
+    public Producto(String codigo, String nombre) {
+        this.codigo = codigo;
+        this.nombre = nombre;
     }
 
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -46,5 +53,18 @@ public class Producto implements Serializable{
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    @Override
+    public String toString() {
+        return "Producto{" + "id=" + id + ", codigo=" + codigo + ", nombre=" + nombre + '}';
     }
 }

@@ -81,4 +81,9 @@ public class DetalleCompra implements Serializable{
     public void setCompra(Compra compra) {
         this.compra = compra;
     }
+
+    @Override
+    public String toString() {
+        return "DetalleCompra{" + "id=" + id + ", cantidad=" + cantidad + ", precio=" + precio + ", compra=" + compra + ", producto=" + producto + '}';
+    }
 }

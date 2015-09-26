@@ -34,4 +34,9 @@ public class PagoCompra implements Serializable{
     public void setLlavePrimaria(PagoCompraPK llavePrimaria) {
         this.llavePrimaria = llavePrimaria;
     }
+
+    @Override
+    public String toString() {
+        return "PagoCompra{" + "llavePrimaria=" + llavePrimaria + ", cantidadCancelada=" + cantidadCancelada + '}';
+    }
 }

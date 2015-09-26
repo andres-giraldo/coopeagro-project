@@ -21,6 +21,12 @@ public class Agricultor extends Persona implements Serializable{
     public Agricultor(){
     }
 
+    public Agricultor(String documento, TiposDocumento tipoDocumento,String nombre, String apellidoUno, String apellidoDos, String telefono, String celular, String correo, Date fechaRegistro, String direccion) {
+        super(new PersonaPK(documento, tipoDocumento), nombre, apellidoUno, apellidoDos, telefono, celular, correo);
+        this.fechaRegistro = fechaRegistro;
+        this.direccion = direccion;
+    }
+
     public Date getFechaRegistro() {
         return fechaRegistro;
     }
@@ -35,5 +41,10 @@ public class Agricultor extends Persona implements Serializable{
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    @Override
+    public String toString() {
+        return "Agricultor{" + "fechaRegistro=" + fechaRegistro + ", direccion=" + direccion + '}';
     }
 }

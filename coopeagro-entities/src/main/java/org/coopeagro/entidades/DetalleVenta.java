@@ -23,7 +23,6 @@ public class DetalleVenta implements Serializable{
         initialValue=0,
         allocationSize=1
     )
-
     
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE, generator="DetalleVentaGen")
@@ -81,5 +80,10 @@ public class DetalleVenta implements Serializable{
 
     public void setVenta(Venta venta) {
         this.venta = venta;
+    }
+
+    @Override
+    public String toString() {
+        return "DetalleVenta{" + "id=" + id + ", cantidad=" + cantidad + ", precio=" + precio + ", venta=" + venta + ", producto=" + producto + '}';
     }
 }

@@ -24,6 +24,12 @@ public class Usuario implements Serializable {
     public Usuario() {
     }
 
+    public Usuario(String usuario, String clave, Perfiles perfil) {
+        this.usuario = usuario;
+        this.clave = clave;
+        this.perfil = perfil;
+    }
+
     public String getUsuario() {
         return usuario;
     }
@@ -46,5 +52,10 @@ public class Usuario implements Serializable {
 
     public void setPerfil(Perfiles perfil) {
         this.perfil = perfil;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" + "usuario=" + usuario + ", clave=" + clave + ", perfil=" + perfil + '}';
     }
 }

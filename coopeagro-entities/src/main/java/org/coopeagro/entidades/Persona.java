@@ -26,6 +26,16 @@ public class Persona implements Serializable{
     public Persona(){
     }
 
+    public Persona(PersonaPK llavePrimaria, String nombre, String apellidoUno, String apellidoDos, String telefono, String celular, String correo) {
+        this.llavePrimaria = llavePrimaria;
+        this.nombre = nombre;
+        this.apellidoUno = apellidoUno;
+        this.apellidoDos = apellidoDos;
+        this.telefono = telefono;
+        this.celular = celular;
+        this.correo = correo;
+    }
+
     public PersonaPK getLlavePrimaria() {
         return llavePrimaria;
     }
@@ -82,4 +92,8 @@ public class Persona implements Serializable{
         this.correo = correo;
     }
 
+    @Override
+    public String toString() {
+        return "Persona{" + "llavePrimaria=" + llavePrimaria + ", nombre=" + nombre + ", apellidoUno=" + apellidoUno + ", apellidoDos=" + apellidoDos + ", telefono=" + telefono + ", celular=" + celular + ", correo=" + correo + '}';
+    }
 }

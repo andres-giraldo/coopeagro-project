@@ -37,4 +37,9 @@ public class PagoVentaPK implements Serializable{
     public void setVenta(Venta venta) {
         this.venta = venta;
     }
+
+    @Override
+    public String toString() {
+        return "PagoVentaPK{" + "fechaPago=" + fechaPago + ", venta=" + venta + '}';
+    }
 }

@@ -70,4 +70,9 @@ public class Empleado extends Persona implements Serializable{
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
+    @Override
+    public String toString() {
+        return "Empleado{" + "cargo=" + cargo + ", direccion=" + direccion + ", fechaIngreso=" + fechaIngreso + ", fechaRetiro=" + fechaRetiro + ", usuario=" + usuario + '}';
+    }
 }

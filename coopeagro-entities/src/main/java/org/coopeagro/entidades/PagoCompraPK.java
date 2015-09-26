@@ -37,4 +37,9 @@ public class PagoCompraPK implements Serializable{
     public void setCompra(Compra compra) {
         this.compra = compra;
     }
+
+    @Override
+    public String toString() {
+        return "PagoCompraPK{" + "fechaPago=" + fechaPago + ", compra=" + compra + '}';
+    }
 }

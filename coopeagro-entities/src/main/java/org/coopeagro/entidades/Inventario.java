@@ -84,4 +84,9 @@ public class Inventario implements Serializable{
     public void setProducto(Producto producto) {
         this.producto = producto;
     }
+
+    @Override
+    public String toString() {
+        return "Inventario{" + "id=" + id + ", fecha=" + fecha + ", producto=" + producto + ", cantidadComprometida=" + cantidadComprometida + ", cantidadTotal=" + cantidadTotal + '}';
+    }
 }

@@ -101,4 +101,9 @@ public class Pedido implements Serializable{
     public void setEstado(EstadosPedido estado) {
         this.estado = estado;
     }
+
+    @Override
+    public String toString() {
+        return "Pedido{" + "numeroPedido=" + numeroPedido + ", fechaPedido=" + fechaPedido + ", tipoPedido=" + tipoPedido + ", empleado=" + empleado + ", estado=" + estado + ", total=" + total + '}';
+    }
 }
