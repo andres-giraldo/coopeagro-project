@@ -12,6 +12,42 @@
         <servlet-name>ServletProducto</servlet-name>
         <servlet-class>org.coopeagro.servlets.ServletProducto</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ServletCliente</servlet-name>
+        <servlet-class>org.coopeagro.servlets.ServletCliente</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletCompra</servlet-name>
+        <servlet-class>org.coopeagro.servlets.ServletCompra</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletDetalleCompra</servlet-name>
+        <servlet-class>org.coopeagro.servlets.ServletDetalleCompra</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletDetalleVenta</servlet-name>
+        <servlet-class>org.coopeagro.servlets.ServletDetalleVenta</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletEmpleado</servlet-name>
+        <servlet-class>org.coopeagro.servlets.ServletEmpleado</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletInventario</servlet-name>
+        <servlet-class>org.coopeagro.servlets.ServletInventario</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletPagoCompra</servlet-name>
+        <servlet-class>org.coopeagro.servlets.ServletPagoCompra</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletPagoVenta</servlet-name>
+        <servlet-class>org.coopeagro.servlets.ServletPagoVenta</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletVenta</servlet-name>
+        <servlet-class>org.coopeagro.servlets.ServletVenta</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ServletAgricultor</servlet-name>
         <url-pattern>/ServletAgricultor</url-pattern>
@@ -19,6 +55,42 @@
     <servlet-mapping>
         <servlet-name>ServletProducto</servlet-name>
         <url-pattern>/ServletProducto</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletCliente</servlet-name>
+        <url-pattern>/ServletCliente</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletCompra</servlet-name>
+        <url-pattern>/ServletCompra</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletDetalleCompra</servlet-name>
+        <url-pattern>/ServletDetalleCompra</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletDetalleVenta</servlet-name>
+        <url-pattern>/ServletDetalleVenta</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletEmpleado</servlet-name>
+        <url-pattern>/ServletEmpleado</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletInventario</servlet-name>
+        <url-pattern>/ServletInventario</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletPagoCompra</servlet-name>
+        <url-pattern>/ServletPagoCompra</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletPagoVenta</servlet-name>
+        <url-pattern>/ServletPagoVenta</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletVenta</servlet-name>
+        <url-pattern>/ServletVenta</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

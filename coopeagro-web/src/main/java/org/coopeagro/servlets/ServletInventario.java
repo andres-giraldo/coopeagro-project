@@ -1,7 +1,9 @@
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package org.coopeagro.servlets;
 
 import java.io.IOException;
@@ -10,19 +12,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.coopeagro.controladores.ProductoJpaController;
-import org.coopeagro.entidades.Producto;
+import org.coopeagro.controladores.InventarioJpaController;
 
 /**
  *
- * @author sala306
+ * @author YEISSON
  */
-public class ServletProducto extends HttpServlet {
+public class ServletInventario extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -31,32 +31,25 @@ public class ServletProducto extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProductoJpaController controller = (ProductoJpaController)getServletContext().getAttribute("productoJpaController");
-        controller.create(new Producto("000001", "PAPA CRIOLLA"));
-        controller.create(new Producto("000002", "PAPA CAPIRA"));
-        controller.create(new Producto("000003", "PAPA NEVADA"));
+        InventarioJpaController controller = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try {
+        try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ServletProducto</title>");            
+            out.println("<title>Servlet ServletInventario</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ServletProducto at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ServletInventario at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
-        } finally {            
-            out.close();
         }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
-     * Handles the HTTP
-     * <code>GET</code> method.
+     * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -70,8 +63,7 @@ public class ServletProducto extends HttpServlet {
     }
 
     /**
-     * Handles the HTTP
-     * <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method.
      *
      * @param request servlet request
      * @param response servlet response
@@ -93,4 +85,5 @@ public class ServletProducto extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }

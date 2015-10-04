@@ -8,18 +8,17 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import org.coopeagro.controllers.AgricultorJpaController;
-import org.coopeagro.controllers.ClienteJpaController;
-import org.coopeagro.controllers.CompraJpaController;
-import org.coopeagro.controllers.DetalleCompraJpaController;
-import org.coopeagro.controllers.DetalleVentaJpaController;
-import org.coopeagro.controllers.EmpleadoJpaController;
-import org.coopeagro.controllers.InventarioJpaController;
-import org.coopeagro.controllers.PagoCompraJpaController;
-import org.coopeagro.controllers.PagoVentaJpaController;
-import org.coopeagro.controllers.ProductoJpaController;
-import org.coopeagro.controllers.UsuarioJpaController;
-import org.coopeagro.controllers.VentaJpaController;
+import org.coopeagro.controladores.AgricultorJpaController;
+import org.coopeagro.controladores.ClienteJpaController;
+import org.coopeagro.controladores.CompraJpaController;
+import org.coopeagro.controladores.DetalleCompraJpaController;
+import org.coopeagro.controladores.DetalleVentaJpaController;
+import org.coopeagro.controladores.EmpleadoJpaController;
+import org.coopeagro.controladores.InventarioJpaController;
+import org.coopeagro.controladores.PagoCompraJpaController;
+import org.coopeagro.controladores.PagoVentaJpaController;
+import org.coopeagro.controladores.ProductoJpaController;
+import org.coopeagro.controladores.VentaJpaController;
 
 /**
  * Web application lifecycle listener.
@@ -35,8 +34,8 @@ public class ConfigurationLoadListener implements ServletContextListener {
         sce.getServletContext().setAttribute("entityManagerFactory", emf);
         
         AgricultorJpaController agricultorJpaController = new AgricultorJpaController(emf);
-        sce.getServletContext().setAttribute("agricultorJpaController", agricultorJpaController
-                );
+        sce.getServletContext().setAttribute("agricultorJpaController", agricultorJpaController);
+        
         ClienteJpaController clienteJpaController = new ClienteJpaController(emf);
         sce.getServletContext().setAttribute("clienteJpaController", clienteJpaController);
         
@@ -63,9 +62,6 @@ public class ConfigurationLoadListener implements ServletContextListener {
         
         ProductoJpaController productoJpaController = new ProductoJpaController(emf);
         sce.getServletContext().setAttribute("productoJpaController", productoJpaController);
-        
-        UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
-        sce.getServletContext().setAttribute("usuarioJpaController", usuarioJpaController);
         
         VentaJpaController ventaJpaController = new VentaJpaController(emf);
         sce.getServletContext().setAttribute("ventaJpaController", ventaJpaController);
