@@ -22,8 +22,8 @@ public class Compra extends Pedido implements Serializable{
     public Compra() {
     }
 
-    public Compra(Agricultor proveedor, Date fechaPedido, TiposPedido tipoPedido, Empleado empleado, EstadosPedido estado, Double total) {
-        super(fechaPedido, tipoPedido, empleado, estado, total);
+    public Compra(Agricultor proveedor, Date fechaPedido, Empleado empleado, EstadosPedido estado, Double total) {
+        super(fechaPedido, empleado, estado, total);
         this.proveedor = proveedor;
     }
 

@@ -36,9 +36,6 @@ public class Pedido implements Serializable{
     @Temporal(TemporalType.DATE)
     @Column(name="FEFECHAPEDIDO")
     private Date fechaPedido;
-    @Enumerated(EnumType.STRING)
-    @Column(name="DSTIPOPEDIDO")
-    private TiposPedido tipoPedido;
     @ManyToOne
     @JoinColumns({
         @JoinColumn(name = "DNI_EMPLEADO"),
@@ -54,9 +51,8 @@ public class Pedido implements Serializable{
     public Pedido(){
     }
 
-    public Pedido(Date fechaPedido, TiposPedido tipoPedido, Empleado empleado, EstadosPedido estado, Double total) {
+    public Pedido(Date fechaPedido, Empleado empleado, EstadosPedido estado, Double total) {
         this.fechaPedido = fechaPedido;
-        this.tipoPedido = tipoPedido;
         this.empleado = empleado;
         this.estado = estado;
         this.total = total;
@@ -86,14 +82,6 @@ public class Pedido implements Serializable{
         this.total = total;
     }
 
-    public TiposPedido getTipoPedido() {
-        return tipoPedido;
-    }
-
-    public void setTipoPedido(TiposPedido tipoPedido) {
-        this.tipoPedido = tipoPedido;
-    }
-
     public Empleado getEmpleado() {
         return empleado;
     }
@@ -112,6 +100,6 @@ public class Pedido implements Serializable{
 
     @Override
     public String toString() {
-        return "Pedido{" + "numeroPedido=" + numeroPedido + ", fechaPedido=" + fechaPedido + ", tipoPedido=" + tipoPedido + ", empleado=" + empleado + ", estado=" + estado + ", total=" + total + '}';
+        return "Pedido{" + "numeroPedido=" + numeroPedido + ", fechaPedido=" + fechaPedido + ", empleado=" + empleado + ", estado=" + estado + ", total=" + total + '}';
     }
 }
