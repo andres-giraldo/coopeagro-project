@@ -22,6 +22,11 @@ public class PagoCompraPK implements Serializable{
     public PagoCompraPK() {
     }
 
+    public PagoCompraPK(Date fechaPago, Compra compra) {
+        this.fechaPago = fechaPago;
+        this.compra = compra;
+    }
+
     public Date getFechaPago() {
         return fechaPago;
     }

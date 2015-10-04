@@ -32,6 +32,14 @@ public class Venta extends Pedido implements Serializable{
     public Venta() {
     }
 
+    public Venta(Date fechaEstimadaEntrega, Cliente cliente, String direccion, String remitente, Date fechaPedido, TiposPedido tipoPedido, Empleado empleado, EstadosPedido estado, Double total) {
+        super(fechaPedido, tipoPedido, empleado, estado, total);
+        this.fechaEstimadaEntrega = fechaEstimadaEntrega;
+        this.cliente = cliente;
+        this.direccion = direccion;
+        this.remitente = remitente;
+    }
+
     public Date getFechaEstimadaEntrega() {
         return fechaEstimadaEntrega;
     }

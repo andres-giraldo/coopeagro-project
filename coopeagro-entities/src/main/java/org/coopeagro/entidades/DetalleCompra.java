@@ -42,6 +42,13 @@ public class DetalleCompra implements Serializable{
     public DetalleCompra(){
     }
 
+    public DetalleCompra(Double cantidad, Double precio, Compra compra, Producto producto) {
+        this.cantidad = cantidad;
+        this.precio = precio;
+        this.compra = compra;
+        this.producto = producto;
+    }
+
     public Integer getId() {
         return id;
     }

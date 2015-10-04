@@ -22,6 +22,11 @@ public class PagoVentaPK implements Serializable{
     public PagoVentaPK() {
     }
 
+    public PagoVentaPK(Date fechaPago, Venta venta) {
+        this.fechaPago = fechaPago;
+        this.venta = venta;
+    }
+
     public Date getFechaPago() {
         return fechaPago;
     }

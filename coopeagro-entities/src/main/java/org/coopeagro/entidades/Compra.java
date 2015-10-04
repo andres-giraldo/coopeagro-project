@@ -1,6 +1,7 @@
 package org.coopeagro.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
@@ -19,6 +20,11 @@ public class Compra extends Pedido implements Serializable{
     private Agricultor proveedor;
 
     public Compra() {
+    }
+
+    public Compra(Agricultor proveedor, Date fechaPedido, TiposPedido tipoPedido, Empleado empleado, EstadosPedido estado, Double total) {
+        super(fechaPedido, tipoPedido, empleado, estado, total);
+        this.proveedor = proveedor;
     }
 
     public Agricultor getProveedor() {

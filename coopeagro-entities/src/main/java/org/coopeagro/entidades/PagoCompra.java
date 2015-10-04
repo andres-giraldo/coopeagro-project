@@ -1,7 +1,6 @@
 package org.coopeagro.entidades;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -14,16 +13,21 @@ public class PagoCompra implements Serializable{
     @EmbeddedId
     private PagoCompraPK llavePrimaria;
     @Column(name="NMCANTIDADCANCELADA")
-    private BigDecimal cantidadCancelada;
+    private Double cantidadCancelada;
     
     public PagoCompra(){
     }
 
-    public BigDecimal getCantidadCancelada() {
+    public PagoCompra(PagoCompraPK llavePrimaria, Double cantidadCancelada) {
+        this.llavePrimaria = llavePrimaria;
+        this.cantidadCancelada = cantidadCancelada;
+    }
+
+    public Double getCantidadCancelada() {
         return cantidadCancelada;
     }
 
-    public void setCantidadCancelada(BigDecimal cantidadCancelada) {
+    public void setCantidadCancelada(Double cantidadCancelada) {
         this.cantidadCancelada = cantidadCancelada;
     }
 

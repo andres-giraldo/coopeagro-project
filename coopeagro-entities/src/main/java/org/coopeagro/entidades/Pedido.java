@@ -54,6 +54,14 @@ public class Pedido implements Serializable{
     public Pedido(){
     }
 
+    public Pedido(Date fechaPedido, TiposPedido tipoPedido, Empleado empleado, EstadosPedido estado, Double total) {
+        this.fechaPedido = fechaPedido;
+        this.tipoPedido = tipoPedido;
+        this.empleado = empleado;
+        this.estado = estado;
+        this.total = total;
+    }
+
     public Integer getNumeroPedido() {
         return numeroPedido;
     }
