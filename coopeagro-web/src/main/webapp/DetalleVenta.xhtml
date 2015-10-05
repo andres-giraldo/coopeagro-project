@@ -13,47 +13,47 @@
         <h:form>
             <h:panelGrid columns="2">
                 <!--<h:outputLabel value="Id Venta*"/>-->
-                <h:inputHidden id="idVenta" value=""/>
+                <h:inputHidden id="idVenta" value="#{beanDetalleVenta.detalleVenta.venta}"/>
                 
                 <h:outputLabel value="Producto*"/>
-                <h:selectOneMenu value="">
+                <h:selectOneMenu value="#{beanDetalleVenta.detalleVenta.producto}">
                     <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
-                    <f:selectItems value="" var="productoItem" itemLabel="" itemValue=""/>
+                    <f:selectItems value="#{beanDetalleVenta.productos}"/>
                 </h:selectOneMenu>
                 
                 <h:outputLabel value="Cantidad*"/>
-                <p:inputMask id="cantidad" mask="9?99" value=""/>
+                <p:inputMask id="cantidad" mask="9?99" value="#{beanDetalleVenta.detalleVenta.cantidad}"/>
                 
                 <h:outputLabel value="Precio*"/>
-                <p:inputMask id="precio" mask="9?99999" value=""/>
+                <p:inputMask id="precio" mask="9?99999" value="#{beanDetalleVenta.detalleVenta.precio}"/>
             </h:panelGrid>
             <h:commandButton value="Guardar"/>
         </h:form>
         <h:form>
-            <!--<p:dataTable var="" value="" paginator="true" rows="10"
+            <p:dataTable var="item" value="#{beanDetalleVenta.detallesVenta}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                  rowsPerPageTemplate="5,10,15" selectionMode="single" lazy="true">
-                <p:column headerText="Id Venta" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Id Venta">
+                    <h:outputText value="#{item.venta}" />
                 </p:column>
-                <p:column headerText="Producto" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Producto">
+                    <h:outputText value="#{item.producto}" />
                 </p:column>
-                <p:column headerText="Cantidad" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Cantidad">
+                    <h:outputText value="#{item.cantidad}" />
                 </p:column>
-                <p:column headerText="Precio" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Precio">
+                    <h:outputText value="#{item.precio}" />
                 </p:column>
-                <p:column header="&nbsp;">
+                <p:column headerText="&nbsp;">
                     <h:commandLink action="" value="Editar"/>
                 </p:column>
-                <p:column header="&nbsp;">
+                <p:column headerText="&nbsp;">
                     <h:commandLink actionListener="" value="Eliminar"/>
-                </h:column>
-            </p:dataTable>-->
+                </p:column>
+            </p:dataTable>
             <br/>
-            <h:commandLink action="/index" value="Regresar"/>
+            <h:commandLink action="/Venta" value="Regresar"/>
         </h:form>
     </h:body>
 </html>

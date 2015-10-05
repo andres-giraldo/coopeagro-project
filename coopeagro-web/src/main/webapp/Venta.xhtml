@@ -13,66 +13,75 @@
         <h:form>
             <h:panelGrid columns="2">
                 <h:outputLabel value="Fecha Pedido*"/>
-                <p:calendar id="fechaPedido" value=""/>
+                <p:calendar id="fechaPedido" value="#{beanVenta.venta.fechaPedido}"/>
                 
                 <h:outputLabel value="Fecha Estimada Entrega*"/>
-                <p:calendar id="fechaEstEntraga" value=""/>
+                <p:calendar id="fechaEstEntraga" value="#{beanVenta.venta.fechaEstimadaEntrega}"/>
+                
+                <h:outputLabel value="Cliente*"/>
+                <h:selectOneMenu value="#{beanVenta.venta.cliente}">
+                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
+                    <f:selectItems value="#{beanVenta.clientes}"/>
+                </h:selectOneMenu>
                 
                 <h:outputLabel value="Dirección*"/>
-                <h:inputText id="direccion" value=""/>
+                <h:inputText id="direccion" value="#{beanVenta.venta.direccion}"/>
                 
                 <h:outputLabel value="Remitente*"/>
-                <h:inputText id="remitente" value=""/>
+                <h:inputText id="remitente" value="#{beanVenta.venta.remitente}"/>
                 
                 <h:outputLabel value="Empleado*"/>
-                <h:selectOneMenu value="">
+                <h:selectOneMenu value="#{beanVenta.venta.empleado}">
                     <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
-                    <f:selectItems value="" var="empleadoItem" itemLabel="" itemValue=""/>
+                    <f:selectItems value="#{beanVenta.empleados}"/>
                 </h:selectOneMenu>
                 
                 <h:outputLabel value="Estado*"/>
-                <h:selectOneMenu value="">
+                <h:selectOneMenu value="#{beanVenta.venta.estado}">
                     <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
-                    <f:selectItems value="" var="estadoItem" itemLabel="" itemValue=""/>
+                    <f:selectItems value="#{beanVenta.estadoValues}"/>
                 </h:selectOneMenu>
                 
                 <h:outputLabel value="Total*"/>
-                <p:inputMask id="total" mask="9?99999999" value=""/>
+                <p:inputMask id="total" mask="9?99999999" value="#{beanVenta.venta.total}"/>
             </h:panelGrid>
-            <h:commandButton value="Guardar"/>
+            <h:commandButton value="Guardar" action="#{beanVenta.guardar()}"/>
         </h:form>
         <h:form>
-            <!--<p:dataTable var="" value="" paginator="true" rows="10"
+            <p:dataTable var="item" value="#{beanVenta.ventas}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                  rowsPerPageTemplate="5,10,15" selectionMode="single" lazy="true">
-                <p:column headerText="Fecha Pedido" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Fecha Pedido">
+                    <h:outputText value="#{item.fechaPedido}" />
                 </p:column>
-                <p:column headerText="Fecha Estimada Entrega" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Fecha Estimada Entrega">
+                    <h:outputText value="#{item.fechaEstimadaEntrega}" />
                 </p:column>
-                <p:column headerText="Dirección" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Cliente">
+                    <h:outputText value="#{item.cliente}" />
                 </p:column>
-                <p:column headerText="Remitente" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Dirección">
+                    <h:outputText value="#{item.direccion}" />
                 </p:column>
-                <p:column headerText="Empleado" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Remitente">
+                    <h:outputText value="#{item.remitente}" />
                 </p:column>
-                <p:column headerText="Estado" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Empleado">
+                    <h:outputText value="#{item.empleado}" />
                 </p:column>
-                <p:column headerText="Total" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Estado">
+                    <h:outputText value="#{item.estado}" />
                 </p:column>
-                <p:column header="&nbsp;">
-                    <h:commandLink action="" value="Editar"/>
+                <p:column headerText="Total">
+                    <h:outputText value="#{item.total}" />
                 </p:column>
-                <p:column header="&nbsp;">
-                    <h:commandLink actionListener="" value="Eliminar"/>
-                </h:column>
-            </p:dataTable>-->
+                <p:column headerText="&nbsp;">
+                    <h:commandLink value="Editar"/>
+                </p:column>
+                <p:column headerText="&nbsp;">
+                    <h:commandLink value="Eliminar"/>
+                </p:column>
+            </p:dataTable>
             <br/>
             <h:commandLink action="/index" value="Regresar"/>
         </h:form>

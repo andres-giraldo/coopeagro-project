@@ -13,101 +13,101 @@
         <h:form>
             <h:panelGrid columns="2">
                 <h:outputLabel value="Identificación*"/>
-                <h:inputText id="identificacion" value=""/>
+                <h:inputText id="identificacion" value="#{beanEmpleado.empleado.llavePrimaria.documento}"/>
                 
                 <h:outputLabel value="Tipo Identificación*"/>
-                <h:selectOneMenu value="">
+                <h:selectOneMenu value="#{beanEmpleado.empleado.llavePrimaria.tipoDocumento}">
                     <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
-                    <f:selectItems value="" var="tipoIdItem" itemLabel="" itemValue=""/>
+                    <f:selectItems value="#{beanEmpleado.tiposDocumentoValues}"/>
                 </h:selectOneMenu>
                 
                 <h:outputLabel value="Nombre*"/>
-                <h:inputText id="nombre" value=""/>
+                <h:inputText id="nombre" value="#{beanEmpleado.empleado.nombre}"/>
                 
                 <h:outputLabel value="Primer Apellido*"/>
-                <h:inputText id="apellido1" value=""/>
+                <h:inputText id="apellido1" value="#{beanEmpleado.empleado.apellidoUno}"/>
                 
                 <h:outputLabel value="Segundo Apellido*"/>
-                <h:inputText id="apellido2" value=""/>
+                <h:inputText id="apellido2" value="#{beanEmpleado.empleado.apellidoDos}"/>
                 
                 <h:outputLabel value="Telefono*"/>
-                <p:inputMask id="telefono" mask="9?99999" value=""/>
+                <p:inputMask id="telefono" mask="9?99999" value="#{beanEmpleado.empleado.telefono}"/>
                 
                 <h:outputLabel value="Celular*"/>
-                <p:inputMask id="celular" mask="9?99999999" value=""/>
+                <p:inputMask id="celular" mask="9?99999999" value="#{beanEmpleado.empleado.celular}"/>
                 
                 <h:outputLabel value="Correo*"/>
-                <h:inputText id="email" value="" validatorMessage="El correo no es valido">
+                <h:inputText id="email" value="#{beanEmpleado.empleado.correo}" validatorMessage="El correo no es valido">
                     <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
                 </h:inputText>
                 
                 <h:outputLabel value="Cargo*"/>
-                <h:inputText id="cargo" value=""/>
+                <h:inputText id="cargo" value="#{beanEmpleado.empleado.cargo}"/>
                 
                 <h:outputLabel value="Dirección*"/>
-                <h:inputText id="direccion" value=""/>
+                <h:inputText id="direccion" value="#{beanEmpleado.empleado.direccion}"/>
                 
                 <h:outputLabel value="Fecha Ingreso*"/>
-                <p:calendar id="fechaIngreso" value=""/>
+                <p:calendar id="fechaIngreso" value="#{beanEmpleado.empleado.fechaIngreso}"/>
                 
                 <h:outputLabel value="Fecha Retiro*"/>
-                <p:calendar id="fechaRetiro" value=""/>
+                <p:calendar id="fechaRetiro" value="#{beanEmpleado.empleado.fechaRetiro}"/>
                 
                 <h:outputLabel value="Usuario*"/>
-                <h:inputText id="usuario" value=""/>
+                <h:inputText id="usuario" value="#{beanEmpleado.empleado.usuario}"/>
                 
                 <h:outputLabel value="Clave*"/>
-                <h:inputSecret id="clave" value=""/>
+                <h:inputSecret id="clave" value="#{beanEmpleado.empleado.clave}"/>
             </h:panelGrid>
             <h:commandButton value="Guardar"/>
         </h:form>
         <h:form>
-            <!--<p:dataTable var="" value="" paginator="true" rows="10"
+            <p:dataTable var="item" value="#{beanEmpleado.empleados}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                  rowsPerPageTemplate="5,10,15" selectionMode="single" lazy="true">
-                <p:column headerText="Identificación" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Identificación">
+                    <h:outputText value="#{item.llavePrimaria.documento}" />
                 </p:column>
-                <p:column headerText="Tipo Identificación" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Tipo Identificación">
+                    <h:outputText value="#{item.llavePrimaria.tipoDocumento}" />
                 </p:column>
-                <p:column headerText="Nombre" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{item.nombre}" />
                 </p:column>
-                <p:column headerText="Primer Apellido" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Primer Apellido">
+                    <h:outputText value="#{item.apellidoUno}" />
                 </p:column>
-                <p:column headerText="Segundo Apellido" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Segundo Apellido">
+                    <h:outputText value="#{item.apellidoDos}" />
                 </p:column>
-                <p:column headerText="Telefono" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Telefono">
+                    <h:outputText value="#{item.telefono}" />
                 </p:column>
-                <p:column headerText="Celular" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Celular">
+                    <h:outputText value="#{item.celular}" />
                 </p:column>
-                <p:column headerText="Correo" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Correo">
+                    <h:outputText value="#{item.correo}" />
                 </p:column>
-                <p:column headerText="Cargo" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Cargo">
+                    <h:outputText value="#{item.cargo}" />
                 </p:column>
-                <p:column headerText="Dirección" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Dirección">
+                    <h:outputText value="#{item.direccion}" />
                 </p:column>
-                <p:column headerText="Fecha Ingreso" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Fecha Ingreso">
+                    <h:outputText value="#{item.fechaIngreso}" />
                 </p:column>
-                <p:column headerText="Fecha Retiro" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Fecha Retiro">
+                    <h:outputText value="#{item.fechaRetiro}" />
                 </p:column>
-                <p:column header="&nbsp;">
-                    <h:commandLink action="" value="Editar"/>
+                <p:column headerText="&nbsp;">
+                    <h:commandLink value="Editar"/>
                 </p:column>
-                <p:column header="&nbsp;">
-                    <h:commandLink actionListener="" value="Eliminar"/>
-                </h:column>
-            </p:dataTable>-->
+                <p:column headerText="&nbsp;">
+                    <h:commandLink value="Eliminar"/>
+                </p:column>
+            </p:dataTable>
             <br/>
             <h:commandLink action="/index" value="Regresar"/>
         </h:form>

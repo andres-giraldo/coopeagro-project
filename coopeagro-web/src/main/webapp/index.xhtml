@@ -1,17 +1,43 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Facelet Title</title>
     </h:head>
     <h:body>
         <h:form>
-            <ul>
-                <li><h:commandLink action="/Producto">Producto</h:commandLink></li>
+            <p:growl id="messages"/>
+            <p:menubar>
+                <p:menuitem value="Agricultor" action="/Agricultor"/>
+                <p:menuitem value="Cliente" action="/Cliente"/>
+                <p:menuitem value="Compra" action="/Compra"/>
+                <p:menuitem value="Empleado" action="/Empleado"/>
+                <p:menuitem value="Inventario" action="/Inventario"/>
+                <p:submenu label="Pagos">
+                    <p:menuitem value="Compra" action="/PagoCompra"/>
+                    <p:menuitem value="Venta" action="/PagoVenta"/>
+                </p:submenu>
+                <p:menuitem value="Producto" action="/Producto"/>
+                <p:menuitem value="Venta" action="/Venta"/>
+                <p:menuitem value="Salir"/>
+            </p:menubar>
+            <!--<ul>
                 <li><h:commandLink action="/Agricultor">Agricultor</h:commandLink></li>
                 <li><h:commandLink action="/Cliente">Cliente</h:commandLink></li>
-            </ul>
+                <li><h:commandLink action="/Compra">Compra</h:commandLink></li>
+                <li><h:commandLink action="/Empleado">Empleado</h:commandLink></li>
+                <li><h:commandLink action="/Inventario">Inventario</h:commandLink></li>
+                <li>Pagos
+                    <ul>
+                       <li><h:commandLink action="/PagoCompra">Compra</h:commandLink></li>
+                       <li><h:commandLink action="/PagoVenta">Venta</h:commandLink></li>
+                    </ul>
+                </li>
+                <li><h:commandLink action="/Producto">Producto</h:commandLink></li>
+                <li><h:commandLink action="/Venta">Venta</h:commandLink></li>
+            </ul>-->
         </h:form>
     </h:body>
 </html>

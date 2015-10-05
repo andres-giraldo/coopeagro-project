@@ -13,39 +13,39 @@
         <h:form>
             <h:panelGrid columns="2">
                 <h:outputLabel value="Fecha Pago*"/>
-                <p:calendar id="fechaPago" value=""/>
+                <p:calendar id="fechaPago" value="#{beanPagoCompra.pagoCompra.llavePrimaria.fechaPago}"/>
                 
                 <h:outputLabel value="Id Compra*"/>
-                <h:selectOneMenu value="">
+                <h:selectOneMenu value="#{beanPagoCompra.pagoCompra.llavePrimaria.compra}">
                     <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
-                    <f:selectItems value="" var="compraItem" itemLabel="" itemValue=""/>
+                    <f:selectItems value="#{beanPagoCompra.compras}"/>
                 </h:selectOneMenu>
                 
                 <h:outputLabel value="Cantidad Cancelada*"/>
-                <p:inputMask id="cantidadCancelada" mask="9?99999999" value=""/>
+                <p:inputMask id="cantidadCancelada" mask="9?99999999" value="#{beanPagoCompra.pagoCompra.cantidadCancelada}"/>
             </h:panelGrid>
             <h:commandButton value="Guardar"/>
         </h:form>
         <h:form>
-            <!--<p:dataTable var="" value="" paginator="true" rows="10"
+            <p:dataTable var="item" value="#{beanPagoCompra.pagosCompra}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                  rowsPerPageTemplate="5,10,15" selectionMode="single" lazy="true">
-                <p:column headerText="Fecha Pago" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Fecha Pago">
+                    <h:outputText value="#{item.llavePrimaria.fechaPago}" />
                 </p:column>
-                <p:column headerText="Id Compra" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Id Compra">
+                    <h:outputText value="#{beanPagoCompra.pagoCompra.llavePrimaria.compra}" />
                 </p:column>
-                <p:column headerText="Cantidad Cancelada" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Cantidad Cancelada">
+                    <h:outputText value="#{item.cantidadCancelada}" />
                 </p:column>
-                <p:column header="&nbsp;">
-                    <h:commandLink action="" value="Editar"/>
+                <p:column headerText="&nbsp;">
+                    <h:commandLink value="Editar"/>
                 </p:column>
-                <p:column header="&nbsp;">
-                    <h:commandLink actionListener="" value="Eliminar"/>
-                </h:column>
-            </p:dataTable>-->
+                <p:column headerText="&nbsp;">
+                    <h:commandLink value="Eliminar"/>
+                </p:column>
+            </p:dataTable>
             <br/>
             <h:commandLink action="/index" value="Regresar"/>
         </h:form>

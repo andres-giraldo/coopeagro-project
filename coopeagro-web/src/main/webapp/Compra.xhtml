@@ -13,57 +13,57 @@
         <h:form>
             <h:panelGrid columns="2">
                 <h:outputLabel value="Proveedor*"/>
-                <h:selectOneMenu value="">
+                <h:selectOneMenu value="#{beanCompra.compra.proveedor}">
                     <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
-                    <f:selectItems value="" var="proveedorItem" itemLabel="" itemValue=""/>
+                    <f:selectItems value="#{beanCompra.proveedores}"/>
                 </h:selectOneMenu>
                 
                 <h:outputLabel value="Fecha Pedido*"/>
-                <p:calendar id="fechaPedido" value=""/>
+                <p:calendar id="fechaPedido" value="#{beanCompra.compra.fechaPedido}"/>
                 
                 <h:outputLabel value="Empleado*"/>
-                <h:selectOneMenu value="">
+                <h:selectOneMenu value="#{beanCompra.compra.empleado}">
                     <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
-                    <f:selectItems value="" var="empleadoItem" itemLabel="" itemValue=""/>
+                    <f:selectItems value="#{beanCompra.empleados}"/>
                 </h:selectOneMenu>
                 
                 <h:outputLabel value="Estado*"/>
-                <h:selectOneMenu value="">
+                <h:selectOneMenu value="#{beanCompra.compra.estado}">
                     <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
-                    <f:selectItems value="" var="estadoItem" itemLabel="" itemValue=""/>
+                    <f:selectItems value="#{beanCompra.estadoValues}"/>
                 </h:selectOneMenu>
                 
                 <h:outputLabel value="Total*"/>
-                <p:inputMask id="total" mask="9?99999999" value=""/>
+                <p:inputMask id="total" mask="9?99999999" value="#{beanCompra.compra.total}"/>
             </h:panelGrid>
-            <h:commandButton value="Guardar"/>
+            <h:commandButton value="Guardar" action="#{beanCompra.guardar()}"/>
         </h:form>
         <h:form>
-            <!--<p:dataTable var="" value="" paginator="true" rows="10"
+            <p:dataTable var="item" value="#{beanCompra.compras}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                  rowsPerPageTemplate="5,10,15" selectionMode="single" lazy="true">
-                <p:column headerText="Proveedor" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Proveedor">
+                    <h:outputText value="#{item.proveedor}" />
                 </p:column>
-                <p:column headerText="Fecha Pedido" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Fecha Pedido">
+                    <h:outputText value="#{item.fechaPedido}" />
                 </p:column>
-                <p:column headerText="Empleado" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Empleado">
+                    <h:outputText value="#{item.empleado}" />
                 </p:column>
-                <p:column headerText="Estado" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Estado">
+                    <h:outputText value="#{item.estado}" />
                 </p:column>
-                <p:column headerText="Total" sortBy="" filterBy="">
-                    <h:outputText value="" />
+                <p:column headerText="Total">
+                    <h:outputText value="#{item.total}" />
                 </p:column>
-                <p:column header="&nbsp;">
-                    <h:commandLink action="" value="Editar"/>
+                <p:column headerText="&nbsp;">
+                    <h:commandLink value="Editar"/>
                 </p:column>
-                <p:column header="&nbsp;">
-                    <h:commandLink actionListener="" value="Eliminar"/>
-                </h:column>
-            </p:dataTable>-->
+                <p:column headerText="&nbsp;">
+                    <h:commandLink value="Eliminar"/>
+                </p:column>
+            </p:dataTable>
             <br/>
             <h:commandLink action="/index" value="Regresar"/>
         </h:form>
