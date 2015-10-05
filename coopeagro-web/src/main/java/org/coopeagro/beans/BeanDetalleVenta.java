@@ -16,6 +16,7 @@ import javax.servlet.ServletContext;
 import org.coopeagro.controladores.DetalleVentaJpaController;
 import org.coopeagro.entidades.DetalleVenta;
 import org.coopeagro.entidades.Producto;
+import org.coopeagro.entidades.Venta;
 
 /**
  *
@@ -29,6 +30,7 @@ public class BeanDetalleVenta {
     DetalleVenta detalleVenta = new DetalleVenta();
     List<DetalleVenta> detallesVenta = new ArrayList<DetalleVenta>();
     List<Producto> productos = new ArrayList<Producto>();
+    List<Venta> ventas = new ArrayList<Venta>();
     /**
      * Creates a new instance of BeanDetalleVenta
      */
@@ -58,5 +60,13 @@ public class BeanDetalleVenta {
 
     public void setProductos(List<Producto> productos) {
         this.productos = productos;
+    }
+
+    public List<Venta> getVentas() {
+        return ventas;
+    }
+
+    public void setVentas(List<Venta> ventas) {
+        this.ventas = ventas;
     }
 }

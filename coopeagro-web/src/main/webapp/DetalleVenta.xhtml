@@ -3,32 +3,38 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Detalle Venta</title>
     </h:head>
     <h:body>
-        <h3>Administrar Detalle Ventas</h3>
+        <ui:include src="/index.xhtml"/>
+        <h3>Detalle Venta</h3>
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
         <h:form>
             <h:panelGrid columns="2">
-                <!--<h:outputLabel value="Id Venta*"/>-->
-                <h:inputHidden id="idVenta" value="#{beanDetalleVenta.detalleVenta.venta}"/>
+                <p:outputLabel value="Id Venta*"/>
+                <h:selectOneMenu value="#{beanDetalleVenta.detalleVenta.venta}">
+                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
+                    <f:selectItems value="#{beanDetalleVenta.ventas}"/>
+                </h:selectOneMenu>
                 
-                <h:outputLabel value="Producto*"/>
+                <p:outputLabel value="Producto*"/>
                 <h:selectOneMenu value="#{beanDetalleVenta.detalleVenta.producto}">
                     <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
                     <f:selectItems value="#{beanDetalleVenta.productos}"/>
                 </h:selectOneMenu>
                 
-                <h:outputLabel value="Cantidad*"/>
+                <p:outputLabel value="Cantidad*"/>
                 <p:inputMask id="cantidad" mask="9?99" value="#{beanDetalleVenta.detalleVenta.cantidad}"/>
                 
-                <h:outputLabel value="Precio*"/>
+                <p:outputLabel value="Precio*"/>
                 <p:inputMask id="precio" mask="9?99999" value="#{beanDetalleVenta.detalleVenta.precio}"/>
             </h:panelGrid>
-            <h:commandButton value="Guardar"/>
+            <p:commandButton value="Guardar"/>
         </h:form>
+        <br/>
         <h:form>
             <p:dataTable var="item" value="#{beanDetalleVenta.detallesVenta}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
@@ -46,14 +52,14 @@
                     <h:outputText value="#{item.precio}" />
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink action="" value="Editar"/>
+                    <h:commandLink value="Editar"/>
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink actionListener="" value="Eliminar"/>
+                    <h:commandLink value="Eliminar"/>
                 </p:column>
             </p:dataTable>
             <br/>
-            <h:commandLink action="/Venta" value="Regresar"/>
+            <!--<h:commandLink action="/index" value="Regresar"/>-->
         </h:form>
     </h:body>
 </html>

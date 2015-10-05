@@ -18,6 +18,7 @@ import org.coopeagro.controladores.VentaJpaController;
 import org.coopeagro.entidades.Cliente;
 import org.coopeagro.entidades.Empleado;
 import org.coopeagro.entidades.EstadosPedido;
+import org.coopeagro.entidades.TiposDocumento;
 import org.coopeagro.entidades.Venta;
 
 /**
@@ -40,15 +41,20 @@ public class BeanVenta {
         VentaJpaController controller = (VentaJpaController) servletContext.getAttribute("ventaJpaController");
     }
     
-    public String guardar(){
-        return "DetalleVenta";
-    }
-    
     public SelectItem[] getEstadoValues() {
         SelectItem[] items = new SelectItem[EstadosPedido.values().length];
         int i = 0;
         for(EstadosPedido ep: EstadosPedido.values()) {
           items[i++] = new SelectItem(ep, ep.getEstadoPedido());
+        }
+        return items;
+    }
+    
+    public SelectItem[] getTiposDocumentoValues() {
+        SelectItem[] items = new SelectItem[TiposDocumento.values().length];
+        int i = 0;
+        for(TiposDocumento td: TiposDocumento.values()) {
+          items[i++] = new SelectItem(td, td.getTipoDocumento());
         }
         return items;
     }

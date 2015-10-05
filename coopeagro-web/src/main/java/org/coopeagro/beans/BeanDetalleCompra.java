@@ -14,6 +14,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import org.coopeagro.controladores.DetalleCompraJpaController;
+import org.coopeagro.entidades.Compra;
 import org.coopeagro.entidades.DetalleCompra;
 import org.coopeagro.entidades.Producto;
 
@@ -29,6 +30,7 @@ public class BeanDetalleCompra {
     DetalleCompra detalleCompra = new DetalleCompra();
     List<DetalleCompra> detallesCompra = new ArrayList<DetalleCompra>();
     List<Producto> productos = new ArrayList<Producto>();
+    List<Compra> compras = new ArrayList<Compra>();
     /**
      * Creates a new instance of BeanDetalleCompra
      */
@@ -58,5 +60,13 @@ public class BeanDetalleCompra {
 
     public void setProductos(List<Producto> productos) {
         this.productos = productos;
+    }
+
+    public List<Compra> getCompras() {
+        return compras;
+    }
+
+    public void setCompras(List<Compra> compras) {
+        this.compras = compras;
     }
 }

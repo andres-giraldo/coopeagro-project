@@ -3,32 +3,35 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Inventario</title>
     </h:head>
     <h:body>
+        <ui:include src="/index.xhtml"/>
         <h3>Administrar Inventario</h3>
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
         <h:form>
             <h:panelGrid columns="2">
-                <h:outputLabel value="Fecha*"/>
+                <p:outputLabel value="Fecha*"/>
                 <p:calendar id="fecha" value="#{beanInventario.inventario.fecha}"/>
                 
-                <h:outputLabel value="Producto*"/>
+                <p:outputLabel value="Producto*"/>
                 <h:selectOneMenu value="#{beanInventario.inventario.producto}">
                     <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
                     <f:selectItems value="#{beanInventario.productos}"/>
                 </h:selectOneMenu>
                 
-                <h:outputLabel value="Cantidad Comprometida*"/>
+                <p:outputLabel value="Cantidad Comprometida*"/>
                 <p:inputMask id="cantidadComprometida" mask="9?999" value="#{beanInventario.inventario.cantidadComprometida}"/>
                 
-                <h:outputLabel value="Cantidad Total*"/>
+                <p:outputLabel value="Cantidad Total*"/>
                 <p:inputMask id="cantidadTotal" mask="9?999" value="#{beanInventario.inventario.cantidadTotal}"/>
             </h:panelGrid>
-            <h:commandButton value="Guardar"/>
+            <p:commandButton value="Guardar"/>
         </h:form>
+        <br/>
         <h:form>
             <p:dataTable var="item" value="#{beanInventario.inventarios}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
@@ -53,7 +56,7 @@
                 </p:column>
             </p:dataTable>
             <br/>
-            <h:commandLink action="/index" value="Regresar"/>
+            <!--<h:commandLink action="/index" value="Regresar"/>-->
         </h:form>
     </h:body>
 </html>

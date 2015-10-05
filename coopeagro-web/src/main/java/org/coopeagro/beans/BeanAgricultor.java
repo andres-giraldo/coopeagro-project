@@ -33,7 +33,7 @@ public class BeanAgricultor {
      * Creates a new instance of BeanAgricultor
      */
     public BeanAgricultor() {
-        //AgricultorJpaController controller = (AgricultorJpaController) servletContext.getAttribute("agricultorJpaController");
+        AgricultorJpaController controller = (AgricultorJpaController) servletContext.getAttribute("agricultorJpaController");
         //agricultores = listarAgricultores();
     }
     

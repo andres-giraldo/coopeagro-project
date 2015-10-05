@@ -12,7 +12,10 @@
             <p:menubar>
                 <p:menuitem value="Agricultor" action="/Agricultor"/>
                 <p:menuitem value="Cliente" action="/Cliente"/>
-                <p:menuitem value="Compra" action="/Compra"/>
+                <p:submenu label="Compras">
+                    <p:menuitem value="Encabezado" action="/Compra"/>
+                    <p:menuitem value="Detalle" action="/DetalleCompra"/>
+                </p:submenu>
                 <p:menuitem value="Empleado" action="/Empleado"/>
                 <p:menuitem value="Inventario" action="/Inventario"/>
                 <p:submenu label="Pagos">
@@ -20,8 +23,11 @@
                     <p:menuitem value="Venta" action="/PagoVenta"/>
                 </p:submenu>
                 <p:menuitem value="Producto" action="/Producto"/>
-                <p:menuitem value="Venta" action="/Venta"/>
-                <p:menuitem value="Salir"/>
+                <p:submenu label="Ventas">
+                    <p:menuitem value="Encabezado" action="/Venta"/>
+                    <p:menuitem value="Detalle" action="/DetalleVenta"/>
+                </p:submenu>
+                <p:menuitem value="Salir" action="/index"/>
             </p:menubar>
             <!--<ul>
                 <li><h:commandLink action="/Agricultor">Agricultor</h:commandLink></li>

@@ -3,50 +3,65 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <h:head>
         <title>Venta</title>
     </h:head>
     <h:body>
-        <h3>Administrar Ventas</h3>
+        <ui:include src="/index.xhtml"/>
+        <h3>Encabezado Venta</h3>
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
         <h:form>
             <h:panelGrid columns="2">
-                <h:outputLabel value="Fecha Pedido*"/>
+                <p:outputLabel value="Fecha Pedido*"/>
                 <p:calendar id="fechaPedido" value="#{beanVenta.venta.fechaPedido}"/>
                 
-                <h:outputLabel value="Fecha Estimada Entrega*"/>
+                <p:outputLabel value="Fecha Estimada Entrega*"/>
                 <p:calendar id="fechaEstEntraga" value="#{beanVenta.venta.fechaEstimadaEntrega}"/>
                 
-                <h:outputLabel value="Cliente*"/>
-                <h:selectOneMenu value="#{beanVenta.venta.cliente}">
+                <p:outputLabel value="Identificación Cliente*"/>
+                <h:selectOneMenu id="idCliente" value="#{beanVenta.venta.cliente.llavePrimaria.documento}">
                     <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
-                    <f:selectItems value="#{beanVenta.clientes}"/>
+                    <f:selectItems value="#{beanVenta.clientes}" var="itemCliente" itemLabel="#{itemCliente.llavePrimaria.documento}" itemValue="#{itemCliente.llavePrimaria.documento}"/>
                 </h:selectOneMenu>
                 
-                <h:outputLabel value="Dirección*"/>
-                <h:inputText id="direccion" value="#{beanVenta.venta.direccion}"/>
-                
-                <h:outputLabel value="Remitente*"/>
-                <h:inputText id="remitente" value="#{beanVenta.venta.remitente}"/>
-                
-                <h:outputLabel value="Empleado*"/>
-                <h:selectOneMenu value="#{beanVenta.venta.empleado}">
+                <p:outputLabel value="Tipo Identificación Cliente*"/>
+                <h:selectOneMenu id="tipoIdCliente" value="#{beanVenta.venta.cliente.llavePrimaria.tipoDocumento}">
                     <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
-                    <f:selectItems value="#{beanVenta.empleados}"/>
+                    <f:selectItems value="#{beanVenta.tiposDocumentoValues}"/>
                 </h:selectOneMenu>
                 
-                <h:outputLabel value="Estado*"/>
-                <h:selectOneMenu value="#{beanVenta.venta.estado}">
+                <p:outputLabel value="Dirección*"/>
+                <p:inputText id="direccion" value="#{beanVenta.venta.direccion}"/>
+                
+                <p:outputLabel value="Remitente*"/>
+                <p:inputText id="remitente" value="#{beanVenta.venta.remitente}"/>
+                
+                <p:outputLabel value="Identificación Empleado*"/>
+                <h:selectOneMenu id="idEmpleado" value="#{beanVenta.venta.empleado}">
+                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
+                    <f:selectItems value="#{beanVenta.empleados}" var="itemEmpleado" itemLabel="#{itemEmpleado.llavePrimaria.documento}" itemValue="#{itemEmpleado.llavePrimaria.documento}"/>
+                </h:selectOneMenu>
+                
+                <p:outputLabel value="Tipo Identificación Empleado*"/>
+                <h:selectOneMenu id="tipoIdEmpleado" value="#{beanVenta.venta.empleado.llavePrimaria.tipoDocumento}">
+                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
+                    <f:selectItems value="#{beanVenta.tiposDocumentoValues}"/>
+                </h:selectOneMenu>
+                
+                <p:outputLabel value="Estado*"/>
+                <h:selectOneMenu id="estado" value="#{beanVenta.venta.estado}">
                     <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
                     <f:selectItems value="#{beanVenta.estadoValues}"/>
                 </h:selectOneMenu>
                 
-                <h:outputLabel value="Total*"/>
+                <p:outputLabel value="Total*"/>
                 <p:inputMask id="total" mask="9?99999999" value="#{beanVenta.venta.total}"/>
             </h:panelGrid>
-            <h:commandButton value="Guardar" action="#{beanVenta.guardar()}"/>
+            <p:commandButton value="Guardar"/>
         </h:form>
+        <br/>
         <h:form>
             <p:dataTable var="item" value="#{beanVenta.ventas}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
@@ -57,8 +72,11 @@
                 <p:column headerText="Fecha Estimada Entrega">
                     <h:outputText value="#{item.fechaEstimadaEntrega}" />
                 </p:column>
-                <p:column headerText="Cliente">
-                    <h:outputText value="#{item.cliente}" />
+                <p:column headerText="Identificación Cliente">
+                    <h:outputText value="#{item.cliente.llavePrimaria.documento}" />
+                </p:column>
+                <p:column headerText="Tipo Identificación Cliente">
+                    <h:outputText value="#{item.cliente.llavePrimaria.tipoDocumento}" />
                 </p:column>
                 <p:column headerText="Dirección">
                     <h:outputText value="#{item.direccion}" />
@@ -66,8 +84,11 @@
                 <p:column headerText="Remitente">
                     <h:outputText value="#{item.remitente}" />
                 </p:column>
-                <p:column headerText="Empleado">
-                    <h:outputText value="#{item.empleado}" />
+                <p:column headerText="Identificación Empleado">
+                    <h:outputText value="#{item.empleado.llavePrimaria.documento}" />
+                </p:column>
+                <p:column headerText="Tipo Identificación Empleado">
+                    <h:outputText value="#{item.empleado.llavePrimaria.tipoDocumento}" />
                 </p:column>
                 <p:column headerText="Estado">
                     <h:outputText value="#{item.estado}" />
@@ -83,7 +104,7 @@
                 </p:column>
             </p:dataTable>
             <br/>
-            <h:commandLink action="/index" value="Regresar"/>
+            <!--<h:commandLink action="/index" value="Regresar"/>-->
         </h:form>
     </h:body>
 </html>
