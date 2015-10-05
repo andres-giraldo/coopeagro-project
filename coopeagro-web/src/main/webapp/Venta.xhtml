@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Venta</title>
+    </h:head>
+    <h:body>
+        <h3>Administrar Ventas</h3>
+        <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
+        <h:form>
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Fecha Pedido*"/>
+                <p:calendar id="fechaPedido" value=""/>
+                
+                <h:outputLabel value="Fecha Estimada Entrega*"/>
+                <p:calendar id="fechaEstEntraga" value=""/>
+                
+                <h:outputLabel value="Dirección*"/>
+                <h:inputText id="direccion" value=""/>
+                
+                <h:outputLabel value="Remitente*"/>
+                <h:inputText id="remitente" value=""/>
+                
+                <h:outputLabel value="Empleado*"/>
+                <h:selectOneMenu value="">
+                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
+                    <f:selectItems value="" var="empleadoItem" itemLabel="" itemValue=""/>
+                </h:selectOneMenu>
+                
+                <h:outputLabel value="Estado*"/>
+                <h:selectOneMenu value="">
+                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
+                    <f:selectItems value="" var="estadoItem" itemLabel="" itemValue=""/>
+                </h:selectOneMenu>
+                
+                <h:outputLabel value="Total*"/>
+                <p:inputMask id="total" mask="9?99999999" value=""/>
+            </h:panelGrid>
+            <h:commandButton value="Guardar"/>
+        </h:form>
+        <h:form>
+            <!--<p:dataTable var="" value="" paginator="true" rows="10"
+                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                 rowsPerPageTemplate="5,10,15" selectionMode="single" lazy="true">
+                <p:column headerText="Fecha Pedido" sortBy="" filterBy="">
+                    <h:outputText value="" />
+                </p:column>
+                <p:column headerText="Fecha Estimada Entrega" sortBy="" filterBy="">
+                    <h:outputText value="" />
+                </p:column>
+                <p:column headerText="Dirección" sortBy="" filterBy="">
+                    <h:outputText value="" />
+                </p:column>
+                <p:column headerText="Remitente" sortBy="" filterBy="">
+                    <h:outputText value="" />
+                </p:column>
+                <p:column headerText="Empleado" sortBy="" filterBy="">
+                    <h:outputText value="" />
+                </p:column>
+                <p:column headerText="Estado" sortBy="" filterBy="">
+                    <h:outputText value="" />
+                </p:column>
+                <p:column headerText="Total" sortBy="" filterBy="">
+                    <h:outputText value="" />
+                </p:column>
+                <p:column header="&nbsp;">
+                    <h:commandLink action="" value="Editar"/>
+                </p:column>
+                <p:column header="&nbsp;">
+                    <h:commandLink actionListener="" value="Eliminar"/>
+                </h:column>
+            </p:dataTable>-->
+            <br/>
+            <h:commandLink action="/index" value="Regresar"/>
+        </h:form>
+    </h:body>
+</html>
+

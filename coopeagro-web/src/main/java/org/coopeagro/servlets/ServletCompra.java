@@ -13,10 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.coopeagro.controladores.CompraJpaController;
-import org.coopeagro.entidades.Agricultor;
-import org.coopeagro.entidades.Compra;
-import org.coopeagro.entidades.EstadosPedido;
-import org.coopeagro.entidades.TiposPedido;
 
 /**
  *

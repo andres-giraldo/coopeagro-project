@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Clientes</title>
+    </h:head>
+    <h:body>
+        <h3>Administrar Clientes</h3>
+        <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true" />
+        <h:form>
+            <h:panelGrid columns="2">
+                <h:outputLabel value="Identificación*"/>
+                <h:inputText id="identificacion" value="#{beanCliente.cliente.llavePrimaria.documento}"/>
+                
+                <h:outputLabel value="Tipo Identificación*"/>
+                <h:selectOneMenu value="#{beanCliente.cliente.llavePrimaria.tipoDocumento}">
+                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
+                    <f:selectItems value="#{beanCliente.tiposDocumentoValues}"/>
+                </h:selectOneMenu>
+                
+                <h:outputLabel value="Nombre*"/>
+                <h:inputText id="nombre" value="#{beanCliente.cliente.nombre}"/>
+                
+                <h:outputLabel value="Primer Apellido*"/>
+                <h:inputText id="apellido1" value="#{beanCliente.cliente.apellidoUno}"/>
+                
+                <h:outputLabel value="Segundo Apellido*"/>
+                <h:inputText id="apellido2" value="#{beanCliente.cliente.apellidoDos}"/>
+                
+                <h:outputLabel value="Telefono*"/>
+                <p:inputMask id="telefono" mask="9?999999" value="#{beanCliente.cliente.telefono}"/>
+                
+                <h:outputLabel value="Celular*"/>
+                <p:inputMask id="celular" mask="9?999999999" value="#{beanCliente.cliente.celular}"/>
+                
+                <h:outputLabel value="Correo*"/>
+                <h:inputText id="email" value="#{beanCliente.cliente.correo}" validatorMessage="El correo no es valido">
+                    <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                </h:inputText>
+            </h:panelGrid>
+            <h:commandButton value="Guardar"/>
+        </h:form>
+        <h:form>
+            <p:dataTable var="item" value="#{beanCliente.clientes}" paginator="true" rows="10"
+                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                 rowsPerPageTemplate="5,10,15" selectionMode="single" lazy="true">
+                <p:column headerText="Identificación">
+                    <h:outputText value="#{item.llavePrimaria.documento}" />
+                </p:column>
+                <p:column headerText="Tipo Identificación">
+                    <h:outputText value="#{item.llavePrimaria.tipoDocumento}" />
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{item.nombre}" />
+                </p:column>
+                <p:column headerText="Primer Apellido">
+                    <h:outputText value="#{item.apellidoUno}" />
+                </p:column>
+                <p:column headerText="Segundo Apellido">
+                    <h:outputText value="#{item.apellidoDos}" />
+                </p:column>
+                <p:column headerText="Telefono">
+                    <h:outputText value="#{item.telefono}" />
+                </p:column>
+                <p:column headerText="Celular">
+                    <h:outputText value="#{item.celular}" />
+                </p:column>
+                <p:column headerText="Correo">
+                    <h:outputText value="#{item.correo}" />
+                </p:column>
+                <p:column headerText="&nbsp;">
+                    <h:commandLink value="Editar"/>
+                </p:column>
+                <p:column headerText="&nbsp;">
+                    <h:commandLink value="Eliminar"/>
+                </p:column>
+            </p:dataTable>
+            <br/>
+            <h:commandLink action="/index" value="Regresar"/>
+        </h:form>
+    </h:body>
+</html>
+
