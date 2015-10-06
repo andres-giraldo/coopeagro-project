@@ -15,16 +15,16 @@
         <h:form>
             <h:panelGrid columns="2">
                 <p:outputLabel value="Id Compra*"/>
-                <h:selectOneMenu value="#{beanDetalleCompra.detalleCompra.compra}">
-                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
+                <p:selectOneMenu value="#{beanDetalleCompra.detalleCompra.compra}">
+                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanDetalleCompra.compras}"/>
-                </h:selectOneMenu>
+                </p:selectOneMenu>
                 
                 <p:outputLabel value="Producto*"/>
-                <h:selectOneMenu value="#{beanDetalleCompra.detalleCompra.producto}">
-                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
+                <p:selectOneMenu value="#{beanDetalleCompra.detalleCompra.producto}">
+                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanDetalleCompra.productos}"/>
-                </h:selectOneMenu>
+                </p:selectOneMenu>
                 
                 <p:outputLabel value="Cantidad*"/>
                 <p:inputMask id="cantidad" mask="9?99" value="#{beanDetalleCompra.detalleCompra.cantidad}"/>
@@ -37,8 +37,7 @@
         <br/>
         <h:form>
             <p:dataTable var="item" value="#{beanDetalleCompra.detallesCompra}" paginator="true" rows="10"
-                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                 rowsPerPageTemplate="5,10,15" selectionMode="single" lazy="true">
+                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Id Compra">
                     <h:outputText value="#{item.compra}" />
                 </p:column>

@@ -14,32 +14,38 @@
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
         <h:form>
             <h:panelGrid columns="2">
-                <p:outputLabel value="Proveedor*"/>
-                <h:selectOneMenu value="#{beanCompra.compra.proveedor}">
-                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
-                    <f:selectItems value="#{beanCompra.proveedores}"/>
-                </h:selectOneMenu>
+                <p:outputLabel value="Identificación Proveedor*"/>
+                <p:selectOneMenu value="#{beanCompra.compra.proveedor.llavePrimaria.documento}">
+                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
+                    <f:selectItems value="#{beanCompra.proveedores}" var="itemProv" itemLabel="#{itemProv.llavePrimaria.documento}" itemValue="#{itemProv.llavePrimaria.documento}"/>
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="Tipo Identificación Proveedor*"/>
+                <p:selectOneMenu value="#{beanCompra.compra.proveedor.llavePrimaria.tipoDocumento}">
+                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
+                    <f:selectItems value="#{beanCompra.tiposDocumentoValues}" var="itemEnum" itemLabel="#{itemEnum.tipoDocumento}" itemValue="#{itemEnum.tipoDocumento}"/>
+                </p:selectOneMenu>
                 
                 <p:outputLabel value="Fecha Pedido*"/>
                 <p:calendar id="fechaPedido" value="#{beanCompra.compra.fechaPedido}"/>
                 
                 <p:outputLabel value="Identificación Empleado*"/>
-                <h:selectOneMenu value="#{beanCompra.compra.empleado.llavePrimaria.documento}">
-                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
-                    <f:selectItems value="#{beanCompra.empleados}" var="itemEmpleado" itemLabel="#{itemEmpleado.llavePrimaria.documento}" itemValue="#{itemEmpleado.llavePrimaria.documento}"/>
-                </h:selectOneMenu>
+                <p:selectOneMenu value="#{beanCompra.compra.empleado.llavePrimaria.documento}">
+                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
+                    <f:selectItems value="#{beanCompra.empleados}" var="itemEmpl" itemLabel="#{itemEmpl.llavePrimaria.documento}" itemValue="#{itemEmpl.llavePrimaria.documento}"/>
+                </p:selectOneMenu>
                 
                 <p:outputLabel value="Tipo Identificación Empleado*"/>
-                <h:selectOneMenu value="#{beanCompra.compra.empleado.llavePrimaria.tipoDocumento}">
-                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
-                    <f:selectItems value="#{beanCompra.tiposDocumentoValues}"/>
-                </h:selectOneMenu>
+                <p:selectOneMenu value="#{beanCompra.compra.empleado.llavePrimaria.tipoDocumento}">
+                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
+                    <f:selectItems value="#{beanCompra.tiposDocumentoValues}" var="itemEnum" itemLabel="#{itemEnum.tipoDocumento}" itemValue="#{itemEnum.tipoDocumento}"/>
+                </p:selectOneMenu>
                 
                 <p:outputLabel value="Estado*"/>
-                <h:selectOneMenu value="#{beanCompra.compra.estado}">
-                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
-                    <f:selectItems value="#{beanCompra.estadoValues}"/>
-                </h:selectOneMenu>
+                <p:selectOneMenu value="#{beanCompra.compra.estado}">
+                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
+                    <f:selectItems value="#{beanCompra.estadoValues}" var="itemEstado" itemLabel="#{itemEstado.estadoPedido}" itemValue="#{itemEstado.estadoPedido}"/>
+                </p:selectOneMenu>
                 
                 <p:outputLabel value="Total*"/>
                 <p:inputMask id="total" mask="9?99999999" value="#{beanCompra.compra.total}"/>
@@ -49,9 +55,11 @@
         <br/>
         <h:form>
             <p:dataTable var="item" value="#{beanCompra.compras}" paginator="true" rows="10"
-                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                 rowsPerPageTemplate="5,10,15" selectionMode="single" lazy="true">
-                <p:column headerText="Proveedor">
+                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+                <p:column headerText="Identificación Proveedor">
+                    <h:outputText value="#{item.proveedor}" />
+                </p:column>
+                <p:column headerText="Tipo Identificación Proveedor">
                     <h:outputText value="#{item.proveedor}" />
                 </p:column>
                 <p:column headerText="Fecha Pedido">

@@ -24,8 +24,7 @@
         <br/>
         <h:form>
             <p:dataTable var="item" value="#{beanProducto.productos}" paginator="true" rows="10"
-                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                 rowsPerPageTemplate="5,10,15" selectionMode="single" lazy="true">
+                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Id">
                     <h:outputText value="#{item.id}" />
                 </p:column>

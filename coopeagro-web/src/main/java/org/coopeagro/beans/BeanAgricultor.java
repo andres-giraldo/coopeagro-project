@@ -9,10 +9,9 @@ package org.coopeagro.beans;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import javax.servlet.ServletContext;
 import org.coopeagro.controladores.AgricultorJpaController;
 import org.coopeagro.entidades.Agricultor;
@@ -46,13 +45,8 @@ public class BeanAgricultor {
         return controller.findAgricultorEntities();
     }*/
     
-    public SelectItem[] getTiposDocumentoValues() {
-        SelectItem[] items = new SelectItem[TiposDocumento.values().length];
-        int i = 0;
-        for(TiposDocumento td: TiposDocumento.values()) {
-          items[i++] = new SelectItem(td, td.getTipoDocumento());
-        }
-        return items;
+    public TiposDocumento[] getTiposDocumentoValues() {
+        return TiposDocumento.values();
     }
 
     public Agricultor getAgricultor() {

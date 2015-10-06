@@ -18,10 +18,10 @@
                 <p:calendar id="fecha" value="#{beanInventario.inventario.fecha}"/>
                 
                 <p:outputLabel value="Producto*"/>
-                <h:selectOneMenu value="#{beanInventario.inventario.producto}">
-                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
+                <p:selectOneMenu value="#{beanInventario.inventario.producto}">
+                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanInventario.productos}"/>
-                </h:selectOneMenu>
+                </p:selectOneMenu>
                 
                 <p:outputLabel value="Cantidad Comprometida*"/>
                 <p:inputMask id="cantidadComprometida" mask="9?999" value="#{beanInventario.inventario.cantidadComprometida}"/>
@@ -34,8 +34,7 @@
         <br/>
         <h:form>
             <p:dataTable var="item" value="#{beanInventario.inventarios}" paginator="true" rows="10"
-                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                 rowsPerPageTemplate="5,10,15" selectionMode="single" lazy="true">
+                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Fecha">
                     <h:outputText value="#{item.fecha}" />
                 </p:column>

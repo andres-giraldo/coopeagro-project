@@ -18,10 +18,10 @@
                 <p:calendar id="fechaPago" value="#{beanPagoCompra.pagoCompra.llavePrimaria.fechaPago}"/>
                 
                 <p:outputLabel value="Id Compra*"/>
-                <h:selectOneMenu value="#{beanPagoCompra.pagoCompra.llavePrimaria.compra}">
-                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
+                <p:selectOneMenu value="#{beanPagoCompra.pagoCompra.llavePrimaria.compra}">
+                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanPagoCompra.compras}"/>
-                </h:selectOneMenu>
+                </p:selectOneMenu>
                 
                 <p:outputLabel value="Cantidad Cancelada*"/>
                 <p:inputMask id="cantidadCancelada" mask="9?99999999" value="#{beanPagoCompra.pagoCompra.cantidadCancelada}"/>
@@ -31,8 +31,7 @@
         <br/>
         <h:form>
             <p:dataTable var="item" value="#{beanPagoCompra.pagosCompra}" paginator="true" rows="10"
-                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                 rowsPerPageTemplate="5,10,15" selectionMode="single" lazy="true">
+                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Fecha Pago">
                     <h:outputText value="#{item.llavePrimaria.fechaPago}" />
                 </p:column>

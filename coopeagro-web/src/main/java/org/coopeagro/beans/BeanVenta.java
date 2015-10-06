@@ -9,10 +9,9 @@ package org.coopeagro.beans;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import javax.servlet.ServletContext;
 import org.coopeagro.controladores.VentaJpaController;
 import org.coopeagro.entidades.Cliente;
@@ -41,22 +40,12 @@ public class BeanVenta {
         VentaJpaController controller = (VentaJpaController) servletContext.getAttribute("ventaJpaController");
     }
     
-    public SelectItem[] getEstadoValues() {
-        SelectItem[] items = new SelectItem[EstadosPedido.values().length];
-        int i = 0;
-        for(EstadosPedido ep: EstadosPedido.values()) {
-          items[i++] = new SelectItem(ep, ep.getEstadoPedido());
-        }
-        return items;
+    public EstadosPedido[] getEstadoValues() {
+        return EstadosPedido.values();
     }
     
-    public SelectItem[] getTiposDocumentoValues() {
-        SelectItem[] items = new SelectItem[TiposDocumento.values().length];
-        int i = 0;
-        for(TiposDocumento td: TiposDocumento.values()) {
-          items[i++] = new SelectItem(td, td.getTipoDocumento());
-        }
-        return items;
+    public TiposDocumento[] getTiposDocumentoValues() {
+        return TiposDocumento.values();
     }
 
     public Venta getVenta() {

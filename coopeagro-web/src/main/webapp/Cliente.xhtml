@@ -18,10 +18,10 @@
                 <p:inputText id="identificacion" value="#{beanCliente.cliente.llavePrimaria.documento}"/>
                 
                 <p:outputLabel value="Tipo Identificación*"/>
-                <h:selectOneMenu value="#{beanCliente.cliente.llavePrimaria.tipoDocumento}">
-                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
-                    <f:selectItems value="#{beanCliente.tiposDocumentoValues}"/>
-                </h:selectOneMenu>
+                <p:selectOneMenu value="#{beanCliente.cliente.llavePrimaria.tipoDocumento}">
+                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
+                    <f:selectItems value="#{beanCliente.tiposDocumentoValues}" var="itemTI" itemLabel="#{itemTI.tipoDocumento}" itemValue="#{itemTI.tipoDocumento}"/>
+                </p:selectOneMenu>
                 
                 <p:outputLabel value="Nombre*"/>
                 <p:inputText id="nombre" value="#{beanCliente.cliente.nombre}"/>
@@ -48,8 +48,7 @@
         <br/>
         <h:form>
             <p:dataTable var="item" value="#{beanCliente.clientes}" paginator="true" rows="10"
-                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                 rowsPerPageTemplate="5,10,15" selectionMode="single" lazy="true">
+                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Identificación">
                     <h:outputText value="#{item.llavePrimaria.documento}" />
                 </p:column>

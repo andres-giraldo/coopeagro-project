@@ -18,10 +18,10 @@
                 <p:inputText id="identificacion" value="#{beanAgricultor.agricultor.llavePrimaria.documento}"/>
                 
                 <p:outputLabel value="Tipo Identificación*"/>
-                <h:selectOneMenu value="#{beanAgricultor.agricultor.llavePrimaria.tipoDocumento}">
-                    <f:selectItem itemLabel="---" itemValue="#{0}" noSelectionOption="true" />
-                    <f:selectItems value="#{beanAgricultor.tiposDocumentoValues}"/>
-                </h:selectOneMenu>
+                <p:selectOneMenu value="#{beanAgricultor.agricultor.llavePrimaria.tipoDocumento}">
+                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
+                    <f:selectItems value="#{beanAgricultor.tiposDocumentoValues}" var="itemTI" itemLabel="#{itemTI.tipoDocumento}" itemValue="#{itemTI.tipoDocumento}"/>
+                </p:selectOneMenu>
                 
                 <p:outputLabel value="Nombre*"/>
                 <p:inputText id="nombre" value="#{beanAgricultor.agricultor.nombre}"/>
@@ -54,8 +54,7 @@
         <br/>
         <h:form>
             <p:dataTable var="item" value="#{beanAgricultor.agricultores}" paginator="true" rows="10"
-                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-                 rowsPerPageTemplate="5,10,15" selectionMode="single" lazy="true">
+                 paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Identificación">
                     <h:outputText value="#{item.llavePrimaria.documento}" />
                 </p:column>
