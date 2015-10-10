@@ -19,7 +19,7 @@ import org.coopeagro.entidades.Producto;
 
 /**
  *
- * @author YEISSON
+ * @author sala306
  */
 public class ProductoJpaController implements Serializable {
 

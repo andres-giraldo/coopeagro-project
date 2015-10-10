@@ -22,22 +22,16 @@ public class Empleado extends Persona implements Serializable{
     @Temporal(TemporalType.DATE)
     @Column(name = "FEFECHARETIRO")
     private Date fechaRetiro;
-    @Column(name = "DSUSUARIO")
-    private String usuario;
-    @Column(name = "DSCLAVE")
-    private String clave;
 
     public Empleado() {
     }
 
-    public Empleado(String cargo, String direccion, Date fechaIngreso, Date fechaRetiro, String usuario, String clave, String documento, TiposDocumento tipoDocumento, String nombre, String apellidoUno, String apellidoDos, String telefono, String celular, String correo) {
-        super(new PersonaPK(documento, tipoDocumento), nombre, apellidoUno, apellidoDos, telefono, celular, correo);
+    public Empleado(String cargo, String direccion, Date fechaIngreso, Date fechaRetiro, String documento, TiposDocumento tipoDocumento, String nombre, String apellidoUno, String apellidoDos, String telefono, String celular, String correo, String usuario, String clave, Perfiles perfil) {
+        super(new PersonaPK(documento, tipoDocumento), nombre, apellidoUno, apellidoDos, telefono, celular, correo, new Usuario(usuario, clave, perfil));
         this.cargo = cargo;
         this.direccion = direccion;
         this.fechaIngreso = fechaIngreso;
         this.fechaRetiro = fechaRetiro;
-        this.usuario = usuario;
-        this.clave = clave;
     }
 
     public String getCargo() {
@@ -72,24 +66,8 @@ public class Empleado extends Persona implements Serializable{
         this.fechaRetiro = fechaRetiro;
     }
 
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
-
-    public String getClave() {
-        return clave;
-    }
-
-    public void setClave(String clave) {
-        this.clave = clave;
-    }
-
     @Override
     public String toString() {
-        return "Empleado{" + "cargo=" + cargo + ", direccion=" + direccion + ", fechaIngreso=" + fechaIngreso + ", fechaRetiro=" + fechaRetiro + ", usuario=" + usuario + ", clave=" + clave + '}';
+        return "Empleado{" + "cargo=" + cargo + ", direccion=" + direccion + ", fechaIngreso=" + fechaIngreso + ", fechaRetiro=" + fechaRetiro + '}';
     }
 }

@@ -3,7 +3,9 @@ package org.coopeagro.entidades;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
+import javax.persistence.JoinColumn;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToOne;
 
 @MappedSuperclass
 public class Persona implements Serializable{
@@ -22,11 +24,14 @@ public class Persona implements Serializable{
     private String celular;
     @Column(name="DSCORREO")
     private String correo;
+    @OneToOne
+    @JoinColumn(name = "DNIUSUARIO")
+    private Usuario usuario;
     
     public Persona(){
     }
 
-    public Persona(PersonaPK llavePrimaria, String nombre, String apellidoUno, String apellidoDos, String telefono, String celular, String correo) {
+    public Persona(PersonaPK llavePrimaria, String nombre, String apellidoUno, String apellidoDos, String telefono, String celular, String correo, Usuario usuario) {
         this.llavePrimaria = llavePrimaria;
         this.nombre = nombre;
         this.apellidoUno = apellidoUno;
@@ -34,6 +39,7 @@ public class Persona implements Serializable{
         this.telefono = telefono;
         this.celular = celular;
         this.correo = correo;
+        this.usuario = usuario;
     }
 
     public PersonaPK getLlavePrimaria() {
@@ -92,8 +98,16 @@ public class Persona implements Serializable{
         this.correo = correo;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
     @Override
     public String toString() {
-        return "Persona{" + "llavePrimaria=" + llavePrimaria + ", nombre=" + nombre + ", apellidoUno=" + apellidoUno + ", apellidoDos=" + apellidoDos + ", telefono=" + telefono + ", celular=" + celular + ", correo=" + correo + '}';
+        return "Persona{" + "llavePrimaria=" + llavePrimaria + ", nombre=" + nombre + ", apellidoUno=" + apellidoUno + ", apellidoDos=" + apellidoDos + ", telefono=" + telefono + ", celular=" + celular + ", correo=" + correo + ", usuario=" + usuario + '}';
     }
 }

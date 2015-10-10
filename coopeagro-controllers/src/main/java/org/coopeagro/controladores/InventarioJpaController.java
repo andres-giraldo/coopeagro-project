@@ -19,7 +19,7 @@ import org.coopeagro.entidades.Inventario;
 
 /**
  *
- * @author YEISSON
+ * @author sala306
  */
 public class InventarioJpaController implements Serializable {
 

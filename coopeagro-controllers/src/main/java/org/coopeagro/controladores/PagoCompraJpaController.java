@@ -15,13 +15,11 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
-import org.coopeagro.controladores.exceptions.PreexistingEntityException;
 import org.coopeagro.entidades.PagoCompra;
-import org.coopeagro.entidades.PagoCompraPK;
 
 /**
  *
- * @author YEISSON
+ * @author sala306
  */
 public class PagoCompraJpaController implements Serializable {
 
@@ -34,21 +32,13 @@ public class PagoCompraJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(PagoCompra pagoCompra) throws PreexistingEntityException, Exception {
-        if (pagoCompra.getLlavePrimaria() == null) {
-            pagoCompra.setLlavePrimaria(new PagoCompraPK());
-        }
+    public void create(PagoCompra pagoCompra) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(pagoCompra);
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findPagoCompra(pagoCompra.getLlavePrimaria()) != null) {
-                throw new PreexistingEntityException("PagoCompra " + pagoCompra + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -66,7 +56,7 @@ public class PagoCompraJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                PagoCompraPK id = pagoCompra.getLlavePrimaria();
+                Integer id = pagoCompra.getId();
                 if (findPagoCompra(id) == null) {
                     throw new NonexistentEntityException("The pagoCompra with id " + id + " no longer exists.");
                 }
@@ -79,7 +69,7 @@ public class PagoCompraJpaController implements Serializable {
         }
     }
 
-    public void destroy(PagoCompraPK id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -87,7 +77,7 @@ public class PagoCompraJpaController implements Serializable {
             PagoCompra pagoCompra;
             try {
                 pagoCompra = em.getReference(PagoCompra.class, id);
-                pagoCompra.getLlavePrimaria();
+                pagoCompra.getId();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The pagoCompra with id " + id + " no longer exists.", enfe);
             }
@@ -124,7 +114,7 @@ public class PagoCompraJpaController implements Serializable {
         }
     }
 
-    public PagoCompra findPagoCompra(PagoCompraPK id) {
+    public PagoCompra findPagoCompra(Integer id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(PagoCompra.class, id);

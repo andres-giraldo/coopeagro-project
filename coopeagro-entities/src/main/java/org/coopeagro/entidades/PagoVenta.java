@@ -1,36 +1,53 @@
 package org.coopeagro.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="TCA_PAGO_VENTAS")
 public class PagoVenta implements Serializable{
+     @TableGenerator(name="PagoVentaGen", 
+        table="TCA_SQ", 
+        pkColumnName="GEN_KEY", 
+        valueColumnName="GEN_VALUE", 
+        pkColumnValue="PAGO_VENTA_SEQ", 
+        initialValue=0,
+        allocationSize=1
+    )
     
-    @EmbeddedId
-    private PagoVentaPK llavePrimaria;
+    @Id
+    @GeneratedValue(strategy=GenerationType.TABLE, generator="PagoVentaGen")
+    @Column(name = "DNIPAGOVENTA")
+    private Integer id;
     @Column(name="NMCANTIDADCANCELADA")
     private Double cantidadCancelada;
-
+    @Temporal(TemporalType.DATE)
+    @Column(name="FEFECHAPAGO")
+    private Date fechaPago;
+    @OneToMany
+    @JoinColumn(name = "DNI_VENTA")
+    private Venta venta;
+    
     public PagoVenta() {
     }
 
-    public PagoVenta(PagoVentaPK llavePrimaria, Double cantidadCancelada) {
-        this.llavePrimaria = llavePrimaria;
+    public PagoVenta(Double cantidadCancelada, Date fechaPago, Venta venta) {
         this.cantidadCancelada = cantidadCancelada;
+        this.fechaPago = fechaPago;
+        this.venta = venta;
     }
-
-    public PagoVentaPK getLlavePrimaria() {
-        return llavePrimaria;
-    }
-
-    public void setLlavePrimaria(PagoVentaPK llavePrimaria) {
-        this.llavePrimaria = llavePrimaria;
-    }
-
+    
     public Double getCantidadCancelada() {
         return cantidadCancelada;
     }
@@ -39,8 +56,32 @@ public class PagoVenta implements Serializable{
         this.cantidadCancelada = cantidadCancelada;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Date getFechaPago() {
+        return fechaPago;
+    }
+
+    public void setFechaPago(Date fechaPago) {
+        this.fechaPago = fechaPago;
+    }
+
+    public Venta getVenta() {
+        return venta;
+    }
+
+    public void setVenta(Venta venta) {
+        this.venta = venta;
+    }
+
     @Override
     public String toString() {
-        return "PagoVenta{" + "llavePrimaria=" + llavePrimaria + ", cantidadCancelada=" + cantidadCancelada + '}';
+        return "PagoVenta{" + "id=" + id + ", cantidadCancelada=" + cantidadCancelada + ", fechaPago=" + fechaPago + ", venta=" + venta + '}';
     }
 }

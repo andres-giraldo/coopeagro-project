@@ -21,8 +21,8 @@ public class Agricultor extends Persona implements Serializable{
     public Agricultor(){
     }
 
-    public Agricultor(String documento, TiposDocumento tipoDocumento,String nombre, String apellidoUno, String apellidoDos, String telefono, String celular, String correo, Date fechaRegistro, String direccion) {
-        super(new PersonaPK(documento, tipoDocumento), nombre, apellidoUno, apellidoDos, telefono, celular, correo);
+    public Agricultor(String documento, TiposDocumento tipoDocumento,String nombre, String apellidoUno, String apellidoDos, String telefono, String celular, String correo, Date fechaRegistro, String direccion, String usuario, String clave, Perfiles perfil) {
+        super(new PersonaPK(documento, tipoDocumento), nombre, apellidoUno, apellidoDos, telefono, celular, correo, new Usuario(usuario, clave, perfil));
         this.fechaRegistro = fechaRegistro;
         this.direccion = direccion;
     }
