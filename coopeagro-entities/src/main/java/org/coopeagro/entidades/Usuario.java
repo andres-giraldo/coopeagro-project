@@ -1,6 +1,7 @@
 package org.coopeagro.entidades;
 
 import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -22,14 +23,19 @@ public class Usuario implements Serializable{
         initialValue=0,
         allocationSize=1
     )
+    
+    @Basic(optional = false)
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE, generator="UsuarioGen")
     @Column(name = "DNIUSUARIO")
     private Integer id;
+    @Basic(optional = false)
     @Column(name = "DSUSUARIO")
     private String usuario;
+    @Basic(optional = false)
     @Column(name = "DSCLAVE")
     private String clave;
+    @Basic(optional = false)
     @Enumerated(EnumType.STRING)
     @Column(name = "DSPERFIL")
     private Perfiles perfil;

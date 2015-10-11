@@ -18,6 +18,7 @@ import org.coopeagro.controladores.InventarioJpaController;
 import org.coopeagro.controladores.PagoCompraJpaController;
 import org.coopeagro.controladores.PagoVentaJpaController;
 import org.coopeagro.controladores.ProductoJpaController;
+import org.coopeagro.controladores.UsuarioJpaController;
 import org.coopeagro.controladores.VentaJpaController;
 
 /**
@@ -65,6 +66,9 @@ public class ConfigurationLoadListener implements ServletContextListener {
         
         VentaJpaController ventaJpaController = new VentaJpaController(emf);
         sce.getServletContext().setAttribute("ventaJpaController", ventaJpaController);
+        
+        UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
+        sce.getServletContext().setAttribute("usuarioJpaController", usuarioJpaController);
     }
 
     @Override

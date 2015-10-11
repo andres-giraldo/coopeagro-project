@@ -2,6 +2,7 @@ package org.coopeagro.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,17 +27,20 @@ public class PagoVenta implements Serializable{
         allocationSize=1
     )
     
+    @Basic(optional = false) 
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE, generator="PagoVentaGen")
     @Column(name = "DNIPAGOVENTA")
     private Integer id;
+    @Basic(optional = false)
     @Column(name="NMCANTIDADCANCELADA")
     private Double cantidadCancelada;
+    @Basic(optional = false)
     @Temporal(TemporalType.DATE)
     @Column(name="FEFECHAPAGO")
     private Date fechaPago;
     @OneToMany
-    @JoinColumn(name = "DNI_VENTA")
+    @JoinColumn(name = "DNIPEDIDO_VENTA_FK", referencedColumnName = "DNIPEDIDO_VENTA", nullable = false)
     private Venta venta;
     
     public PagoVenta() {

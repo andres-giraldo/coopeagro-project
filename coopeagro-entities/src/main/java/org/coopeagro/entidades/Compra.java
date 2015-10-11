@@ -14,8 +14,8 @@ public class Compra extends Pedido implements Serializable{
     
     @ManyToOne
     @JoinColumns({
-        @JoinColumn(name = "DNI_AGRICULTOR"),
-        @JoinColumn(name = "DSTIPODOCUMENTO_AGRICULTOR")
+        @JoinColumn(name = "DNI_AGRICULTOR_FK", referencedColumnName = "DNI_AGRICULTOR", nullable = false),
+        @JoinColumn(name = "DSTIPODOCUMENTO_AGRICULTOR_FK", referencedColumnName = "DSTIPODOCUMENTO_AGRICULTOR", nullable = false)
     })
     private Agricultor proveedor;
 

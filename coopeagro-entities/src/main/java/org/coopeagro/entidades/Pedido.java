@@ -2,6 +2,7 @@ package org.coopeagro.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -29,19 +30,22 @@ public class Pedido implements Serializable{
         allocationSize=1
     )
     
+    @Basic(optional = false)
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE, generator="PedidoGen")
-    @Column(name="DNI")
+    @Column(name="DNIPEDIDO")
     private Integer numeroPedido;
+    @Basic(optional = false)
     @Temporal(TemporalType.DATE)
     @Column(name="FEFECHAPEDIDO")
     private Date fechaPedido;
     @ManyToOne
     @JoinColumns({
-        @JoinColumn(name = "DNI_EMPLEADO"),
-        @JoinColumn(name = "DSTIPODOCUMENTO_EMPLEADO")
+        @JoinColumn(name = "DNI_EMPLEADO_FK", referencedColumnName = "DNI_EMPLEADO", nullable = false),
+        @JoinColumn(name = "DSTIPODOCUMENTO_EMPLEADO_FK", referencedColumnName = "DSTIPODOCUMENTO_EMPLEADO", nullable = false)
     })
     private Empleado empleado;
+    @Basic(optional = false)
     @Enumerated(EnumType.STRING)
     @Column(name="DSESTADO")
     private EstadosPedido estado;

@@ -2,6 +2,7 @@ package org.coopeagro.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -12,9 +13,11 @@ import javax.persistence.TemporalType;
 @Table(name="TCA_AGRICULTORES")
 public class Agricultor extends Persona implements Serializable{
     
+    @Basic(optional = false)
     @Temporal(TemporalType.DATE)
     @Column(name="FEFECHAREGISTRO")
     private Date fechaRegistro;
+    @Basic(optional = false)
     @Column(name="DSDIRECCION")
     private String direccion;
     

@@ -2,6 +2,7 @@ package org.coopeagro.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,18 +28,22 @@ public class Inventario implements Serializable{
         allocationSize=1
     )
     
+    @Basic(optional = false)
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE, generator="InventarioGen")
     @Column(name="DNI")
     private Integer id;
+    @Basic(optional = false)
     @Temporal(TemporalType.DATE)
     @Column(name="FEFECHA")
     private Date fecha;
     @ManyToOne
-    @JoinColumn(name = "DNIPRODUCTO")
+    @JoinColumn(name = "DNIPRODUCTO_FK", referencedColumnName = "DNIPRODUCTO", nullable = false)
     private Producto producto;
+    @Basic(optional = false)
     @Column(name="NMCANTIDADCOMPROMETIDA")
     private Double cantidadComprometida;
+    @Basic(optional = false)
     @Column(name="NMCANTIDADTOTAL")
     private Double cantidadTotal;
     

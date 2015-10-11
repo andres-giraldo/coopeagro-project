@@ -1,6 +1,7 @@
 package org.coopeagro.entidades;
 
 import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.JoinColumn;
@@ -12,20 +13,26 @@ public class Persona implements Serializable{
 
     @EmbeddedId
     private PersonaPK llavePrimaria;
+    @Basic(optional = false)
     @Column(name="DSNOMBRE")
     private String nombre;
+    @Basic(optional = false)
     @Column(name="DSAPELLIDOUNO")
     private String apellidoUno;
+    @Basic(optional = true)
     @Column(name="DSAPELLIDODOS")
     private String apellidoDos;
+    @Basic(optional = false)
     @Column(name="DSTELEFONO")
     private String telefono;
+    @Basic(optional = true)
     @Column(name="DSCELULAR")
     private String celular;
+    @Basic(optional = true)
     @Column(name="DSCORREO")
     private String correo;
     @OneToOne
-    @JoinColumn(name = "DNIUSUARIO")
+    @JoinColumn(name = "DNIUSUARIO_FK", referencedColumnName = "DNIUSUARIO", nullable = true)
     private Usuario usuario;
     
     public Persona(){

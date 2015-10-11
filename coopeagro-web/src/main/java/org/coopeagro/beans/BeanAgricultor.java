@@ -33,6 +33,10 @@ public class BeanAgricultor {
      */
     public BeanAgricultor() {
         AgricultorJpaController controller = (AgricultorJpaController) servletContext.getAttribute("agricultorJpaController");
+        //controller.findAgricultorEntities();
+        for (Agricultor agr : controller.findAgricultorEntities()) {
+            System.out.println(agr);
+        }
         //agricultores = listarAgricultores();
     }
     

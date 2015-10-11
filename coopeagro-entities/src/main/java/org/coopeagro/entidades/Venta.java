@@ -2,6 +2,7 @@ package org.coopeagro.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -15,17 +16,20 @@ import javax.persistence.TemporalType;
 @Table(name="TCA_VENTAS")
 public class Venta extends Pedido implements Serializable{
 
+    @Basic(optional = false)
     @Temporal(TemporalType.DATE)
     @Column(name="FEFECHAESTIMADAENTREGA")
     private Date fechaEstimadaEntrega;
     @ManyToOne
     @JoinColumns({
-        @JoinColumn(name = "DNI_CLIENTE"),
-        @JoinColumn(name = "DSTIPODOCUMENTO_CLIENTE")
+        @JoinColumn(name = "DNI_CLIENTE_FK", referencedColumnName = "DNI_CLIENTE", nullable = false),
+        @JoinColumn(name = "DSTIPODOCUMENTO_CLIENTE_FK", referencedColumnName = "DSTIPODOCUMENTO_CLIENTE", nullable = false)
     })
     private Cliente cliente;
+    @Basic(optional = false)
     @Column(name="DSDIRECCION")
     private String direccion;
+    @Basic(optional = false)
     @Column(name="DSREMITENTE")
     private String remitente;
     

@@ -1,6 +1,7 @@
 package org.coopeagro.entidades;
 
 import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,19 +25,22 @@ public class DetalleVenta implements Serializable{
         allocationSize=1
     )
     
+    @Basic(optional = false)
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE, generator="DetalleVentaGen")
     @Column(name="DNI")
     private Integer id;
+    @Basic(optional = false)
     @Column(name="NMCANTIDAD")
     private Double cantidad;
+    @Basic(optional = false)
     @Column(name="NMPRECIO")
     private Double precio;
     @ManyToOne
-    @JoinColumn(name = "DNI_VENTA")
+    @JoinColumn(name = "DNIPEDIDO_VENTA_FK", referencedColumnName = "DNIPEDIDO_VENTA", nullable = false)
     private Venta venta;
     @ManyToOne
-    @JoinColumn(name = "DNIPRODUCTO")
+    @JoinColumn(name = "DNIPRODUCTO_FK", referencedColumnName = "DNIPRODUCTO", nullable = false)
     private Producto producto;
     
     public DetalleVenta(){
