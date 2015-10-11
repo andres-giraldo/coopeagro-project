@@ -32,7 +32,7 @@ public class Persona implements Serializable{
     @Column(name="DSCORREO")
     private String correo;
     @OneToOne
-    @JoinColumn(name = "DNIUSUARIO_FK", referencedColumnName = "DNIUSUARIO", nullable = true)
+    @JoinColumn(name = "DNIUSUARIO", referencedColumnName = "DNIUSUARIO", nullable = true)
     private Usuario usuario;
     
     public Persona(){

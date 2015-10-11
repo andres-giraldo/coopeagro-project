@@ -38,7 +38,7 @@ public class Inventario implements Serializable{
     @Column(name="FEFECHA")
     private Date fecha;
     @ManyToOne
-    @JoinColumn(name = "DNIPRODUCTO_FK", referencedColumnName = "DNIPRODUCTO", nullable = false)
+    @JoinColumn(name = "DNIPRODUCTO", referencedColumnName = "DNIPRODUCTO", nullable = false)
     private Producto producto;
     @Basic(optional = false)
     @Column(name="NMCANTIDADCOMPROMETIDA")

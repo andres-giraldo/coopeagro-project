@@ -22,8 +22,8 @@ public class Venta extends Pedido implements Serializable{
     private Date fechaEstimadaEntrega;
     @ManyToOne
     @JoinColumns({
-        @JoinColumn(name = "DNI_CLIENTE_FK", referencedColumnName = "DNI_CLIENTE", nullable = false),
-        @JoinColumn(name = "DSTIPODOCUMENTO_CLIENTE_FK", referencedColumnName = "DSTIPODOCUMENTO_CLIENTE", nullable = false)
+        @JoinColumn(name = "DNI_CLIENTE", referencedColumnName = "DNI", nullable = false),
+        @JoinColumn(name = "DSTIPODOCUMENTO_CLIENTE", referencedColumnName = "DSTIPODOCUMENTO", nullable = false)
     })
     private Cliente cliente;
     @Basic(optional = false)

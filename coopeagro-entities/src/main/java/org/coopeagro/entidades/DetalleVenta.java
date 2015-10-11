@@ -37,10 +37,10 @@ public class DetalleVenta implements Serializable{
     @Column(name="NMPRECIO")
     private Double precio;
     @ManyToOne
-    @JoinColumn(name = "DNIPEDIDO_VENTA_FK", referencedColumnName = "DNIPEDIDO_VENTA", nullable = false)
+    @JoinColumn(name = "DNIPEDIDO_VENTA", referencedColumnName = "DNIPEDIDO", nullable = false)
     private Venta venta;
     @ManyToOne
-    @JoinColumn(name = "DNIPRODUCTO_FK", referencedColumnName = "DNIPRODUCTO", nullable = false)
+    @JoinColumn(name = "DNIPRODUCTO", referencedColumnName = "DNIPRODUCTO", nullable = false)
     private Producto producto;
     
     public DetalleVenta(){

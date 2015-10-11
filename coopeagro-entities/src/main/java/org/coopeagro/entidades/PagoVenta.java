@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
@@ -39,8 +40,8 @@ public class PagoVenta implements Serializable{
     @Temporal(TemporalType.DATE)
     @Column(name="FEFECHAPAGO")
     private Date fechaPago;
-    @OneToMany
-    @JoinColumn(name = "DNIPEDIDO_VENTA_FK", referencedColumnName = "DNIPEDIDO_VENTA", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "DNIPEDIDO_VENTA", referencedColumnName = "DNIPEDIDO", nullable = false)
     private Venta venta;
     
     public PagoVenta() {

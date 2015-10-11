@@ -41,8 +41,8 @@ public class Pedido implements Serializable{
     private Date fechaPedido;
     @ManyToOne
     @JoinColumns({
-        @JoinColumn(name = "DNI_EMPLEADO_FK", referencedColumnName = "DNI_EMPLEADO", nullable = false),
-        @JoinColumn(name = "DSTIPODOCUMENTO_EMPLEADO_FK", referencedColumnName = "DSTIPODOCUMENTO_EMPLEADO", nullable = false)
+        @JoinColumn(name = "DNI_EMPLEADO", referencedColumnName = "DNI", nullable = false),
+        @JoinColumn(name = "DSTIPODOCUMENTO_EMPLEADO", referencedColumnName = "DSTIPODOCUMENTO", nullable = false)
     })
     private Empleado empleado;
     @Basic(optional = false)
