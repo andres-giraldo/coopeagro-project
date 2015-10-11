@@ -19,7 +19,7 @@ import org.coopeagro.entidades.DetalleCompra;
 
 /**
  *
- * @author sala306
+ * @author YEISSON
  */
 public class DetalleCompraJpaController implements Serializable {
 

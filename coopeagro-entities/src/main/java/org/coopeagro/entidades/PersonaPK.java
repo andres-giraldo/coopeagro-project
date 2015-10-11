@@ -19,6 +19,8 @@ public class PersonaPK implements Serializable {
     private TiposDocumento tipoDocumento;
 
     public PersonaPK() {
+        this.documento = "";
+        this.tipoDocumento = TiposDocumento.NIT;
     }
 
     public PersonaPK(String documento, TiposDocumento tipoDocumento) {

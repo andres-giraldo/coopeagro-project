@@ -8,12 +8,16 @@ package org.coopeagro.beans;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import org.coopeagro.controladores.AgricultorJpaController;
+import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Agricultor;
 import org.coopeagro.entidades.TiposDocumento;
 
@@ -32,22 +36,65 @@ public class BeanAgricultor {
      * Creates a new instance of BeanAgricultor
      */
     public BeanAgricultor() {
-        AgricultorJpaController controller = (AgricultorJpaController) servletContext.getAttribute("agricultorJpaController");
+        //AgricultorJpaController controller = (AgricultorJpaController) servletContext.getAttribute("agricultorJpaController");
         //controller.findAgricultorEntities();
-        for (Agricultor agr : controller.findAgricultorEntities()) {
+        /*for (Agricultor agr : controller.findAgricultorEntities()) {
             System.out.println(agr);
-        }
-        //agricultores = listarAgricultores();
+        }*/
+        agricultores = listarAgricultores();
     }
     
     public void guardar(){
-        //AgricultorJpaController controller = (AgricultorJpaController) servletContext.getAttribute("agricultorJpaController");
+        FacesMessage msg = null;
+        try {
+            AgricultorJpaController controller = (AgricultorJpaController) servletContext.getAttribute("agricultorJpaController");
+            controller.create(agricultor);
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue insertado con éxito");
+        } catch (Exception ex) {
+            Logger.getLogger(BeanAgricultor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        agricultores = listarAgricultores();
     }
     
-    /*private List<Agricultor> listarAgricultores(){
+    public String eliminar(String id, TiposDocumento tipo){
+        try {
+            Agricultor agricultorEliminar = new Agricultor();
+            agricultorEliminar.getLlavePrimaria().setDocumento(id);
+            agricultorEliminar.getLlavePrimaria().setTipoDocumento(tipo);
+            AgricultorJpaController controller = (AgricultorJpaController) servletContext.getAttribute("agricultorJpaController");
+            controller.destroy(agricultorEliminar.getLlavePrimaria());
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(BeanAgricultor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        agricultores = listarAgricultores();
+        return "Agricultor";
+    }
+    
+    public String editar(){
+        try {
+            AgricultorJpaController controller = (AgricultorJpaController) servletContext.getAttribute("agricultorJpaController");
+            controller.edit(agricultor);
+        } catch (Exception ex) {
+            Logger.getLogger(BeanAgricultor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        agricultores = listarAgricultores();
+        return "Agricultor";
+    }
+    
+    public String prepararEdicion(String id, TiposDocumento tipo){
+        Agricultor agricultorConsultar = new Agricultor();
+        agricultorConsultar.getLlavePrimaria().setDocumento(id);
+        agricultorConsultar.getLlavePrimaria().setTipoDocumento(tipo);
+        AgricultorJpaController controller = (AgricultorJpaController) servletContext.getAttribute("agricultorJpaController");
+        agricultor = controller.findAgricultor(agricultorConsultar.getLlavePrimaria());
+        return "Agricultor";
+    }
+    
+    private List<Agricultor> listarAgricultores(){
         AgricultorJpaController controller = (AgricultorJpaController) servletContext.getAttribute("agricultorJpaController");
         return controller.findAgricultorEntities();
-    }*/
+    }
     
     public TiposDocumento[] getTiposDocumentoValues() {
         return TiposDocumento.values();

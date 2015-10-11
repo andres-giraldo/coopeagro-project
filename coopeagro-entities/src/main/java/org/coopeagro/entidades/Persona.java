@@ -36,6 +36,7 @@ public class Persona implements Serializable{
     private Usuario usuario;
     
     public Persona(){
+        this.llavePrimaria = new PersonaPK();
     }
 
     public Persona(PersonaPK llavePrimaria, String nombre, String apellidoUno, String apellidoDos, String telefono, String celular, String correo, Usuario usuario) {

@@ -19,7 +19,7 @@ import org.coopeagro.entidades.Usuario;
 
 /**
  *
- * @author sala306
+ * @author YEISSON
  */
 public class UsuarioJpaController implements Serializable {
 

@@ -19,7 +19,6 @@
                 
                 <p:outputLabel value="Tipo Identificación*"/>
                 <p:selectOneMenu value="#{beanAgricultor.agricultor.llavePrimaria.tipoDocumento}">
-                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanAgricultor.tiposDocumentoValues}" var="itemTI" itemLabel="#{itemTI.tipoDocumento}" itemValue="#{itemTI.tipoDocumento}"/>
                 </p:selectOneMenu>
                 
@@ -49,7 +48,8 @@
                 <p:outputLabel value="Dirección*"/>
                 <p:inputText id="direccion" value="#{beanAgricultor.agricultor.direccion}"/>
             </h:panelGrid>
-            <p:commandButton value="Guardar"/>
+            <p:commandButton value="Guardar" actionListener="#{beanAgricultor.guardar()}"/>
+            <p:commandButton value="Editar" actionListener="#{beanAgricultor.editar()}"/>
         </h:form>
         <br/>
         <h:form>
@@ -86,10 +86,10 @@
                     <h:outputText value="#{item.direccion}" />
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Editar"/>
+                    <h:commandLink value="Editar" action="#{beanAgricultor.prepararEdicion(item.llavePrimaria.documento, item.llavePrimaria.tipoDocumento)}"/>
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Eliminar"/>
+                    <h:commandLink value="Eliminar" actionListener="#{beanAgricultor.eliminar(item.llavePrimaria.documento, item.llavePrimaria.tipoDocumento)}"/>
                 </p:column>
             </p:dataTable>
             <br/>

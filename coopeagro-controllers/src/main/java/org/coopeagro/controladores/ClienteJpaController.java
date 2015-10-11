@@ -21,7 +21,7 @@ import org.coopeagro.entidades.PersonaPK;
 
 /**
  *
- * @author sala306
+ * @author YEISSON
  */
 public class ClienteJpaController implements Serializable {
 

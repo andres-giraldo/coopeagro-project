@@ -19,7 +19,7 @@ import org.coopeagro.entidades.PagoVenta;
 
 /**
  *
- * @author sala306
+ * @author YEISSON
  */
 public class PagoVentaJpaController implements Serializable {
 
