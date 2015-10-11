@@ -33,10 +33,10 @@
                 <p:inputText id="apellido2" value="#{beanEmpleado.empleado.apellidoDos}"/>
                 
                 <p:outputLabel value="Telefono*"/>
-                <p:inputMask id="telefono" mask="9?99999" value="#{beanEmpleado.empleado.telefono}"/>
+                <p:inputMask id="telefono" mask="9?999999" value="#{beanEmpleado.empleado.telefono}"/>
                 
                 <p:outputLabel value="Celular*"/>
-                <p:inputMask id="celular" mask="9?99999999" value="#{beanEmpleado.empleado.celular}"/>
+                <p:inputMask id="celular" mask="9?999999999" value="#{beanEmpleado.empleado.celular}"/>
                 
                 <p:outputLabel value="Correo*"/>
                 <p:inputText id="email" value="#{beanEmpleado.empleado.correo}" validatorMessage="El correo no es valido">
@@ -54,14 +54,9 @@
                 
                 <p:outputLabel value="Fecha Retiro*"/>
                 <p:calendar id="fechaRetiro" value="#{beanEmpleado.empleado.fechaRetiro}"/>
-                
-                <p:outputLabel value="Usuario*"/>
-                <p:inputText id="usuario" value="#{beanEmpleado.empleado.usuario}"/>
-                
-                <p:outputLabel value="Clave*"/>
-                <p:password id="clave" value="#{beanEmpleado.empleado.clave}"/>
             </h:panelGrid>
-            <p:commandButton value="Guardar"/>
+            <p:commandButton value="Guardar" actionListener="#{beanEmpleado.guardar()}"/>
+            <p:commandButton value="Editar" actionListener="#{beanEmpleado.editar()}"/>
         </h:form>
         <br/>
         <h:form>
@@ -104,10 +99,10 @@
                     <h:outputText value="#{item.fechaRetiro}" />
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Editar"/>
+                    <h:commandLink value="Editar" action="#{beanEmpleado.prepararEdicion(item.llavePrimaria.documento, item.llavePrimaria.tipoDocumento)}"/>
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Eliminar"/>
+                    <h:commandLink value="Eliminar" actionListener="#{beanEmpleado.eliminar(item.llavePrimaria.documento, item.llavePrimaria.tipoDocumento)}"/>
                 </p:column>
             </p:dataTable>
             <br/>

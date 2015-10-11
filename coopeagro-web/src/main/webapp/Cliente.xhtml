@@ -19,7 +19,6 @@
                 
                 <p:outputLabel value="Tipo Identificación*"/>
                 <p:selectOneMenu value="#{beanCliente.cliente.llavePrimaria.tipoDocumento}">
-                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanCliente.tiposDocumentoValues}" var="itemTI" itemLabel="#{itemTI.tipoDocumento}" itemValue="#{itemTI.tipoDocumento}"/>
                 </p:selectOneMenu>
                 
@@ -43,7 +42,8 @@
                     <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
                 </p:inputText>
             </h:panelGrid>
-            <p:commandButton value="Guardar"/>
+            <p:commandButton value="Guardar" actionListener="#{beanCliente.guardar()}"/>
+            <p:commandButton value="Editar" actionListener="#{beanCliente.editar()}"/>
         </h:form>
         <br/>
         <h:form>
@@ -74,10 +74,10 @@
                     <h:outputText value="#{item.correo}" />
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Editar"/>
+                    <h:commandLink value="Editar" action="#{beanCliente.prepararEdicion(item.llavePrimaria.documento, item.llavePrimaria.tipoDocumento)}"/>
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Eliminar"/>
+                    <h:commandLink value="Eliminar" actionListener="#{beanCliente.eliminar(item.llavePrimaria.documento, item.llavePrimaria.tipoDocumento)}"/>
                 </p:column>
             </p:dataTable>
             <br/>
