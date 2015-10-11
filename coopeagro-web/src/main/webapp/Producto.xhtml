@@ -13,13 +13,17 @@
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true" />
         <h:form>
             <h:panelGrid columns="2">
+                <!--<p:outputLabel value="Código*"/>-->
+                <h:inputHidden id="id" value="#{beanProducto.producto.id}"/>
+                
                 <p:outputLabel value="Código*"/>
                 <p:inputText id="codigo" value="#{beanProducto.producto.codigo}"/>
                 
                 <p:outputLabel value="Nombre*"/>
                 <p:inputText id="nombre" value="#{beanProducto.producto.nombre}"/>
             </h:panelGrid>
-            <p:commandButton value="Guardar"/>
+            <p:commandButton value="Guardar" actionListener="#{beanProducto.guardar()}"/>
+            <p:commandButton value="Editar" actionListener="#{beanProducto.editar()}"/>
         </h:form>
         <br/>
         <h:form>
@@ -35,10 +39,10 @@
                     <h:outputText value="#{item.nombre}" />
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Editar"/>
+                    <h:commandLink value="Editar" action="#{beanProducto.prepararEdicion(item.id)}"/>
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Eliminar"/>
+                    <h:commandLink value="Eliminar" actionListener="#{beanProducto.eliminar(item.id)}"/>
                 </p:column>
             </p:dataTable>
             <br/>
