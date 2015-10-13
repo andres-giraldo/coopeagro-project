@@ -34,6 +34,7 @@ public class Venta extends Pedido implements Serializable{
     private String remitente;
     
     public Venta() {
+        this.cliente = new Cliente();
     }
 
     public Venta(Date fechaEstimadaEntrega, Cliente cliente, String direccion, String remitente, Date fechaPedido, Empleado empleado, EstadosPedido estado, Double total) {

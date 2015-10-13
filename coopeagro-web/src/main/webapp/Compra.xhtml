@@ -14,15 +14,17 @@
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
         <h:form>
             <h:panelGrid columns="2">
+                <!--<p:outputLabel value="Identificación Pedido*"/>-->
+                <h:inputHidden id="id" value="#{beanCompra.compra.numeroPedido}"/>
+                
                 <p:outputLabel value="Identificación Proveedor*"/>
-                <p:selectOneMenu value="#{beanCompra.compra.proveedor.llavePrimaria.documento}">
+                <p:selectOneMenu value="#{beanCompra.compra.agricultor.llavePrimaria.documento}">
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanCompra.proveedores}" var="itemProv" itemLabel="#{itemProv.llavePrimaria.documento}" itemValue="#{itemProv.llavePrimaria.documento}"/>
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Tipo Identificación Proveedor*"/>
-                <p:selectOneMenu value="#{beanCompra.compra.proveedor.llavePrimaria.tipoDocumento}">
-                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
+                <p:selectOneMenu value="#{beanCompra.compra.agricultor.llavePrimaria.tipoDocumento}">
                     <f:selectItems value="#{beanCompra.tiposDocumentoValues}" var="itemEnum" itemLabel="#{itemEnum.tipoDocumento}" itemValue="#{itemEnum.tipoDocumento}"/>
                 </p:selectOneMenu>
                 
@@ -37,7 +39,6 @@
                 
                 <p:outputLabel value="Tipo Identificación Empleado*"/>
                 <p:selectOneMenu value="#{beanCompra.compra.empleado.llavePrimaria.tipoDocumento}">
-                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanCompra.tiposDocumentoValues}" var="itemEnum" itemLabel="#{itemEnum.tipoDocumento}" itemValue="#{itemEnum.tipoDocumento}"/>
                 </p:selectOneMenu>
                 
@@ -50,17 +51,21 @@
                 <p:outputLabel value="Total*"/>
                 <p:inputMask id="total" mask="9?99999999" value="#{beanCompra.compra.total}"/>
             </h:panelGrid>
-            <p:commandButton value="Guardar"/>
+            <p:commandButton value="Guardar" actionListener="#{beanCompra.guardar()}"/>
+            <p:commandButton value="Editar" actionListener="#{beanCompra.editar()}"/>
         </h:form>
         <br/>
         <h:form>
             <p:dataTable var="item" value="#{beanCompra.compras}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+                <p:column headerText="Número Pedido">
+                    <h:outputText value="#{item.numeroPedido}" />
+                </p:column>
                 <p:column headerText="Identificación Proveedor">
-                    <h:outputText value="#{item.proveedor}" />
+                    <h:outputText value="#{item.agricultor.llavePrimaria.documento}" />
                 </p:column>
                 <p:column headerText="Tipo Identificación Proveedor">
-                    <h:outputText value="#{item.proveedor}" />
+                    <h:outputText value="#{item.agricultor.llavePrimaria.tipoDocumento}" />
                 </p:column>
                 <p:column headerText="Fecha Pedido">
                     <h:outputText value="#{item.fechaPedido}" />
@@ -78,10 +83,10 @@
                     <h:outputText value="#{item.total}" />
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Editar"/>
+                    <h:commandLink value="Editar" action="#{beanCompra.prepararEdicion(item.numeroPedido)}"/>
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Eliminar"/>
+                    <h:commandLink value="Eliminar" actionListener="#{beanCompra.eliminar(item.numeroPedido)}"/>
                 </p:column>
             </p:dataTable>
             <br/>

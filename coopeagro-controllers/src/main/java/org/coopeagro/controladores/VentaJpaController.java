@@ -15,6 +15,8 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
+import org.coopeagro.entidades.Cliente;
+import org.coopeagro.entidades.Empleado;
 import org.coopeagro.entidades.Venta;
 
 /**
@@ -136,4 +138,35 @@ public class VentaJpaController implements Serializable {
         }
     }
     
+    public List<Cliente> getAllCustomers() throws Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query query = em.createQuery("select c from Cliente c");
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
+    public List<Empleado> getAllEmployees() throws Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query query = em.createQuery("select e from Empleado e");
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 }

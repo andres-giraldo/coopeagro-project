@@ -44,6 +44,8 @@ public class DetalleVenta implements Serializable{
     private Producto producto;
     
     public DetalleVenta(){
+        this.venta = new Venta();
+        this.producto = new Producto();
     }
 
     public DetalleVenta(Double cantidad, Double precio, Venta venta, Producto producto) {

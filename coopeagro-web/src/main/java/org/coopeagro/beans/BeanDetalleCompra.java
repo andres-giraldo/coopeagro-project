@@ -8,12 +8,16 @@ package org.coopeagro.beans;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import org.coopeagro.controladores.DetalleCompraJpaController;
+import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Compra;
 import org.coopeagro.entidades.DetalleCompra;
 import org.coopeagro.entidades.Producto;
@@ -35,7 +39,78 @@ public class BeanDetalleCompra {
      * Creates a new instance of BeanDetalleCompra
      */
     public BeanDetalleCompra() {
+        //DetalleCompraJpaController controller = (DetalleCompraJpaController) servletContext.getAttribute("detalleCompraJpaController");
+        detallesCompra = listarDetalleCompras();
+        productos = listarProductos();
+        compras = listarCompras();
+    }
+    
+    public void guardar(){
+        FacesMessage msg = null;
+        try {
+            DetalleCompraJpaController controller = (DetalleCompraJpaController) servletContext.getAttribute("detalleCompraJpaController");
+            controller.create(detalleCompra);
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue insertado con éxito");
+        } catch (Exception ex) {
+            Logger.getLogger(BeanDetalleCompra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        detallesCompra = listarDetalleCompras();
+    }
+    
+    public String eliminar(Integer id){
+        try {
+            DetalleCompraJpaController controller = (DetalleCompraJpaController) servletContext.getAttribute("detalleCompraJpaController");
+            controller.destroy(id);
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(BeanDetalleCompra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        detallesCompra = listarDetalleCompras();
+        return "DetalleCompra";
+    }
+    
+    public String editar(){
+        try {
+            DetalleCompraJpaController controller = (DetalleCompraJpaController) servletContext.getAttribute("detalleCompraJpaController");
+            controller.edit(detalleCompra);
+        } catch (Exception ex) {
+            Logger.getLogger(BeanDetalleCompra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        detallesCompra = listarDetalleCompras();
+        return "DetalleCompra";
+    }
+    
+    public String prepararEdicion(Integer id){
         DetalleCompraJpaController controller = (DetalleCompraJpaController) servletContext.getAttribute("detalleCompraJpaController");
+        detalleCompra = controller.findDetalleCompra(id);
+        return "DetalleCompra";
+    }
+    
+    private List<DetalleCompra> listarDetalleCompras(){
+        DetalleCompraJpaController controller = (DetalleCompraJpaController) servletContext.getAttribute("detalleCompraJpaController");
+        return controller.findDetalleCompraEntities();
+    }
+    
+    private List<Producto> listarProductos(){
+        List<Producto> p = null;
+        try {
+            DetalleCompraJpaController controller = (DetalleCompraJpaController) servletContext.getAttribute("detalleCompraJpaController");
+            p = controller.getAllProducts();
+        } catch (Exception ex) {
+            Logger.getLogger(BeanDetalleCompra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return p;
+    }
+    
+    private List<Compra> listarCompras(){
+        List<Compra> c = null;
+        try {
+            DetalleCompraJpaController controller = (DetalleCompraJpaController) servletContext.getAttribute("detalleCompraJpaController");
+            c = controller.getAllCompras();
+        } catch (Exception ex) {
+            Logger.getLogger(BeanDetalleCompra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return c;
     }
 
     public DetalleCompra getDetalleCompra() {

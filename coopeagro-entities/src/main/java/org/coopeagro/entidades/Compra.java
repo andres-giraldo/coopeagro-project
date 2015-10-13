@@ -17,26 +17,27 @@ public class Compra extends Pedido implements Serializable{
         @JoinColumn(name = "DNI_AGRICULTOR", referencedColumnName = "DNI", nullable = false),
         @JoinColumn(name = "DSTIPODOCUMENTO_AGRICULTOR", referencedColumnName = "DSTIPODOCUMENTO", nullable = false)
     })
-    private Agricultor proveedor;
+    private Agricultor agricultor;
 
     public Compra() {
+        this.agricultor = new Agricultor();
     }
 
     public Compra(Agricultor proveedor, Date fechaPedido, Empleado empleado, EstadosPedido estado, Double total) {
         super(fechaPedido, empleado, estado, total);
-        this.proveedor = proveedor;
+        this.agricultor = proveedor;
     }
 
-    public Agricultor getProveedor() {
-        return proveedor;
+    public Agricultor getAgricultor() {
+        return agricultor;
     }
 
-    public void setProveedor(Agricultor proveedor) {
-        this.proveedor = proveedor;
+    public void setAgricultor(Agricultor agricultor) {
+        this.agricultor = agricultor;
     }
 
     @Override
     public String toString() {
-        return "Compra{" + "proveedor=" + proveedor + '}';
+        return "Compra{" + "agricultor=" + agricultor + '}';
     }
 }

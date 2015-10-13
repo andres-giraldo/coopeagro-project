@@ -14,6 +14,9 @@
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
         <h:form>
             <h:panelGrid columns="2">
+                <!--<p:outputLabel value="Identificación Pedido*"/>-->
+                <h:inputHidden id="id" value="#{beanVenta.venta.numeroPedido}"/>
+                
                 <p:outputLabel value="Fecha Pedido*"/>
                 <p:calendar id="fechaPedido" value="#{beanVenta.venta.fechaPedido}"/>
                 
@@ -28,7 +31,6 @@
                 
                 <p:outputLabel value="Tipo Identificación Cliente*"/>
                 <p:selectOneMenu id="tipoIdCliente" value="#{beanVenta.venta.cliente.llavePrimaria.tipoDocumento}">
-                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanVenta.tiposDocumentoValues}" var="itemEnum" itemLabel="#{itemEnum.tipoDocumento}" itemValue="#{itemEnum.tipoDocumento}"/>
                 </p:selectOneMenu>
                 
@@ -39,14 +41,13 @@
                 <p:inputText id="remitente" value="#{beanVenta.venta.remitente}"/>
                 
                 <p:outputLabel value="Identificación Empleado*"/>
-                <p:selectOneMenu id="idEmpleado" value="#{beanVenta.venta.empleado}">
+                <p:selectOneMenu id="idEmpleado" value="#{beanVenta.venta.empleado.llavePrimaria.documento}">
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanVenta.empleados}" var="itemEmpleado" itemLabel="#{itemEmpleado.llavePrimaria.documento}" itemValue="#{itemEmpleado.llavePrimaria.documento}"/>
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Tipo Identificación Empleado*"/>
                 <p:selectOneMenu id="tipoIdEmpleado" value="#{beanVenta.venta.empleado.llavePrimaria.tipoDocumento}">
-                    <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanVenta.tiposDocumentoValues}" var="itemEnum" itemLabel="#{itemEnum.tipoDocumento}" itemValue="#{itemEnum.tipoDocumento}"/>
                 </p:selectOneMenu>
                 
@@ -59,12 +60,16 @@
                 <p:outputLabel value="Total*"/>
                 <p:inputMask id="total" mask="9?99999999" value="#{beanVenta.venta.total}"/>
             </h:panelGrid>
-            <p:commandButton value="Guardar"/>
+            <p:commandButton value="Guardar" actionListener="#{beanVenta.guardar()}"/>
+            <p:commandButton value="Editar" actionListener="#{beanVenta.editar()}"/>
         </h:form>
         <br/>
         <h:form>
             <p:dataTable var="item" value="#{beanVenta.ventas}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+                <p:column headerText="Número Pedido">
+                    <h:outputText value="#{item.numeroPedido}" />
+                </p:column>
                 <p:column headerText="Fecha Pedido">
                     <h:outputText value="#{item.fechaPedido}" />
                 </p:column>
@@ -96,10 +101,10 @@
                     <h:outputText value="#{item.total}" />
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Editar"/>
+                    <h:commandLink value="Editar" action="#{beanVenta.prepararEdicion(item.numeroPedido)}"/>
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Eliminar"/>
+                    <h:commandLink value="Eliminar" actionListener="#{beanVenta.eliminar(item.numeroPedido)}"/>
                 </p:column>
             </p:dataTable>
             <br/>

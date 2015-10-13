@@ -14,35 +14,42 @@
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
         <h:form>
             <h:panelGrid columns="2">
+                <!--<p:outputLabel value="Identificación Detalle*"/>-->
+                <h:inputHidden id="id" value="#{beanDetalleVenta.detalleVenta.id}"/>
+                
                 <p:outputLabel value="Id Venta*"/>
-                <p:selectOneMenu value="#{beanDetalleVenta.detalleVenta.venta}">
+                <p:selectOneMenu value="#{beanDetalleVenta.detalleVenta.venta.numeroPedido}">
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
-                    <f:selectItems value="#{beanDetalleVenta.ventas}"/>
+                    <f:selectItems value="#{beanDetalleVenta.ventas}" var="itemVenta" itemLabel="#{itemVenta.numeroPedido}" itemValue="#{itemVenta.numeroPedido}"/>
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Producto*"/>
-                <p:selectOneMenu value="#{beanDetalleVenta.detalleVenta.producto}">
+                <p:selectOneMenu value="#{beanDetalleVenta.detalleVenta.producto.id}">
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
-                    <f:selectItems value="#{beanDetalleVenta.productos}"/>
+                    <f:selectItems value="#{beanDetalleVenta.productos}" var="itemProducto" itemLabel="#{itemProducto.codigo}" itemValue="#{itemProducto.id}"/>
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Cantidad*"/>
-                <p:inputMask id="cantidad" mask="9?99" value="#{beanDetalleVenta.detalleVenta.cantidad}"/>
+                <p:inputMask id="cantidad" mask="9?999" value="#{beanDetalleVenta.detalleVenta.cantidad}"/>
                 
                 <p:outputLabel value="Precio*"/>
-                <p:inputMask id="precio" mask="9?99999" value="#{beanDetalleVenta.detalleVenta.precio}"/>
+                <p:inputMask id="precio" mask="9?999999" value="#{beanDetalleVenta.detalleVenta.precio}"/>
             </h:panelGrid>
-            <p:commandButton value="Guardar"/>
+            <p:commandButton value="Guardar" actionListener="#{beanDetalleVenta.guardar()}"/>
+            <p:commandButton value="Editar" actionListener="#{beanDetalleVenta.editar()}"/>
         </h:form>
         <br/>
         <h:form>
             <p:dataTable var="item" value="#{beanDetalleVenta.detallesVenta}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+                <p:column headerText="Id Detalle">
+                    <h:outputText value="#{item.id}" />
+                </p:column>
                 <p:column headerText="Id Venta">
-                    <h:outputText value="#{item.venta}" />
+                    <h:outputText value="#{item.venta.numeroPedido}" />
                 </p:column>
                 <p:column headerText="Producto">
-                    <h:outputText value="#{item.producto}" />
+                    <h:outputText value="#{item.producto.id}" />
                 </p:column>
                 <p:column headerText="Cantidad">
                     <h:outputText value="#{item.cantidad}" />
@@ -51,10 +58,10 @@
                     <h:outputText value="#{item.precio}" />
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Editar"/>
+                    <h:commandLink value="Editar" action="#{beanDetalleVenta.prepararEdicion(item.id)}"/>
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Eliminar"/>
+                    <h:commandLink value="Eliminar" actionListener="#{beanDetalleVenta.eliminar(item.id)}"/>
                 </p:column>
             </p:dataTable>
             <br/>

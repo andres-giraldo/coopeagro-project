@@ -53,6 +53,8 @@ public class Pedido implements Serializable{
     private Double total;
     
     public Pedido(){
+        this.empleado = new Empleado();
+        this.numeroPedido = 0;
     }
 
     public Pedido(Date fechaPedido, Empleado empleado, EstadosPedido estado, Double total) {
