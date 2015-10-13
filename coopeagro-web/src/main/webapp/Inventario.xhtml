@@ -14,13 +14,16 @@
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
         <h:form>
             <h:panelGrid columns="2">
+                <!--<p:outputLabel value="Código*"/>-->
+                <h:inputHidden id="id" value="#{beanInventario.inventario.id}"/>
+                
                 <p:outputLabel value="Fecha*"/>
                 <p:calendar id="fecha" value="#{beanInventario.inventario.fecha}"/>
                 
                 <p:outputLabel value="Producto*"/>
-                <p:selectOneMenu value="#{beanInventario.inventario.producto}">
+                <p:selectOneMenu value="#{beanInventario.inventario.producto.id}">
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
-                    <f:selectItems value="#{beanInventario.productos}"/>
+                    <f:selectItems value="#{beanInventario.productos}" var="itemProducto" itemLabel="#{itemProducto.codigo}" itemValue="#{itemProducto.id}"/>
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Cantidad Comprometida*"/>
@@ -29,17 +32,21 @@
                 <p:outputLabel value="Cantidad Total*"/>
                 <p:inputMask id="cantidadTotal" mask="9?999" value="#{beanInventario.inventario.cantidadTotal}"/>
             </h:panelGrid>
-            <p:commandButton value="Guardar"/>
+            <p:commandButton value="Guardar" actionListener="#{beanInventario.guardar()}"/>
+            <p:commandButton value="Editar" actionListener="#{beanInventario.editar()}"/>
         </h:form>
         <br/>
         <h:form>
             <p:dataTable var="item" value="#{beanInventario.inventarios}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+                <p:column headerText="Id Inventario">
+                    <h:outputText value="#{item.id}" />
+                </p:column>
                 <p:column headerText="Fecha">
                     <h:outputText value="#{item.fecha}" />
                 </p:column>
                 <p:column headerText="Producto">
-                    <h:outputText value="#{item.producto}" />
+                    <h:outputText value="#{item.producto.id}" />
                 </p:column>
                 <p:column headerText="Cantidad Comprometida">
                     <h:outputText value="#{item.cantidadComprometida}" />
@@ -48,10 +55,10 @@
                     <h:outputText value="#{item.cantidadTotal}" />
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Editar"/>
+                    <h:commandLink value="Editar" action="#{beanInventario.prepararEdicion(item.id)}"/>
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Eliminar"/>
+                    <h:commandLink value="Eliminar" actionListener="#{beanInventario.eliminar(item.id)}"/>
                 </p:column>
             </p:dataTable>
             <br/>

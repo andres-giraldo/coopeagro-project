@@ -14,38 +14,45 @@
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
         <h:form>
             <h:panelGrid columns="2">
+                <!--<p:outputLabel value="Código*"/>-->
+                <h:inputHidden id="id" value="#{beanPagoVenta.pagoVenta.id}"/>
+                
                 <p:outputLabel value="Fecha Pago*"/>
-                <p:calendar id="fechaPago" value="#{beanPagoVenta.pagoVenta.llavePrimaria.fechaPago}"/>
+                <p:calendar id="fechaPago" value="#{beanPagoVenta.pagoVenta.fechaPago}"/>
                 
                 <p:outputLabel value="Id Venta*"/>
-                <p:selectOneMenu value="#{beanPagoVenta.pagoVenta.llavePrimaria.venta}">
+                <p:selectOneMenu value="#{beanPagoVenta.pagoVenta.venta.numeroPedido}">
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
-                    <f:selectItems value="#{beanPagoVenta.ventas}"/>
+                    <f:selectItems value="#{beanPagoVenta.ventas}" var="itemVenta" itemLabel="#{itemVenta.numeroPedido}" itemValue="#{itemVenta.numeroPedido}"/>
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Cantidad Cancelada*"/>
                 <p:inputMask id="cantidadCancelada" mask="9?99999999" value="#{beanPagoVenta.pagoVenta.cantidadCancelada}"/>
             </h:panelGrid>
-            <p:commandButton value="Guardar"/>
+            <p:commandButton value="Guardar" actionListener="#{beanPagoVenta.guardar()}"/>
+            <p:commandButton value="Editar" actionListener="#{beanPagoVenta.editar()}"/>
         </h:form>
         <br/>
         <h:form>
             <p:dataTable var="item" value="#{beanPagoVenta.pagosVenta}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+                <p:column headerText="Id Pago">
+                    <h:outputText value="#{item.id}" />
+                </p:column>
                 <p:column headerText="Fecha Pago">
-                    <h:outputText value="#{item.llavePrimaria.fechaPago}" />
+                    <h:outputText value="#{item.fechaPago}" />
                 </p:column>
                 <p:column headerText="Id Venta">
-                    <h:outputText value="#{item.llavePrimaria.venta}" />
+                    <h:outputText value="#{item.venta.numeroPedido}" />
                 </p:column>
                 <p:column headerText="Cantidad Cancelada">
                     <h:outputText value="#{item.cantidadCancelada}" />
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Editar"/>
+                    <h:commandLink value="Editar" action="#{beanPagoVenta.prepararEdicion(item.id)}"/>
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Eliminar"/>
+                    <h:commandLink value="Eliminar" actionListener="#{beanPagoVenta.eliminar(item.id)}"/>
                 </p:column>
             </p:dataTable>
             <br/>

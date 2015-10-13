@@ -8,12 +8,16 @@ package org.coopeagro.beans;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import org.coopeagro.controladores.InventarioJpaController;
+import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Inventario;
 import org.coopeagro.entidades.Producto;
 
@@ -33,7 +37,66 @@ public class BeanInventario {
      * Creates a new instance of BeanInventario
      */
     public BeanInventario() {
+        //InventarioJpaController controller = (InventarioJpaController) servletContext.getAttribute("inventarioJpaController");
+        inventarios = listarInventario();
+        productos = listarProductos();
+    }
+    
+    public void guardar(){
+        FacesMessage msg = null;
+        try {
+            InventarioJpaController controller = (InventarioJpaController) servletContext.getAttribute("inventarioJpaController");
+            controller.create(inventario);
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue insertado con éxito");
+        } catch (Exception ex) {
+            Logger.getLogger(BeanInventario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+        inventarios = listarInventario();
+    }
+    
+    public String eliminar(Integer id){
+        try {
+            InventarioJpaController controller = (InventarioJpaController) servletContext.getAttribute("inventarioJpaController");
+            controller.destroy(id);
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(BeanInventario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        inventarios = listarInventario();
+        return "Inventario";
+    }
+    
+    public String editar(){
+        try {
+            InventarioJpaController controller = (InventarioJpaController) servletContext.getAttribute("inventarioJpaController");
+            controller.edit(inventario);
+        } catch (Exception ex) {
+            Logger.getLogger(BeanInventario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        inventarios = listarInventario();
+        return "Inventario";
+    }
+    
+    public String prepararEdicion(Integer id){
         InventarioJpaController controller = (InventarioJpaController) servletContext.getAttribute("inventarioJpaController");
+        inventario = controller.findInventario(id);
+        return "Inventario";
+    }
+    
+    private List<Inventario> listarInventario(){
+        InventarioJpaController controller = (InventarioJpaController) servletContext.getAttribute("inventarioJpaController");
+        return controller.findInventarioEntities();
+    }
+    
+    private List<Producto> listarProductos(){
+        List<Producto> p = null;
+        try {
+            InventarioJpaController controller = (InventarioJpaController) servletContext.getAttribute("inventarioJpaController");
+            p = controller.getAllProducts();
+        } catch (Exception ex) {
+            Logger.getLogger(BeanInventario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return p;
     }
 
     public Inventario getInventario() {

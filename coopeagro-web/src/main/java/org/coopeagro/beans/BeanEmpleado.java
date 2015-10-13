@@ -17,7 +17,6 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import org.coopeagro.controladores.EmpleadoJpaController;
-import org.coopeagro.controladores.UsuarioJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Empleado;
 import org.coopeagro.entidades.TiposDocumento;

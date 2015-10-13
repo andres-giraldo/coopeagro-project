@@ -41,6 +41,7 @@ public class Usuario implements Serializable{
     private Perfiles perfil;
 
     public Usuario() {
+        this.id = 0;
     }
     
     public Usuario(String usuario, String clave, Perfiles perfil) {

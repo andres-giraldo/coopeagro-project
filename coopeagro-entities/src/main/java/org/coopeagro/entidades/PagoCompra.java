@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
@@ -45,6 +44,7 @@ public class PagoCompra implements Serializable{
     private Compra compra;
     
     public PagoCompra(){
+        this.compra = new Compra();
     }
 
     public PagoCompra(Double cantidadCancelada, Date fechaPago, Compra compra) {
