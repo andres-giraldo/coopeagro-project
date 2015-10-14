@@ -15,12 +15,12 @@
     <class>org.coopeagro.entidades.PagoVenta</class>
     <class>org.coopeagro.entidades.Inventario</class>
     <properties>
-      <!--<property name="eclipselink.ddl-generation" value="create-tables"/>-->
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/coopeagro"/>
       <property name="javax.persistence.jdbc.user" value="coopeagro"/>
       <property name="javax.persistence.jdbc.password" value="coopeagro"/>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-      <!--<property name="javax.persistence.schema-generation.database.action" value="create"/>-->
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
     </properties>
   </persistence-unit>
 </persistence>

@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import org.coopeagro.controladores.PagoCompraJpaController;
@@ -27,7 +27,7 @@ import org.coopeagro.entidades.PagoCompra;
  */
 @Named(value = "beanPagoCompra")
 @ManagedBean
-@RequestScoped
+@SessionScoped
 public class BeanPagoCompra {
     private final ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
     PagoCompra pagoCompra = new PagoCompra();

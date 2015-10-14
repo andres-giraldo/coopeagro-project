@@ -6,6 +6,7 @@
 
 package org.coopeagro.beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -14,6 +15,7 @@ import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import org.coopeagro.controladores.PagoVentaJpaController;
@@ -28,7 +30,7 @@ import org.coopeagro.entidades.Venta;
 @Named(value = "beanPagoVenta")
 @ManagedBean
 @RequestScoped
-public class BeanPagoVenta {
+public class BeanPagoVenta implements Serializable{
     private final ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
     PagoVenta pagoVenta = new PagoVenta();
     List<PagoVenta> pagosVenta = new ArrayList<PagoVenta>();

@@ -9,12 +9,12 @@
         <title>Usuario</title>
     </h:head>
     <h:body>
-        <ui:include src="/index.xhtml"/>
+        <ui:include src="/Menu.xhtml"/>
         <h3>Administrar Usuarios</h3>
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
         <h:form>
             <h:panelGrid columns="2">
-                <!--<p:outputLabel value="Código*"/>-->
+                <!--<p:outputLabel value="Id*"/>-->
                 <h:inputHidden id="id" value="#{beanUsuario.usuario.id}"/>
                 
                 <p:outputLabel value="Usuario*"/>
@@ -45,10 +45,10 @@
                     <h:outputText value="#{item.perfil}" />
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Editar" action="#{beanUsuario.prepararEdicion(item.id)}"/>
+                    <h:commandLink value="Editar" action="#{beanUsuario.prepararEdicion(item.usuario)}"/>
                 </p:column>
                 <p:column headerText="&nbsp;">
-                    <h:commandLink value="Eliminar" actionListener="#{beanUsuario.eliminar(item.id)}"/>
+                    <h:commandLink value="Eliminar" actionListener="#{beanUsuario.eliminar(item.usuario)}"/>
                 </p:column>
             </p:dataTable>
             <br/>

@@ -9,7 +9,7 @@
         <title>Inventario</title>
     </h:head>
     <h:body>
-        <ui:include src="/index.xhtml"/>
+        <ui:include src="/Menu.xhtml"/>
         <h3>Administrar Inventario</h3>
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
         <h:form>
@@ -27,10 +27,10 @@
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Cantidad Comprometida*"/>
-                <p:inputMask id="cantidadComprometida" mask="9?999" value="#{beanInventario.inventario.cantidadComprometida}"/>
+                <p:inputText id="cantidadComprometida" value="#{beanInventario.inventario.cantidadComprometida}"/>
                 
                 <p:outputLabel value="Cantidad Total*"/>
-                <p:inputMask id="cantidadTotal" mask="9?999" value="#{beanInventario.inventario.cantidadTotal}"/>
+                <p:inputText id="cantidadTotal" value="#{beanInventario.inventario.cantidadTotal}"/>
             </h:panelGrid>
             <p:commandButton value="Guardar" actionListener="#{beanInventario.guardar()}"/>
             <p:commandButton value="Editar" actionListener="#{beanInventario.editar()}"/>

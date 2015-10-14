@@ -9,7 +9,7 @@
         <title>Pago Venta</title>
     </h:head>
     <h:body>
-        <ui:include src="/index.xhtml"/>
+        <ui:include src="/Menu.xhtml"/>
         <h3>Administrar Pago Ventas</h3>
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
         <h:form>
@@ -27,7 +27,7 @@
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Cantidad Cancelada*"/>
-                <p:inputMask id="cantidadCancelada" mask="9?99999999" value="#{beanPagoVenta.pagoVenta.cantidadCancelada}"/>
+                <p:inputText id="cantidadCancelada" value="#{beanPagoVenta.pagoVenta.cantidadCancelada}"/>
             </h:panelGrid>
             <p:commandButton value="Guardar" actionListener="#{beanPagoVenta.guardar()}"/>
             <p:commandButton value="Editar" actionListener="#{beanPagoVenta.editar()}"/>

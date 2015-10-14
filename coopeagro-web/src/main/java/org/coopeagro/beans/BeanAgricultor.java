@@ -6,6 +6,7 @@
 
 package org.coopeagro.beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,7 +29,7 @@ import org.coopeagro.entidades.TiposDocumento;
 @Named(value = "beanAgricultor")
 @ManagedBean
 @RequestScoped
-public class BeanAgricultor {
+public class BeanAgricultor implements Serializable{
     private final ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
     Agricultor agricultor = new Agricultor();
     List<Agricultor> agricultores = new ArrayList<Agricultor>();

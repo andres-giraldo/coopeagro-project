@@ -15,6 +15,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
+import org.coopeagro.controladores.exceptions.PreexistingEntityException;
 import org.coopeagro.entidades.Usuario;
 
 /**
@@ -32,13 +33,18 @@ public class UsuarioJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Usuario usuario) {
+    public void create(Usuario usuario) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(usuario);
             em.getTransaction().commit();
+        } catch (Exception ex) {
+            if (findUsuario(usuario.getId()) != null) {
+                throw new PreexistingEntityException("Usuario " + usuario + " already exists.", ex);
+            }
+            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -77,7 +83,7 @@ public class UsuarioJpaController implements Serializable {
             Usuario usuario;
             try {
                 usuario = em.getReference(Usuario.class, id);
-                usuario.getId();
+                usuario.getUsuario();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The usuario with id " + id + " no longer exists.", enfe);
             }
@@ -136,4 +142,39 @@ public class UsuarioJpaController implements Serializable {
         }
     }
     
+    public boolean validarInicio(String usuario, String clave) throws Exception {
+        boolean v = false;
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query query = em.createQuery("select u from Usuario u WHERE u.usuario = :usuario AND u.clave = :clave");
+            query.setParameter("usuario", usuario);
+            query.setParameter("clave", clave);
+            List<Usuario> u = query.getResultList();
+            if (!u.isEmpty()) {
+                v = true;
+            }
+            return v;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
+    public Usuario findUsuarioForUserName(String usuario) {
+        EntityManager em = getEntityManager();
+        try {
+            em = getEntityManager();
+            Query query = em.createQuery("select u from Usuario u WHERE u.usuario = :usuario");
+            query.setParameter("usuario", usuario);
+            Usuario u = (Usuario) query.getSingleResult();
+            return u;
+        } finally {
+            em.close();
+        }
+    }
 }

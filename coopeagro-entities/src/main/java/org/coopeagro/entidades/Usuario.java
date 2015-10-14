@@ -50,14 +50,6 @@ public class Usuario implements Serializable{
         this.perfil = perfil;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getUsuario() {
         return usuario;
     }
@@ -80,6 +72,14 @@ public class Usuario implements Serializable{
 
     public void setPerfil(Perfiles perfil) {
         this.perfil = perfil;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     @Override

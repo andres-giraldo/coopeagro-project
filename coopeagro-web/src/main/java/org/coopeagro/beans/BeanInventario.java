@@ -6,6 +6,7 @@
 
 package org.coopeagro.beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,7 +29,7 @@ import org.coopeagro.entidades.Producto;
 @Named(value = "beanInventario")
 @ManagedBean
 @RequestScoped
-public class BeanInventario {
+public class BeanInventario implements Serializable{
     private final ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
     Inventario inventario = new Inventario();
     List<Inventario> inventarios = new ArrayList<Inventario>();
