@@ -12,10 +12,10 @@
         <ui:include src="/Menu.xhtml"/>
         <h3>Administrar Agricultores</h3>
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true" />
-        <h:form>
+        <h:form id="formulario">
             <h:panelGrid columns="2">
                 <p:outputLabel value="Identificación*"/>
-                <p:inputText id="identificacion" value="#{beanAgricultor.agricultor.llavePrimaria.documento}"/>
+                <p:inputText id="identificacion" value="#{beanAgricultor.agricultor.llavePrimaria.documento}" required="true" requiredMessage="El campo identificación es obligatorio"/>
                 
                 <p:outputLabel value="Tipo Identificación*"/>
                 <p:selectOneMenu value="#{beanAgricultor.agricultor.llavePrimaria.tipoDocumento}">
@@ -23,19 +23,19 @@
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Nombre*"/>
-                <p:inputText id="nombre" value="#{beanAgricultor.agricultor.nombre}"/>
+                <p:inputText id="nombre" value="#{beanAgricultor.agricultor.nombre}" required="true" requiredMessage="El campo nombre es obligatorio"/>
                 
                 <p:outputLabel value="Primer Apellido*"/>
-                <p:inputText id="apellido1" value="#{beanAgricultor.agricultor.apellidoUno}"/>
+                <p:inputText id="apellido1" value="#{beanAgricultor.agricultor.apellidoUno}" required="true" requiredMessage="El campo primer apellido es obligatorio"/>
                 
                 <p:outputLabel value="Segundo Apellido*"/>
                 <p:inputText id="apellido2" value="#{beanAgricultor.agricultor.apellidoDos}"/>
                 
                 <p:outputLabel value="Telefono*"/>
-                <p:inputMask id="telefono" mask="9?999999" value="#{beanAgricultor.agricultor.telefono}"/>
+                <p:inputMask id="telefono" mask="9?999999" value="#{beanAgricultor.agricultor.telefono}" required="true" requiredMessage="El campo telefono es obligatorio"/>
                 
                 <p:outputLabel value="Celular*"/>
-                <p:inputMask id="celular" mask="9?999999999" value="#{beanAgricultor.agricultor.celular}"/>
+                <p:inputMask id="celular" mask="9?999999999" value="#{beanAgricultor.agricultor.celular}" required="true" requiredMessage="El campo celular es obligatorio"/>
                 
                 <p:outputLabel value="Correo*"/>
                 <p:inputText id="email" value="#{beanAgricultor.agricultor.correo}" validatorMessage="El correo no es valido">
@@ -43,17 +43,17 @@
                 </p:inputText>
                 
                 <p:outputLabel value="Fecha Registro*"/>
-                <p:calendar id="fechaRegistro" value="#{beanAgricultor.agricultor.fechaRegistro}"/>
+                <p:calendar id="fechaRegistro" value="#{beanAgricultor.agricultor.fechaRegistro}" required="true" requiredMessage="El campo fecha registro es obligatorio"/>
                 
                 <p:outputLabel value="Dirección*"/>
-                <p:inputText id="direccion" value="#{beanAgricultor.agricultor.direccion}"/>
+                <p:inputText id="direccion" value="#{beanAgricultor.agricultor.direccion}" required="true" requiredMessage="El campo dirección es obligatorio"/>
             </h:panelGrid>
-            <p:commandButton value="Guardar" actionListener="#{beanAgricultor.guardar()}"/>
-            <p:commandButton value="Editar" actionListener="#{beanAgricultor.editar()}"/>
+            <p:commandButton value="Guardar" action="#{beanAgricultor.guardar()}" update=":tabla:idTabla"/>
+            <p:commandButton value="Editar" action="#{beanAgricultor.editar()}" update=":tabla:idTabla"/>
         </h:form>
         <br/>
-        <h:form>
-            <p:dataTable var="item" value="#{beanAgricultor.agricultores}" paginator="true" rows="10"
+        <h:form id="tabla">
+            <p:dataTable id="idTabla" var="item" value="#{beanAgricultor.agricultores}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Identificación">
                     <h:outputText value="#{item.llavePrimaria.documento}" />

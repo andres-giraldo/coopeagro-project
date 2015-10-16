@@ -45,7 +45,7 @@ public class BeanAgricultor implements Serializable{
         agricultores = listarAgricultores();
     }
     
-    public void guardar(){
+    public String guardar(){
         FacesMessage msg = null;
         try {
             AgricultorJpaController controller = (AgricultorJpaController) servletContext.getAttribute("agricultorJpaController");
@@ -56,6 +56,7 @@ public class BeanAgricultor implements Serializable{
         }
         FacesContext.getCurrentInstance().addMessage(null, msg);
         agricultores = listarAgricultores();
+        return "Agricultor";
     }
     
     public String eliminar(String id, TiposDocumento tipo){
@@ -73,9 +74,12 @@ public class BeanAgricultor implements Serializable{
     }
     
     public String editar(){
+        FacesMessage msg = null;
         try {
             AgricultorJpaController controller = (AgricultorJpaController) servletContext.getAttribute("agricultorJpaController");
             controller.edit(agricultor);
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue editado con éxito");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (Exception ex) {
             Logger.getLogger(BeanAgricultor.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -11,12 +11,12 @@
         <p:growl id="mensajes" showDetail="true" life="2000" />
         <h:form>
             <h:panelGrid columns="2" cellpadding="5">
-              <h:outputLabel for="username" value="Usuario:" />
+              <p:outputLabel for="username" value="Usuario:" />
               <p:inputText value="#{beanLogin.nombre}" id="username"
-                 required="true" label="username" />
-              <h:outputLabel for="password" value="Clave:" />
+                           required="true" label="username" requiredMessage="El campo usuario es obligatorio"/>
+              <p:outputLabel for="password" value="Clave:" />
               <p:password value="#{beanLogin.clave}" id="password" required="true"
-                 label="password" />
+                          label="password"  requiredMessage="El campo contraseña es obligatorio"/>
               <f:facet name="footer">
                 <p:commandButton id="loginButton" value="Login"
                                  actionListener="#{beanLogin.login}" update=":mensajes"
