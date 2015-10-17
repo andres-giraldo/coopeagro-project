@@ -47,7 +47,7 @@
         </h:form>
         <br/>
         <h:form id="tabla">
-            <p:dataTable id="iTabla" var="item" value="#{beanCliente.clientes}" paginator="true" rows="10"
+            <p:dataTable id="idTabla" var="item" value="#{beanCliente.clientes}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Identificación">
                     <h:outputText value="#{item.llavePrimaria.documento}" />
