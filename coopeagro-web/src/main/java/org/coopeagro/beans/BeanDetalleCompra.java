@@ -46,7 +46,7 @@ public class BeanDetalleCompra implements Serializable{
         compras = listarCompras();
     }
     
-    public void guardar(){
+    public String guardar(){
         FacesMessage msg = null;
         try {
             DetalleCompraJpaController controller = (DetalleCompraJpaController) servletContext.getAttribute("detalleCompraJpaController");
@@ -57,12 +57,16 @@ public class BeanDetalleCompra implements Serializable{
         }
         FacesContext.getCurrentInstance().addMessage(null, msg);
         detallesCompra = listarDetalleCompras();
+        return "DetalleCompra";
     }
     
     public String eliminar(Integer id){
+        FacesMessage msg = null;
         try {
             DetalleCompraJpaController controller = (DetalleCompraJpaController) servletContext.getAttribute("detalleCompraJpaController");
             controller.destroy(id);
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue eliminado con éxito");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(BeanDetalleCompra.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -71,9 +75,12 @@ public class BeanDetalleCompra implements Serializable{
     }
     
     public String editar(){
+        FacesMessage msg = null;
         try {
             DetalleCompraJpaController controller = (DetalleCompraJpaController) servletContext.getAttribute("detalleCompraJpaController");
             controller.edit(detalleCompra);
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue editado con éxito");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (Exception ex) {
             Logger.getLogger(BeanDetalleCompra.class.getName()).log(Level.SEVERE, null, ex);
         }

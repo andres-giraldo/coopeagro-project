@@ -12,29 +12,29 @@
         <ui:include src="/Menu.xhtml"/>
         <h3>Administrar Pago Ventas</h3>
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
-        <h:form>
+        <h:form id="formulario">
             <h:panelGrid columns="2">
                 <!--<p:outputLabel value="Código*"/>-->
                 <h:inputHidden id="id" value="#{beanPagoVenta.pagoVenta.id}"/>
                 
                 <p:outputLabel value="Fecha Pago*"/>
-                <p:calendar id="fechaPago" value="#{beanPagoVenta.pagoVenta.fechaPago}"/>
+                <p:calendar id="fechaPago" value="#{beanPagoVenta.pagoVenta.fechaPago}" required="true" requiredMessage="El campo fecha pago es obligatorio"/>
                 
                 <p:outputLabel value="Id Venta*"/>
-                <p:selectOneMenu value="#{beanPagoVenta.pagoVenta.venta.numeroPedido}">
+                <p:selectOneMenu value="#{beanPagoVenta.pagoVenta.venta.numeroPedido}" required="true" requiredMessage="El campo venta es obligatorio">
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanPagoVenta.ventas}" var="itemVenta" itemLabel="#{itemVenta.numeroPedido}" itemValue="#{itemVenta.numeroPedido}"/>
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Cantidad Cancelada*"/>
-                <p:inputText id="cantidadCancelada" value="#{beanPagoVenta.pagoVenta.cantidadCancelada}"/>
+                <p:inputText id="cantidadCancelada" value="#{beanPagoVenta.pagoVenta.cantidadCancelada}" required="true" requiredMessage="El campo cantidad cancelada es obligatorio"/>
             </h:panelGrid>
-            <p:commandButton value="Guardar" actionListener="#{beanPagoVenta.guardar()}"/>
-            <p:commandButton value="Editar" actionListener="#{beanPagoVenta.editar()}"/>
+            <p:commandButton value="Guardar" action="#{beanPagoVenta.guardar()}" update=":tabla:idTabla"/>
+            <p:commandButton value="Editar" action="#{beanPagoVenta.editar()}" update=":tabla:idTabla"/>
         </h:form>
         <br/>
-        <h:form>
-            <p:dataTable var="item" value="#{beanPagoVenta.pagosVenta}" paginator="true" rows="10"
+        <h:form id="tabla">
+            <p:dataTable id="idTabla" var="item" value="#{beanPagoVenta.pagosVenta}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Id Pago">
                     <h:outputText value="#{item.id}" />

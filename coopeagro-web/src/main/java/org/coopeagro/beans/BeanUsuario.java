@@ -40,7 +40,7 @@ public class BeanUsuario implements Serializable {
         usuarios = listarUsuarios();
     }
     
-    public void guardar(){
+    public String guardar(){
         FacesMessage msg = null;
         try {
             UsuarioJpaController controller = (UsuarioJpaController) servletContext.getAttribute("usuarioJpaController");
@@ -51,12 +51,16 @@ public class BeanUsuario implements Serializable {
         }
         FacesContext.getCurrentInstance().addMessage(null, msg);
         usuarios = listarUsuarios();
+        return "Usuario";
     }
     
     public String eliminar(Integer id){
+        FacesMessage msg = null;
         try {
             UsuarioJpaController controller = (UsuarioJpaController) servletContext.getAttribute("usuarioJpaController");
             controller.destroy(id);
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue eliminado con éxito");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(BeanUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -65,9 +69,12 @@ public class BeanUsuario implements Serializable {
     }
     
     public String editar(){
+        FacesMessage msg = null;
         try {
             UsuarioJpaController controller = (UsuarioJpaController) servletContext.getAttribute("usuarioJpaController");
             controller.edit(usuario);
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue editado con éxito");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (Exception ex) {
             Logger.getLogger(BeanUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -45,7 +45,7 @@ public class BeanEmpleado implements Serializable{
         empleados = listarEmpleados();
     }
     
-    public void guardar(){
+    public String guardar(){
         Usuario u = new Usuario();
         FacesMessage msg = null;
         UsuarioJpaController controllerUsu = (UsuarioJpaController) servletContext.getAttribute("usuarioJpaController");
@@ -66,9 +66,11 @@ public class BeanEmpleado implements Serializable{
         msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue insertado con éxito");
         FacesContext.getCurrentInstance().addMessage(null, msg);
         empleados = listarEmpleados();
+        return "Empleado";
     }
     
     public String eliminar(String id, TiposDocumento tipo, Integer usuario){
+        FacesMessage msg = null;
         try {
             Empleado empleadoEliminar = new Empleado();
             empleadoEliminar.getLlavePrimaria().setDocumento(id);
@@ -84,11 +86,14 @@ public class BeanEmpleado implements Serializable{
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(BeanEmpleado.class.getName()).log(Level.SEVERE, null, ex);
         }
+        msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue eliminado con éxito");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
         empleados = listarEmpleados();
         return "Empleado";
     }
     
     public String editar(){
+        FacesMessage msg = null;
         try {
             UsuarioJpaController controllerUsu = (UsuarioJpaController) servletContext.getAttribute("usuarioJpaController");
             usuario.setPerfil(Perfiles.EMPLEADO);
@@ -103,6 +108,8 @@ public class BeanEmpleado implements Serializable{
         } catch (Exception ex) {
             Logger.getLogger(BeanEmpleado.class.getName()).log(Level.SEVERE, null, ex);
         }
+        msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue editado con éxito");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
         empleados = listarEmpleados();
         return "Empleado";
     }

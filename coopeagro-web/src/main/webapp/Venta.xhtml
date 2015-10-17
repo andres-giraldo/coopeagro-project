@@ -12,19 +12,19 @@
         <ui:include src="/Menu.xhtml"/>
         <h3>Encabezado Venta</h3>
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
-        <h:form>
+        <h:form id="formulario">
             <h:panelGrid columns="2">
                 <!--<p:outputLabel value="Identificación Pedido*"/>-->
                 <h:inputHidden id="id" value="#{beanVenta.venta.numeroPedido}"/>
                 
                 <p:outputLabel value="Fecha Pedido*"/>
-                <p:calendar id="fechaPedido" value="#{beanVenta.venta.fechaPedido}"/>
+                <p:calendar id="fechaPedido" value="#{beanVenta.venta.fechaPedido}" required="true" requiredMessage="El campo fecha pedido es obligatorio"/>
                 
                 <p:outputLabel value="Fecha Estimada Entrega*"/>
-                <p:calendar id="fechaEstEntraga" value="#{beanVenta.venta.fechaEstimadaEntrega}"/>
+                <p:calendar id="fechaEstEntraga" value="#{beanVenta.venta.fechaEstimadaEntrega}" required="true" requiredMessage="El campo fecha estimada entrega es obligatorio"/>
                 
                 <p:outputLabel value="Identificación Cliente*"/>
-                <p:selectOneMenu id="idCliente" value="#{beanVenta.venta.cliente.llavePrimaria.documento}">
+                <p:selectOneMenu id="idCliente" value="#{beanVenta.venta.cliente.llavePrimaria.documento}" required="true" requiredMessage="El campo identificación cliente es obligatorio">
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanVenta.clientes}" var="itemCliente" itemLabel="#{itemCliente.llavePrimaria.documento}" itemValue="#{itemCliente.llavePrimaria.documento}"/>
                 </p:selectOneMenu>
@@ -35,13 +35,13 @@
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Dirección*"/>
-                <p:inputText id="direccion" value="#{beanVenta.venta.direccion}"/>
+                <p:inputText id="direccion" value="#{beanVenta.venta.direccion}" required="true" requiredMessage="El campo dirección es obligatorio"/>
                 
                 <p:outputLabel value="Remitente*"/>
-                <p:inputText id="remitente" value="#{beanVenta.venta.remitente}"/>
+                <p:inputText id="remitente" value="#{beanVenta.venta.remitente}" required="true" requiredMessage="El campo remitente es obligatorio"/>
                 
                 <p:outputLabel value="Identificación Empleado*"/>
-                <p:selectOneMenu id="idEmpleado" value="#{beanVenta.venta.empleado.llavePrimaria.documento}">
+                <p:selectOneMenu id="idEmpleado" value="#{beanVenta.venta.empleado.llavePrimaria.documento}" required="true" requiredMessage="El campo identificación empleado es obligatorio">
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanVenta.empleados}" var="itemEmpleado" itemLabel="#{itemEmpleado.llavePrimaria.documento}" itemValue="#{itemEmpleado.llavePrimaria.documento}"/>
                 </p:selectOneMenu>
@@ -52,20 +52,20 @@
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Estado*"/>
-                <p:selectOneMenu id="estado" value="#{beanVenta.venta.estado}">
+                <p:selectOneMenu id="estado" value="#{beanVenta.venta.estado}" required="true" requiredMessage="El campo estado es obligatorio">
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanVenta.estadoValues}" var="itemEstado" itemLabel="#{itemEstado.estadoPedido}" itemValue="#{itemEstado.estadoPedido}"/>
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Total*"/>
-                <p:inputText id="total" value="#{beanVenta.venta.total}"/>
+                <p:inputText id="total" value="#{beanVenta.venta.total}" required="true" requiredMessage="El campo total es obligatorio"/>
             </h:panelGrid>
-            <p:commandButton value="Guardar" actionListener="#{beanVenta.guardar()}"/>
-            <p:commandButton value="Editar" actionListener="#{beanVenta.editar()}"/>
+            <p:commandButton value="Guardar" action="#{beanVenta.guardar()}" update=":tabla:idTabla"/>
+            <p:commandButton value="Editar" action="#{beanVenta.editar()}" update=":tabla:idTabla"/>
         </h:form>
         <br/>
-        <h:form>
-            <p:dataTable var="item" value="#{beanVenta.ventas}" paginator="true" rows="10"
+        <h:form id="tabla">
+            <p:dataTable id="idTabla" var="item" value="#{beanVenta.ventas}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Número Pedido">
                     <h:outputText value="#{item.numeroPedido}" />

@@ -60,12 +60,15 @@ public class BeanAgricultor implements Serializable{
     }
     
     public String eliminar(String id, TiposDocumento tipo){
+        FacesMessage msg = null;
         try {
             Agricultor agricultorEliminar = new Agricultor();
             agricultorEliminar.getLlavePrimaria().setDocumento(id);
             agricultorEliminar.getLlavePrimaria().setTipoDocumento(tipo);
             AgricultorJpaController controller = (AgricultorJpaController) servletContext.getAttribute("agricultorJpaController");
             controller.destroy(agricultorEliminar.getLlavePrimaria());
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue eliminado con éxito");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(BeanAgricultor.class.getName()).log(Level.SEVERE, null, ex);
         }

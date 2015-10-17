@@ -11,23 +11,23 @@
         <ui:include src="/Menu.xhtml"/>
         <h3>Administrar Productos</h3>
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true" />
-        <h:form>
+        <h:form id="formulario">
             <h:panelGrid columns="2">
                 <!--<p:outputLabel value="Código*"/>-->
                 <h:inputHidden id="id" value="#{beanProducto.producto.id}"/>
                 
                 <p:outputLabel value="Código*"/>
-                <p:inputText id="codigo" value="#{beanProducto.producto.codigo}"/>
+                <p:inputText id="codigo" value="#{beanProducto.producto.codigo}" required="true" requiredMessage="El campo código es obligatorio"/>
                 
                 <p:outputLabel value="Nombre*"/>
-                <p:inputText id="nombre" value="#{beanProducto.producto.nombre}"/>
+                <p:inputText id="nombre" value="#{beanProducto.producto.nombre}" required="true" requiredMessage="El campo nombre es obligatorio"/>
             </h:panelGrid>
-            <p:commandButton value="Guardar" actionListener="#{beanProducto.guardar()}"/>
-            <p:commandButton value="Editar" actionListener="#{beanProducto.editar()}"/>
+            <p:commandButton value="Guardar" action="#{beanProducto.guardar()}" update=":tabla:idTabla"/>
+            <p:commandButton value="Editar" action="#{beanProducto.editar()}" update=":tabla:idTabla"/>
         </h:form>
         <br/>
-        <h:form>
-            <p:dataTable var="item" value="#{beanProducto.productos}" paginator="true" rows="10"
+        <h:form id="tabla">
+            <p:dataTable id="idTabla" var="item" value="#{beanProducto.productos}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Id">
                     <h:outputText value="#{item.id}" />

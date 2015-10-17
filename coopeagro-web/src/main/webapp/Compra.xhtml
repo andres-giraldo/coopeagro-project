@@ -12,13 +12,13 @@
         <ui:include src="/Menu.xhtml"/>
         <h3>Encabezado Compra</h3>
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
-        <h:form>
+        <h:form id="formulario">
             <h:panelGrid columns="2">
                 <!--<p:outputLabel value="Identificación Pedido*"/>-->
                 <h:inputHidden id="id" value="#{beanCompra.compra.numeroPedido}"/>
                 
                 <p:outputLabel value="Identificación Proveedor*"/>
-                <p:selectOneMenu value="#{beanCompra.compra.agricultor.llavePrimaria.documento}">
+                <p:selectOneMenu value="#{beanCompra.compra.agricultor.llavePrimaria.documento}" required="true" requiredMessage="El campo identificación proveedor es obligatorio">
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanCompra.proveedores}" var="itemProv" itemLabel="#{itemProv.llavePrimaria.documento}" itemValue="#{itemProv.llavePrimaria.documento}"/>
                 </p:selectOneMenu>
@@ -29,10 +29,10 @@
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Fecha Pedido*"/>
-                <p:calendar id="fechaPedido" value="#{beanCompra.compra.fechaPedido}"/>
+                <p:calendar id="fechaPedido" value="#{beanCompra.compra.fechaPedido}" required="true" requiredMessage="El campo fecha pedido es obligatorio"/>
                 
                 <p:outputLabel value="Identificación Empleado*"/>
-                <p:selectOneMenu value="#{beanCompra.compra.empleado.llavePrimaria.documento}">
+                <p:selectOneMenu value="#{beanCompra.compra.empleado.llavePrimaria.documento}" required="true" requiredMessage="El campo identificación empleado es obligatorio">
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanCompra.empleados}" var="itemEmpl" itemLabel="#{itemEmpl.llavePrimaria.documento}" itemValue="#{itemEmpl.llavePrimaria.documento}"/>
                 </p:selectOneMenu>
@@ -43,20 +43,20 @@
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Estado*"/>
-                <p:selectOneMenu value="#{beanCompra.compra.estado}">
+                <p:selectOneMenu value="#{beanCompra.compra.estado}" required="true" requiredMessage="El campo estado es obligatorio">
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanCompra.estadoValues}" var="itemEstado" itemLabel="#{itemEstado.estadoPedido}" itemValue="#{itemEstado.estadoPedido}"/>
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Total*"/>
-                <p:inputText id="total" value="#{beanCompra.compra.total}"/>
+                <p:inputText id="total" value="#{beanCompra.compra.total}" required="true" requiredMessage="El campo total es obligatorio"/>
             </h:panelGrid>
-            <p:commandButton value="Guardar" actionListener="#{beanCompra.guardar()}"/>
-            <p:commandButton value="Editar" actionListener="#{beanCompra.editar()}"/>
+            <p:commandButton value="Guardar" action="#{beanCompra.guardar()}" update=":tabla:idTabla"/>
+            <p:commandButton value="Editar" action="#{beanCompra.editar()}" update=":tabla:idTabla"/>
         </h:form>
         <br/>
-        <h:form>
-            <p:dataTable var="item" value="#{beanCompra.compras}" paginator="true" rows="10"
+        <h:form id="tabla">
+            <p:dataTable id="idTabla" var="item" value="#{beanCompra.compras}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Número Pedido">
                     <h:outputText value="#{item.numeroPedido}" />

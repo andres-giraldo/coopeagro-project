@@ -56,7 +56,7 @@ public class BeanVenta implements Serializable{
         return TiposDocumento.values();
     }
     
-    public void guardar(){
+    public String guardar(){
         FacesMessage msg = null;
         try {
             VentaJpaController controller = (VentaJpaController) servletContext.getAttribute("ventaJpaController");
@@ -67,12 +67,16 @@ public class BeanVenta implements Serializable{
         }
         FacesContext.getCurrentInstance().addMessage(null, msg);
         ventas = listarVentas();
+        return "Venta";
     }
     
     public String eliminar(Integer id){
+        FacesMessage msg = null;
         try {
             VentaJpaController controller = (VentaJpaController) servletContext.getAttribute("ventaJpaController");
             controller.destroy(id);
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue eliminado con éxito");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(BeanVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -81,9 +85,12 @@ public class BeanVenta implements Serializable{
     }
     
     public String editar(){
+        FacesMessage msg = null;
         try {
             VentaJpaController controller = (VentaJpaController) servletContext.getAttribute("ventaJpaController");
             controller.edit(venta);
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue editado con éxito");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (Exception ex) {
             Logger.getLogger(BeanVenta.class.getName()).log(Level.SEVERE, null, ex);
         }

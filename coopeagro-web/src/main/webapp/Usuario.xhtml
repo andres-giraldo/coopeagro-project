@@ -12,28 +12,28 @@
         <ui:include src="/Menu.xhtml"/>
         <h3>Administrar Usuarios</h3>
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
-        <h:form>
+        <h:form id="formulario">
             <h:panelGrid columns="2">
                 <!--<p:outputLabel value="Id*"/>-->
                 <h:inputHidden id="id" value="#{beanUsuario.usuario.id}"/>
                 
                 <p:outputLabel value="Usuario*"/>
-                <p:inputText id="usuario" value="#{beanUsuario.usuario.usuario}"/>
+                <p:inputText id="usuario" value="#{beanUsuario.usuario.usuario}" required="true" requiredMessage="El campo usuario es obligatorio"/>
                 
                 <p:outputLabel value="Clave*"/>
-                <p:password id="clave" value="#{beanUsuario.usuario.clave}"/>
+                <p:password id="clave" value="#{beanUsuario.usuario.clave}" required="true" requiredMessage="El campo clave es obligatorio"/>
                 
                 <p:outputLabel value="Perfil*"/>
                 <p:selectOneMenu value="#{beanUsuario.usuario.perfil}">
                     <f:selectItems value="#{beanUsuario.perfilesValues}" var="itemEnum" itemLabel="#{itemEnum.perfil}" itemValue="#{itemEnum.perfil}"/>
                 </p:selectOneMenu>
             </h:panelGrid>
-            <p:commandButton value="Guardar" actionListener="#{beanUsuario.guardar()}"/>
-            <p:commandButton value="Editar" actionListener="#{beanUsuario.editar()}"/>
+            <p:commandButton value="Guardar" action="#{beanUsuario.guardar()}" update=":tabla:idTabla"/>
+            <p:commandButton value="Editar" action="#{beanUsuario.editar()}" update=":tabla:idTabla"/>
         </h:form>
         <br/>
-        <h:form>
-            <p:dataTable var="item" value="#{beanUsuario.usuarios}" paginator="true" rows="10"
+        <h:form id="tabla">
+            <p:dataTable id="idTabla" var="item" value="#{beanUsuario.usuarios}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Id">
                     <h:outputText value="#{item.id}" />

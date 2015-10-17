@@ -12,35 +12,35 @@
         <ui:include src="/Menu.xhtml"/>
         <h3>Detalle Compra</h3>
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
-        <h:form>
+        <h:form id="formulario">
             <h:panelGrid columns="2">
                 <!--<p:outputLabel value="Identificación Detalle*"/>-->
                 <h:inputHidden id="id" value="#{beanDetalleCompra.detalleCompra.id}"/>
                 
                 <p:outputLabel value="Id Compra*"/>
-                <p:selectOneMenu value="#{beanDetalleCompra.detalleCompra.compra.numeroPedido}">
+                <p:selectOneMenu value="#{beanDetalleCompra.detalleCompra.compra.numeroPedido}" required="true" requiredMessage="El campo compra es obligatorio">
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanDetalleCompra.compras}" var="itemCompra" itemLabel="#{itemCompra.numeroPedido}" itemValue="#{itemCompra.numeroPedido}"/>
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Producto*"/>
-                <p:selectOneMenu value="#{beanDetalleCompra.detalleCompra.producto.id}">
+                <p:selectOneMenu value="#{beanDetalleCompra.detalleCompra.producto.id}" required="true" requiredMessage="El campo producto es obligatorio">
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanDetalleCompra.productos}" var="itemProducto" itemLabel="#{itemProducto.codigo}" itemValue="#{itemProducto.id}"/>
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Cantidad*"/>
-                <p:inputMask id="cantidad" mask="9?999" value="#{beanDetalleCompra.detalleCompra.cantidad}"/>
+                <p:inputText id="cantidad" value="#{beanDetalleCompra.detalleCompra.cantidad}" required="true" requiredMessage="El campo cantidad es obligatorio"/>
                 
                 <p:outputLabel value="Precio*"/>
-                <p:inputText id="precio" value="#{beanDetalleCompra.detalleCompra.precio}"/>
+                <p:inputText id="precio" value="#{beanDetalleCompra.detalleCompra.precio}" required="true" requiredMessage="El campo precio es obligatorio"/>
             </h:panelGrid>
-            <p:commandButton value="Guardar" actionListener="#{beanDetalleCompra.guardar()}"/>
-            <p:commandButton value="Editar" actionListener="#{beanDetalleCompra.editar()}"/>
+            <p:commandButton value="Guardar" action="#{beanDetalleCompra.guardar()}" update=":tabla:idTabla"/>
+            <p:commandButton value="Editar" action="#{beanDetalleCompra.editar()}" update=":tabla:idTabla"/>
         </h:form>
         <br/>
-        <h:form>
-            <p:dataTable var="item" value="#{beanDetalleCompra.detallesCompra}" paginator="true" rows="10"
+        <h:form id="tabla">
+            <p:dataTable id="idTabla" var="item" value="#{beanDetalleCompra.detallesCompra}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Id Detalle">
                     <h:outputText value="#{item.id}" />

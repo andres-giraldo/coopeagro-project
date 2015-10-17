@@ -15,7 +15,6 @@ import javax.faces.application.FacesMessage;
 import javax.inject.Named;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import org.coopeagro.controladores.PagoVentaJpaController;
@@ -44,7 +43,7 @@ public class BeanPagoVenta implements Serializable{
         ventas = listarVentas();
     }
     
-    public void guardar(){
+    public String guardar(){
         FacesMessage msg = null;
         try {
             PagoVentaJpaController controller = (PagoVentaJpaController) servletContext.getAttribute("pagoVentaJpaController");
@@ -55,12 +54,16 @@ public class BeanPagoVenta implements Serializable{
         }
         FacesContext.getCurrentInstance().addMessage(null, msg);
         pagosVenta = listarPagoVenta();
+        return "PagoVenta";
     }
     
     public String eliminar(Integer id){
+        FacesMessage msg = null;
         try {
             PagoVentaJpaController controller = (PagoVentaJpaController) servletContext.getAttribute("pagoVentaJpaController");
             controller.destroy(id);
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue eliminado con éxito");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(BeanPagoVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -69,9 +72,12 @@ public class BeanPagoVenta implements Serializable{
     }
     
     public String editar(){
+        FacesMessage msg = null;
         try {
             PagoVentaJpaController controller = (PagoVentaJpaController) servletContext.getAttribute("pagoVentaJpaController");
             controller.edit(pagoVenta);
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue editado con éxito");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (Exception ex) {
             Logger.getLogger(BeanPagoVenta.class.getName()).log(Level.SEVERE, null, ex);
         }

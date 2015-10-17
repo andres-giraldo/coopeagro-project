@@ -12,10 +12,10 @@
         <ui:include src="/Menu.xhtml"/>
         <h3>Administrar Clientes</h3>
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true" />
-        <h:form>
+        <h:form id="formulario">
             <h:panelGrid columns="2">
                 <p:outputLabel value="Identificación*"/>
-                <p:inputText id="identificacion" value="#{beanCliente.cliente.llavePrimaria.documento}"/>
+                <p:inputText id="identificacion" value="#{beanCliente.cliente.llavePrimaria.documento}" required="true" requiredMessage="El campo identificación es obligatorio"/>
                 
                 <p:outputLabel value="Tipo Identificación*"/>
                 <p:selectOneMenu value="#{beanCliente.cliente.llavePrimaria.tipoDocumento}">
@@ -23,31 +23,31 @@
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Nombre*"/>
-                <p:inputText id="nombre" value="#{beanCliente.cliente.nombre}"/>
+                <p:inputText id="nombre" value="#{beanCliente.cliente.nombre}" required="true" requiredMessage="El campo nombre es obligatorio"/>
                 
                 <p:outputLabel value="Primer Apellido*"/>
-                <p:inputText id="apellido1" value="#{beanCliente.cliente.apellidoUno}"/>
+                <p:inputText id="apellido1" value="#{beanCliente.cliente.apellidoUno}" required="true" requiredMessage="El campo primer apellido es obligatorio"/>
                 
                 <p:outputLabel value="Segundo Apellido*"/>
                 <p:inputText id="apellido2" value="#{beanCliente.cliente.apellidoDos}"/>
                 
                 <p:outputLabel value="Telefono*"/>
-                <p:inputMask id="telefono" mask="9?999999" value="#{beanCliente.cliente.telefono}"/>
+                <p:inputMask id="telefono" mask="9?999999" value="#{beanCliente.cliente.telefono}" required="true" requiredMessage="El campo telefono es obligatorio"/>
                 
                 <p:outputLabel value="Celular*"/>
-                <p:inputMask id="celular" mask="9?999999999" value="#{beanCliente.cliente.celular}"/>
+                <p:inputMask id="celular" mask="9?999999999" value="#{beanCliente.cliente.celular}" required="true" requiredMessage="El campo celular es obligatorio"/>
                 
                 <p:outputLabel value="Correo*"/>
                 <p:inputText id="email" value="#{beanCliente.cliente.correo}" validatorMessage="El correo no es valido">
                     <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
                 </p:inputText>
             </h:panelGrid>
-            <p:commandButton value="Guardar" actionListener="#{beanCliente.guardar()}"/>
-            <p:commandButton value="Editar" actionListener="#{beanCliente.editar()}"/>
+            <p:commandButton value="Guardar" action="#{beanCliente.guardar()}" update=":tabla:idTabla"/>
+            <p:commandButton value="Editar" action="#{beanCliente.editar()}" update=":tabla:idTabla"/>
         </h:form>
         <br/>
-        <h:form>
-            <p:dataTable var="item" value="#{beanCliente.clientes}" paginator="true" rows="10"
+        <h:form id="tabla">
+            <p:dataTable id="iTabla" var="item" value="#{beanCliente.clientes}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Identificación">
                     <h:outputText value="#{item.llavePrimaria.documento}" />

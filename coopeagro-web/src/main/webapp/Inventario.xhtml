@@ -12,32 +12,32 @@
         <ui:include src="/Menu.xhtml"/>
         <h3>Administrar Inventario</h3>
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true"/>
-        <h:form>
+        <h:form id="formulario">
             <h:panelGrid columns="2">
                 <!--<p:outputLabel value="Código*"/>-->
                 <h:inputHidden id="id" value="#{beanInventario.inventario.id}"/>
                 
                 <p:outputLabel value="Fecha*"/>
-                <p:calendar id="fecha" value="#{beanInventario.inventario.fecha}"/>
+                <p:calendar id="fecha" value="#{beanInventario.inventario.fecha}" required="true" requiredMessage="El campo fecha es obligatorio"/>
                 
                 <p:outputLabel value="Producto*"/>
-                <p:selectOneMenu value="#{beanInventario.inventario.producto.id}">
+                <p:selectOneMenu value="#{beanInventario.inventario.producto.id}" required="true" requiredMessage="El campo producto es obligatorio">
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanInventario.productos}" var="itemProducto" itemLabel="#{itemProducto.codigo}" itemValue="#{itemProducto.id}"/>
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Cantidad Comprometida*"/>
-                <p:inputText id="cantidadComprometida" value="#{beanInventario.inventario.cantidadComprometida}"/>
+                <p:inputText id="cantidadComprometida" value="#{beanInventario.inventario.cantidadComprometida}" required="true" requiredMessage="El campo cantidad comprometida es obligatorio"/>
                 
                 <p:outputLabel value="Cantidad Total*"/>
-                <p:inputText id="cantidadTotal" value="#{beanInventario.inventario.cantidadTotal}"/>
+                <p:inputText id="cantidadTotal" value="#{beanInventario.inventario.cantidadTotal}" required="true" requiredMessage="El campo cantidad total es obligatorio"/>
             </h:panelGrid>
-            <p:commandButton value="Guardar" actionListener="#{beanInventario.guardar()}"/>
-            <p:commandButton value="Editar" actionListener="#{beanInventario.editar()}"/>
+            <p:commandButton value="Guardar" action="#{beanInventario.guardar()}" update=":tabla:idTabla"/>
+            <p:commandButton value="Editar" action="#{beanInventario.editar()}" update=":tabla:idTabla"/>
         </h:form>
         <br/>
-        <h:form>
-            <p:dataTable var="item" value="#{beanInventario.inventarios}" paginator="true" rows="10"
+        <h:form id="tabla">
+            <p:dataTable id="idTabla" var="item" value="#{beanInventario.inventarios}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Id Inventario">
                     <h:outputText value="#{item.id}" />

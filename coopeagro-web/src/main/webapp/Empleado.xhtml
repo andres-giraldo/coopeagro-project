@@ -12,13 +12,13 @@
         <ui:include src="/Menu.xhtml"/>
         <h3>Administrar Empleados</h3>
         <p:messages id="mensajes" showDetail="true" autoUpdate="true" closable="true" />
-        <h:form>
+        <h:form id="formulario">
             <h:panelGrid columns="2">
                 <!--<p:outputLabel value="Id*"/>-->
                 <h:inputHidden id="id" value="#{beanEmpleado.usuario.id}"/>
                 
                 <p:outputLabel value="Identificación*"/>
-                <p:inputText id="identificacion" value="#{beanEmpleado.empleado.llavePrimaria.documento}"/>
+                <p:inputText id="identificacion" value="#{beanEmpleado.empleado.llavePrimaria.documento}" required="true" requiredMessage="El campo identificación es obligatorio"/>
                 
                 <p:outputLabel value="Tipo Identificación*"/>
                 <p:selectOneMenu value="#{beanEmpleado.empleado.llavePrimaria.tipoDocumento}">
@@ -27,19 +27,19 @@
                 </p:selectOneMenu>
                 
                 <p:outputLabel value="Nombre*"/>
-                <p:inputText id="nombre" value="#{beanEmpleado.empleado.nombre}"/>
+                <p:inputText id="nombre" value="#{beanEmpleado.empleado.nombre}" required="true" requiredMessage="El campo nombre es obligatorio"/>
                 
                 <p:outputLabel value="Primer Apellido*"/>
-                <p:inputText id="apellido1" value="#{beanEmpleado.empleado.apellidoUno}"/>
+                <p:inputText id="apellido1" value="#{beanEmpleado.empleado.apellidoUno}" required="true" requiredMessage="El campo primer apellido es obligatorio"/>
                 
                 <p:outputLabel value="Segundo Apellido*"/>
                 <p:inputText id="apellido2" value="#{beanEmpleado.empleado.apellidoDos}"/>
                 
                 <p:outputLabel value="Telefono*"/>
-                <p:inputMask id="telefono" mask="9?999999" value="#{beanEmpleado.empleado.telefono}"/>
+                <p:inputMask id="telefono" mask="9?999999" value="#{beanEmpleado.empleado.telefono}" required="true" requiredMessage="El campo telefono es obligatorio"/>
                 
                 <p:outputLabel value="Celular*"/>
-                <p:inputMask id="celular" mask="9?999999999" value="#{beanEmpleado.empleado.celular}"/>
+                <p:inputMask id="celular" mask="9?999999999" value="#{beanEmpleado.empleado.celular}" required="true" requiredMessage="El campo celular es obligatorio"/>
                 
                 <p:outputLabel value="Correo*"/>
                 <p:inputText id="email" value="#{beanEmpleado.empleado.correo}" validatorMessage="El correo no es valido">
@@ -47,29 +47,29 @@
                 </p:inputText>
                 
                 <p:outputLabel value="Cargo*"/>
-                <p:inputText id="cargo" value="#{beanEmpleado.empleado.cargo}"/>
+                <p:inputText id="cargo" value="#{beanEmpleado.empleado.cargo}" required="true" requiredMessage="El campo cargo es obligatorio"/>
                 
                 <p:outputLabel value="Dirección*"/>
-                <p:inputText id="direccion" value="#{beanEmpleado.empleado.direccion}"/>
+                <p:inputText id="direccion" value="#{beanEmpleado.empleado.direccion}" required="true" requiredMessage="El campo dirección es obligatorio"/>
                 
                 <p:outputLabel value="Fecha Ingreso*"/>
-                <p:calendar id="fechaIngreso" value="#{beanEmpleado.empleado.fechaIngreso}"/>
+                <p:calendar id="fechaIngreso" value="#{beanEmpleado.empleado.fechaIngreso}" required="true" requiredMessage="El campo fecha ingreso es obligatorio"/>
                 
                 <p:outputLabel value="Fecha Retiro*"/>
                 <p:calendar id="fechaRetiro" value="#{beanEmpleado.empleado.fechaRetiro}"/>
                 
                 <p:outputLabel value="Usuario*"/>
-                <p:inputText id="usuario" value="#{beanEmpleado.usuario.usuario}"/>
+                <p:inputText id="usuario" value="#{beanEmpleado.usuario.usuario}" required="true" requiredMessage="El campo usuario es obligatorio"/>
                 
                 <p:outputLabel value="Clave*"/>
-                <p:password id="clave" value="#{beanEmpleado.usuario.clave}"/>
+                <p:password id="clave" value="#{beanEmpleado.usuario.clave}" required="true" requiredMessage="El campo clave es obligatorio"/>
             </h:panelGrid>
-            <p:commandButton value="Guardar" actionListener="#{beanEmpleado.guardar()}"/>
-            <p:commandButton value="Editar" actionListener="#{beanEmpleado.editar()}"/>
+            <p:commandButton value="Guardar" action="#{beanEmpleado.guardar()}" update=":tabla:idTabla"/>
+            <p:commandButton value="Editar" action="#{beanEmpleado.editar()}" update=":tabla:idTabla"/>
         </h:form>
         <br/>
-        <h:form>
-            <p:dataTable var="item" value="#{beanEmpleado.empleados}" paginator="true" rows="10"
+        <h:form id="tabla">
+            <p:dataTable id="idTabla" var="item" value="#{beanEmpleado.empleados}" paginator="true" rows="10"
                  paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                 <p:column headerText="Identificación">
                     <h:outputText value="#{item.llavePrimaria.documento}" />

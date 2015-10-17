@@ -56,7 +56,7 @@ public class BeanCompra implements Serializable{
         return TiposDocumento.values();
     }
     
-    public void guardar(){
+    public String guardar(){
         FacesMessage msg = null;
         try {
             CompraJpaController controller = (CompraJpaController) servletContext.getAttribute("compraJpaController");
@@ -67,12 +67,16 @@ public class BeanCompra implements Serializable{
         }
         FacesContext.getCurrentInstance().addMessage(null, msg);
         compras = listarCompras();
+        return "Compra";
     }
     
     public String eliminar(Integer id){
+        FacesMessage msg = null;
         try {
             CompraJpaController controller = (CompraJpaController) servletContext.getAttribute("compraJpaController");
             controller.destroy(id);
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue eliminado con éxito");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(BeanCompra.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -81,9 +85,12 @@ public class BeanCompra implements Serializable{
     }
     
     public String editar(){
+        FacesMessage msg = null;
         try {
             CompraJpaController controller = (CompraJpaController) servletContext.getAttribute("compraJpaController");
             controller.edit(compra);
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue editado con éxito");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (Exception ex) {
             Logger.getLogger(BeanCompra.class.getName()).log(Level.SEVERE, null, ex);
         }

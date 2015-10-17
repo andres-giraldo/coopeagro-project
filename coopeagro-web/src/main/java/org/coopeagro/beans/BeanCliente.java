@@ -41,7 +41,7 @@ public class BeanCliente implements Serializable{
         clientes = listarClientes();
     }
     
-    public void guardar(){
+    public String guardar(){
         FacesMessage msg = null;
         try {
             ClienteJpaController controller = (ClienteJpaController) servletContext.getAttribute("clienteJpaController");
@@ -52,15 +52,19 @@ public class BeanCliente implements Serializable{
         }
         FacesContext.getCurrentInstance().addMessage(null, msg);
         clientes = listarClientes();
+        return "Cliente";
     }
     
     public String eliminar(String id, TiposDocumento tipo){
+        FacesMessage msg = null;
         try {
             Cliente clienteEliminar = new Cliente();
             clienteEliminar.getLlavePrimaria().setDocumento(id);
             clienteEliminar.getLlavePrimaria().setTipoDocumento(tipo);
             ClienteJpaController controller = (ClienteJpaController) servletContext.getAttribute("clienteJpaController");
             controller.destroy(clienteEliminar.getLlavePrimaria());
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue eliminado con éxito");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(BeanCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -69,9 +73,12 @@ public class BeanCliente implements Serializable{
     }
     
     public String editar(){
+        FacesMessage msg = null;
         try {
             ClienteJpaController controller = (ClienteJpaController) servletContext.getAttribute("clienteJpaController");
             controller.edit(cliente);
+            msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "El registro fue editado con éxito");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (Exception ex) {
             Logger.getLogger(BeanCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
