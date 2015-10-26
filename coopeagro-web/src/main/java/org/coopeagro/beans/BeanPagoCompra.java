@@ -6,6 +6,7 @@
 
 package org.coopeagro.beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -28,7 +29,7 @@ import org.coopeagro.entidades.PagoCompra;
 @Named(value = "beanPagoCompra")
 @ManagedBean
 @SessionScoped
-public class BeanPagoCompra {
+public class BeanPagoCompra implements Serializable{
     private final ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
     PagoCompra pagoCompra = new PagoCompra();
     List<PagoCompra> pagosCompra = new ArrayList<PagoCompra>();
