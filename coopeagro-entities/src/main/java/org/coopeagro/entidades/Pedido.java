@@ -16,7 +16,6 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 @MappedSuperclass
 public class Pedido implements Serializable{
@@ -49,12 +48,13 @@ public class Pedido implements Serializable{
     @Enumerated(EnumType.STRING)
     @Column(name="DSESTADO")
     private EstadosPedido estado;
-    @Transient
+    @Column(name="NMTOTAL")
     private Double total;
     
     public Pedido(){
         this.empleado = new Empleado();
         this.numeroPedido = 0;
+        this.total = 0.0;
     }
 
     public Pedido(Date fechaPedido, Empleado empleado, EstadosPedido estado, Double total) {

@@ -12,10 +12,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
+import org.coopeagro.entidades.Agricultor;
+import org.coopeagro.entidades.Compra;
+import org.coopeagro.entidades.DetalleCompra;
 import org.coopeagro.entidades.Producto;
+import org.coopeagro.entidades.TiposDocumento;
 
 /**
  *
@@ -136,4 +144,38 @@ public class ProductoJpaController implements Serializable {
         }
     }
     
+    public List<Object[]> getProductsAgricultor(String documento, TiposDocumento tipoDocumento){
+	EntityManager em = getEntityManager();
+	try{
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Object[]> cq = cb.createQuery(Object[].class);
+            Root<DetalleCompra> dc = cq.from(DetalleCompra.class);
+            Join<DetalleCompra, Producto> productos = dc.join("producto");
+            Join<DetalleCompra, Compra> compras = dc.join("compra");
+            Join<Compra, Agricultor> agricultores = compras.join("agricultor");
+            cq.multiselect(dc, productos, compras, agricultores);
+            Predicate criteria = cb.conjunction();
+            if (documento != null) {
+                ParameterExpression<String> documentoParameter = cb.parameter(String.class, "documento");
+                criteria = cb.and(criteria, cb.equal(agricultores.get("llavePrimaria").get("documento"), documentoParameter));
+            }
+            if (tipoDocumento != null) {
+                ParameterExpression<TiposDocumento> tipoDocumentoParameter = cb.parameter(TiposDocumento.class, "tipoDocumento");
+                criteria = cb.and(criteria, cb.equal(agricultores.get("llavePrimaria").get("tipoDocumento"), tipoDocumentoParameter));
+            }
+            if (!criteria.getExpressions().isEmpty()) {
+                cq.where(cb.and(criteria));
+            }
+            Query q = em.createQuery(cq);
+            if (documento != null) {
+                q.setParameter("documento", documento);
+            }
+            if (tipoDocumento != null) {
+                q.setParameter("tipoDocumento", tipoDocumento);
+            }
+            return q.getResultList();
+	}finally{
+            em.close();
+	}
+    }
 }

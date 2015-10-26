@@ -12,7 +12,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Inventario;
@@ -151,5 +155,33 @@ public class InventarioJpaController implements Serializable {
                 em.close();
             }
         }
+    }
+    
+    public Double getDisponibilidad(int producto){
+        Double cantidadDisponible;
+        EntityManager em = getEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Double> cq = cb.createQuery(Double.class);
+        Root<Inventario> inventario = cq.from(Inventario.class);
+        Expression<Double> cantidadTotal = inventario.get("cantidadTotal");
+        Expression<Double> cantidadComprometida = inventario.get("cantidadComprometida");
+        cq.select(cb.diff(cantidadTotal, cantidadComprometida));
+        Predicate criteria = cb.conjunction();
+        cq.where(cb.and(criteria));
+        if (producto != 0) {
+            ParameterExpression<Integer> productoParameter = cb.parameter(Integer.class, "producto");
+            criteria = cb.and(criteria, cb.equal(inventario.get("producto").get("id"), productoParameter));
+        }
+        if (!criteria.getExpressions().isEmpty()) {
+            cq.where(cb.and(criteria));
+        }
+        cq.orderBy(cb.desc(inventario.get("id")));
+        Query q = em.createQuery(cq);
+        if (producto != 0) {
+            q.setParameter("producto", producto);
+        }
+        q.setMaxResults(1);
+        cantidadDisponible = (Double) q.getSingleResult();
+        return cantidadDisponible;
     }
 }

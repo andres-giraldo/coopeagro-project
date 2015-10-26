@@ -7,6 +7,7 @@
 package org.coopeagro.controladores;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -168,5 +169,40 @@ public class CompraJpaController implements Serializable {
                 em.close();
             }
         }
+    }
+    
+    public double getTotal(int numeroPedido){
+        double total;
+        EntityManager em = getEntityManager();
+        Query q = em.createQuery("select SUM(dc.cantidad*dc.precio) from DetalleCompra dc where dc.compra.numeroPedido = :numeroPedido");
+        q.setParameter("numeroPedido", numeroPedido);
+        total = (Double)q.getSingleResult();
+        return total;
+    }
+    
+    public long getTotalComprasTiempo(int anno, int mes){
+        long count;
+        EntityManager em = getEntityManager();
+        Query q = null;
+        if (anno != 0 && mes != 0) {
+            q = em.createQuery("select COUNT(c.numeroPedido) from Compra c where EXTRACT(YEAR from c.fechaPedido) = :annoPedido and "
+                    + "EXTRACT(MONTH from c.fechaPedido) = :mesPedido");
+            q.setParameter("annoPedido", anno);
+            q.setParameter("mesPedido", mes);
+        }else if(anno != 0){
+            q = em.createQuery("select COUNT(c.numeroPedido) from Compra c where EXTRACT(YEAR from c.fechaPedido) = :annoPedido");
+            q.setParameter("annoPedido", anno);
+        }else if(mes != 0){
+            q = em.createQuery("select COUNT(c.numeroPedido) from Compra c where EXTRACT(MONTH from c.fechaPedido) = :mesPedido");
+            q.setParameter("mesPedido", mes);
+        }
+        count = (Long) q.getSingleResult();
+        return count;
+    }
+    
+    public List<Object[]> getTotalComprasAgricultor(){
+        EntityManager em = getEntityManager();
+        Query q = em.createQuery("select a, COUNT(c.numeroPedido) from Compra c JOIN c.agricultor a GROUP BY a");
+        return q.getResultList();
     }
 }

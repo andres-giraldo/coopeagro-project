@@ -18,6 +18,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import org.coopeagro.controladores.DetalleVentaJpaController;
+import org.coopeagro.controladores.VentaJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.DetalleVenta;
 import org.coopeagro.entidades.Producto;
@@ -33,6 +34,7 @@ import org.coopeagro.entidades.Venta;
 public class BeanDetalleVenta implements Serializable{
     private final ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
     DetalleVenta detalleVenta = new DetalleVenta();
+    Venta venta = new Venta();
     List<DetalleVenta> detallesVenta = new ArrayList<DetalleVenta>();
     List<Producto> productos = new ArrayList<Producto>();
     List<Venta> ventas = new ArrayList<Venta>();
@@ -55,6 +57,16 @@ public class BeanDetalleVenta implements Serializable{
         } catch (Exception ex) {
             Logger.getLogger(BeanDetalleVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
+        try {
+            VentaJpaController controller = (VentaJpaController) servletContext.getAttribute("ventaJpaController");
+            double total = controller.getTotal(detalleVenta.getVenta().getNumeroPedido());
+            venta = controller.findVenta(detalleVenta.getVenta().getNumeroPedido());
+            venta.setTotal(total);
+            //venta.setNumeroPedido(detalleVenta.getVenta().getNumeroPedido());
+            controller.edit(venta);
+        } catch (Exception ex) {
+            Logger.getLogger(BeanDetalleVenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
         FacesContext.getCurrentInstance().addMessage(null, msg);
         detallesVenta = listarDetalleVentas();
         return "DetalleVenta";
@@ -69,6 +81,16 @@ public class BeanDetalleVenta implements Serializable{
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(BeanDetalleCompra.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            VentaJpaController controller = (VentaJpaController) servletContext.getAttribute("ventaJpaController");
+            double total = controller.getTotal(id);
+            venta = controller.findVenta(id);
+            venta.setTotal(total);
+            //venta.setNumeroPedido(detalleVenta.getVenta().getNumeroPedido());
+            controller.edit(venta);
+        } catch (Exception ex) {
+            Logger.getLogger(BeanDetalleVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
         detallesVenta = listarDetalleVentas();
         return "DetalleVenta";
@@ -151,5 +173,13 @@ public class BeanDetalleVenta implements Serializable{
 
     public void setVentas(List<Venta> ventas) {
         this.ventas = ventas;
+    }
+
+    public Venta getVenta() {
+        return venta;
+    }
+
+    public void setVenta(Venta venta) {
+        this.venta = venta;
     }
 }

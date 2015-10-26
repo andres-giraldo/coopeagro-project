@@ -56,9 +56,6 @@
                     <f:selectItem itemLabel="---" itemValue="" noSelectionOption="true" />
                     <f:selectItems value="#{beanVenta.estadoValues}" var="itemEstado" itemLabel="#{itemEstado.estadoPedido}" itemValue="#{itemEstado.estadoPedido}"/>
                 </p:selectOneMenu>
-                
-                <p:outputLabel value="Total*"/>
-                <p:inputText id="total" value="#{beanVenta.venta.total}" required="true" requiredMessage="El campo total es obligatorio"/>
             </h:panelGrid>
             <p:commandButton value="Guardar" action="#{beanVenta.guardar()}" update=":tabla:idTabla"/>
             <p:commandButton value="Editar" action="#{beanVenta.editar()}" update=":tabla:idTabla"/>

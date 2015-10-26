@@ -7,12 +7,15 @@
 package org.coopeagro.controladores;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Cliente;
@@ -168,5 +171,59 @@ public class VentaJpaController implements Serializable {
                 em.close();
             }
         }
+    }
+    
+    public double getTotal(int numeroPedido){
+        double total;
+        EntityManager em = getEntityManager();
+        Query q = em.createQuery("select SUM(dv.cantidad*dv.precio) from DetalleVenta dv where dv.venta.numeroPedido = :numeroPedido");
+        q.setParameter("numeroPedido", numeroPedido);
+        total = (Double)q.getSingleResult();
+        return total;
+    }
+    
+    public long getTotalVentasTiempo(int anno, int mes){
+        long count;
+        EntityManager em = getEntityManager();
+        Query q = null;
+        if (anno != 0 && mes != 0) {
+            q = em.createQuery("select COUNT(v.numeroPedido) from Venta v where EXTRACT(YEAR from v.fechaPedido) = :annoPedido and "
+                    + "EXTRACT(MONTH from v.fechaPedido) = :mesPedido");
+            q.setParameter("annoPedido", anno);
+            q.setParameter("mesPedido", mes);
+        }else if(anno != 0){
+            q = em.createQuery("select COUNT(v.numeroPedido) from Venta v where EXTRACT(YEAR from v.fechaPedido) = :annoPedido");
+            q.setParameter("annoPedido", anno);
+        }else if(mes != 0){
+            q = em.createQuery("select COUNT(v.numeroPedido) from Venta v where EXTRACT(MONTH from v.fechaPedido) = :mesPedido");
+            q.setParameter("mesPedido", mes);
+        }
+        count = (Long) q.getSingleResult();
+        return count;
+    }
+    
+    public List<Object[]> getTotalVentasCliente(){
+        EntityManager em = getEntityManager();
+        Query q = em.createQuery("select cl, COUNT(v.numeroPedido) from Venta v JOIN v.cliente cl GROUP BY cl");
+        return q.getResultList();
+    }
+    
+    public List<Object[]> getTotalVentasEmpleado(){
+        EntityManager em = getEntityManager();
+        Query q = em.createQuery("select e, COUNT(v.numeroPedido) from Venta v JOIN v.empleado e GROUP BY e");
+        return q.getResultList();
+    }
+    
+    public double getPromedioVentas(){
+        double total;
+        EntityManager em = getEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Double> cq = cb.createQuery(Double.class);
+        Root venta = cq.from(Venta.class);
+        Expression avgExpression = cb.avg(venta.get("total"));
+        cq.select(avgExpression);
+        Query q = em.createQuery(cq);
+        total = (Double)q.getSingleResult();
+        return total;
     }
 }

@@ -33,6 +33,7 @@ import org.coopeagro.entidades.Producto;
 public class BeanDetalleCompra implements Serializable{
     private final ServletContext servletContext = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
     DetalleCompra detalleCompra = new DetalleCompra();
+    Compra compra = new Compra();
     List<DetalleCompra> detallesCompra = new ArrayList<DetalleCompra>();
     List<Producto> productos = new ArrayList<Producto>();
     List<Compra> compras = new ArrayList<Compra>();
@@ -151,5 +152,13 @@ public class BeanDetalleCompra implements Serializable{
 
     public void setCompras(List<Compra> compras) {
         this.compras = compras;
+    }
+
+    public Compra getCompra() {
+        return compra;
+    }
+
+    public void setCompra(Compra compra) {
+        this.compra = compra;
     }
 }
