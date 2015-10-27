@@ -34,13 +34,24 @@ public class Producto implements Serializable{
     @Basic(optional = false)
     @Column(name="DSNOMBRE")
     private String nombre;
+    @Basic(optional = false)
+    @Column(name="NMVALOR")
+    private Double valor;
     
     public Producto(){
     }
 
-    public Producto(String codigo, String nombre) {
+    public Producto(String codigo, String nombre, Double valor) {
         this.codigo = codigo;
         this.nombre = nombre;
+        this.valor = valor;
+    }
+
+    public Producto(Integer id, String codigo, String nombre, Double valor) {
+        this.id = id;
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.valor = valor;
     }
 
     public Integer getId() {
@@ -67,8 +78,16 @@ public class Producto implements Serializable{
         this.codigo = codigo;
     }
 
+    public Double getValor() {
+        return valor;
+    }
+
+    public void setValor(Double valor) {
+        this.valor = valor;
+    }
+
     @Override
     public String toString() {
-        return "Producto{" + "id=" + id + ", codigo=" + codigo + ", nombre=" + nombre + '}';
+        return "Producto{" + "id=" + id + ", codigo=" + codigo + ", nombre=" + nombre + ", valor=" + valor + '}';
     }
 }

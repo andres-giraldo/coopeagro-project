@@ -1,109 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-    <context-param>
-        <param-name>javax.faces.PROJECT_STAGE</param-name>
-        <param-value>Development</param-value>
-    </context-param>
     <listener>
         <description>ServletContextListener</description>
         <listener-class>org.coopeagro.listener.ConfigurationLoadListener</listener-class>
     </listener>
     <servlet>
         <servlet-name>ServletAgricultor</servlet-name>
-        <servlet-class>org.coopeagro.servlets.ServletAgricultor</servlet-class>
+        <servlet-class>org.coopeagro.servlets.AgricultorServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ServletProducto</servlet-name>
-        <servlet-class>org.coopeagro.servlets.ServletProducto</servlet-class>
+        <servlet-class>org.coopeagro.servlets.ProductoServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ServletCliente</servlet-name>
-        <servlet-class>org.coopeagro.servlets.ServletCliente</servlet-class>
+        <servlet-class>org.coopeagro.servlets.ClienteServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ServletCompra</servlet-name>
-        <servlet-class>org.coopeagro.servlets.ServletCompra</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ServletDetalleCompra</servlet-name>
-        <servlet-class>org.coopeagro.servlets.ServletDetalleCompra</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ServletDetalleVenta</servlet-name>
-        <servlet-class>org.coopeagro.servlets.ServletDetalleVenta</servlet-class>
+        <servlet-class>org.coopeagro.servlets.CompraServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ServletEmpleado</servlet-name>
-        <servlet-class>org.coopeagro.servlets.ServletEmpleado</servlet-class>
+        <servlet-class>org.coopeagro.servlets.EmpleadoServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ServletInventario</servlet-name>
-        <servlet-class>org.coopeagro.servlets.ServletInventario</servlet-class>
+        <servlet-class>org.coopeagro.servlets.InventarioServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ServletPagoCompra</servlet-name>
-        <servlet-class>org.coopeagro.servlets.ServletPagoCompra</servlet-class>
+        <servlet-class>org.coopeagro.servlets.PagoCompraServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ServletPagoVenta</servlet-name>
-        <servlet-class>org.coopeagro.servlets.ServletPagoVenta</servlet-class>
+        <servlet-class>org.coopeagro.servlets.PagoVentaServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ServletVenta</servlet-name>
-        <servlet-class>org.coopeagro.servlets.ServletVenta</servlet-class>
+        <servlet-class>org.coopeagro.servlets.VentaServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>Faces Servlet</servlet-name>
-        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
+        <servlet-name>ServletInicioSesion</servlet-name>
+        <servlet-class>org.coopeagro.servlets.InicioSesionServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ServletAgricultor</servlet-name>
-        <url-pattern>/ServletAgricultor</url-pattern>
+        <url-pattern>/Agricultor</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ServletProducto</servlet-name>
-        <url-pattern>/ServletProducto</url-pattern>
+        <url-pattern>/Producto</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ServletCliente</servlet-name>
-        <url-pattern>/ServletCliente</url-pattern>
+        <url-pattern>/Cliente</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ServletCompra</servlet-name>
-        <url-pattern>/ServletCompra</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ServletDetalleCompra</servlet-name>
-        <url-pattern>/ServletDetalleCompra</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ServletDetalleVenta</servlet-name>
-        <url-pattern>/ServletDetalleVenta</url-pattern>
+        <url-pattern>/Compra</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ServletEmpleado</servlet-name>
-        <url-pattern>/ServletEmpleado</url-pattern>
+        <url-pattern>/Empleado</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ServletInventario</servlet-name>
-        <url-pattern>/ServletInventario</url-pattern>
+        <url-pattern>/Inventario</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ServletPagoCompra</servlet-name>
-        <url-pattern>/ServletPagoCompra</url-pattern>
+        <url-pattern>/PagoCompra</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ServletPagoVenta</servlet-name>
-        <url-pattern>/ServletPagoVenta</url-pattern>
+        <url-pattern>/PagoVenta</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ServletVenta</servlet-name>
-        <url-pattern>/ServletVenta</url-pattern>
+        <url-pattern>/Venta</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
+        <servlet-name>ServletInicioSesion</servlet-name>
+        <url-pattern>/InicioSesion</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -111,6 +90,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/index.xhtml</welcome-file>
+        <welcome-file>jsp/InicioSesion.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

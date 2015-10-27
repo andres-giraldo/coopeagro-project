@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.coopeagro.controladores;
 
 import java.io.Serializable;
@@ -143,10 +142,10 @@ public class ProductoJpaController implements Serializable {
             em.close();
         }
     }
-    
-    public List<Object[]> getProductsAgricultor(String documento, TiposDocumento tipoDocumento){
-	EntityManager em = getEntityManager();
-	try{
+
+    public List<Object[]> getProductsAgricultor(String documento, TiposDocumento tipoDocumento) {
+        EntityManager em = getEntityManager();
+        try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<Object[]> cq = cb.createQuery(Object[].class);
             Root<DetalleCompra> dc = cq.from(DetalleCompra.class);
@@ -174,8 +173,20 @@ public class ProductoJpaController implements Serializable {
                 q.setParameter("tipoDocumento", tipoDocumento);
             }
             return q.getResultList();
-	}finally{
+        } finally {
             em.close();
-	}
+        }
+    }
+
+    public Producto findProductByCodigo(String codigo) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("SELECT p FROM Producto p WHERE p.codigo = :codigo");
+            query.setParameter("codigo", codigo);
+            Producto producto = (Producto)query.getSingleResult();
+            return producto;
+        } finally {
+            em.close();
+        }
     }
 }
