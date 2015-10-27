@@ -17,10 +17,10 @@
         <div class="container-fluid">
             <c:import url="/jsp/general/Alertas.jsp" />
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3" id="menu">
+                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3" id="menu">
                     <c:import url="/jsp/general/Menu.jsp" />
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9" id="contenido">
+                <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9" id="contenido">
                     <form autocomplete="off" action="./Producto" method="POST" id="formularioProductos">
                         <c:import url="/jsp/general/Eliminacion.jsp" />
                         <h2>PRODUCTOS</h2>
