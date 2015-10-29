@@ -78,7 +78,7 @@ public class InicioSesionServlet extends HttpServlet {
                 validacion += "La clave es incorrecta para el usuario ingresado";
             }
         } else {
-            validacion += "El usuario ingresado no está registrado en el sistema";
+            //validacion += "El usuario ingresado no está registrado en el sistema";
         }
         return validacion;
     }

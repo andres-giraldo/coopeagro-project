@@ -27,11 +27,11 @@ import org.coopeagro.controladores.VentaJpaController;
  * @author sala306
  */
 public class ConfigurationLoadListener implements ServletContextListener {
-
+    EntityManagerFactory emf = null;
     /* Cuando se despliega la aplicación se llama este método */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("coopeagroPU");
+        emf = Persistence.createEntityManagerFactory("coopeagroPU");
         sce.getServletContext().setAttribute("entityManagerFactory", emf);
         
         AgricultorJpaController agricultorJpaController = new AgricultorJpaController(emf);
@@ -73,5 +73,8 @@ public class ConfigurationLoadListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+        if(emf.isOpen()){
+            emf.close();
+        }
     }
 }

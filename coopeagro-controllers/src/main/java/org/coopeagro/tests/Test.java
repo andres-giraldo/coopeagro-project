@@ -24,8 +24,8 @@ public class Test {
         
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("coopeagroPU");
         ProductoJpaController productoJpaController = new ProductoJpaController(emf);
-        for (Object[] pa : productoJpaController.getProductsAgricultor("1000", TiposDocumento.CC)) {
-            System.out.println(Arrays.toString(pa));
+        for (Object[] pa : productoJpaController.getProductsAgricultor("2000", TiposDocumento.CC)) {
+            System.out.println(pa[1]);
         }
             
         CompraJpaController compraJpaController = new CompraJpaController(emf);
@@ -38,7 +38,7 @@ public class Test {
         
         //VentaJpaController ventaJpaController = new VentaJpaController(emf);
         for (Object[] tvc : ventaJpaController.getTotalVentasCliente()) {
-            System.out.println(Arrays.toString(tvc));
+            System.out.println("Ventas x cliente"+Arrays.toString(tvc));
         }
         
         //CompraJpaController compraJpaController = new CompraJpaController(emf);
@@ -48,11 +48,16 @@ public class Test {
         
         //VentaJpaController ventaJpaController = new VentaJpaController(emf);
         for (Object[] tve : ventaJpaController.getTotalVentasEmpleado()) {
-            System.out.println(Arrays.toString(tve));
+            System.out.println("Ventas x empleado"+tve[0]);
+            System.out.println("Ventas x empleado"+tve[1]);
+            System.out.println("Ventas x empleado"+tve[2]);
+            System.out.println("Ventas x empleado"+tve[3]);
+            System.out.println("Ventas x empleado"+tve[4]);
+            System.out.println("Ventas x empleado"+tve[5]);
         }
         
         InventarioJpaController inventarioJpaController = new InventarioJpaController(emf);
-        double dp = inventarioJpaController.getDisponibilidad(1);
+        double dp = inventarioJpaController.getDisponibilidad(2);
         System.out.println(dp);
         
         //VentaJpaController ventaJpaController = new VentaJpaController(emf);

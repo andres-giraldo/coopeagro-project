@@ -7,7 +7,8 @@
 package org.coopeagro.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,42 +20,140 @@ import org.coopeagro.controladores.VentaJpaController;
  * @author YEISSON
  */
 public class VentaServlet extends HttpServlet {
-
+    public static List<Object[]> res = new ArrayList<Object[]>();
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * Presocesses resequests fores both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @param request seresvlet resequest
+     * @param response seresvlet resesponse
+     * @throws ServletException if a seresvlet-specific eresresores occuress
+     * @throws IOException if an I/O eresresores occuress
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        VentaJpaController controller = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ServletVenta</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ServletVenta at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        String mensajeError = "";
+        String mensajeAlerta = "";
+        String redireccion = "jsp/Ventas.jsp";
+        long total;
+        double promedio;
+
+        String accion = request.getParameter("accion");
+        if (accion == null) {
+            accion = "";
         }
+        
+        String anno;
+        String mes;
+        
+        switch (accion) {
+            case "total":
+                anno = request.getParameter("year");
+                mes = request.getParameter("month");
+                if (anno.isEmpty()) {
+                    anno = "0";
+                }
+                mensajeAlerta = validarDatos(anno, mes);
+                if (mensajeAlerta.isEmpty()) {
+                    total = TotalVentasTiempo(anno, mes);
+                    if (total > 0) {
+                        //mensajeExito = "El agricultor ha sido guardado con éxito";
+                        //request.setAttribute("year", anno);
+                        //request.setAttribute("month", mes);
+                        request.setAttribute("total", total);
+                        break;
+                    }else{
+                        mensajeError = "No se han encontrado ventas en el periodo de tiempo especificado";
+                        break;
+                    }
+                }
+                break;
+            case "empleado":
+                //listarResultados(response, accion);
+                res = TotalVentasEmpleado();
+                //request.setAttribute("resultados", TotalVentasEmpleado());
+                break;
+            case "cliente":
+                //listarResultados(response, accion);
+                res = TotalVentasCliente();
+                //request.setAttribute("resultados", TotalVentasCliente());
+                break;
+            case "promedio":
+                promedio = PromedioVentas();
+                request.setAttribute("promedio", promedio);
+                break;
+            case "limpiar":
+                request.setAttribute("year", "");
+                request.setAttribute("month", "0");
+                request.setAttribute("total", "");
+                request.setAttribute("promedio", "");
+                res.clear();
+                break;
+            default:
+                break;
+        }
+        request.setAttribute("mensajeError", mensajeError);
+        request.setAttribute("mensajeAlerta", mensajeAlerta);
+        request.getRequestDispatcher(redireccion).forward(request, response);
+    }
+    
+    private String validarDatos(String anno, String mes) {
+        String validacion = "";
+        if (anno.equals("0") && mes.equals("0")) {
+            validacion += "Debe ingresar el campo 'Año' o 'Mes' \n";
+        }else{
+            if (!anno.isEmpty()) {
+                try {
+                    Integer.valueOf(anno);
+                } catch (NumberFormatException e) {
+                    validacion += "El valor a ingresar en el campo 'Año' debe ser numérico \n";
+                }
+            }else{
+                if(!mes.isEmpty()){
+                    try {
+                        Integer.valueOf(anno);
+                    } catch (NumberFormatException e) {
+                        validacion += "El valor a ingresar en el campo 'Mes' debe ser numérico \n";
+                    }
+                }
+            }
+        }
+        return validacion;
+    }
+    
+    private long TotalVentasTiempo(String anno, String mes) {
+        VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
+        long tv = ventaJpaController.getTotalVentasTiempo(Integer.parseInt(anno), Integer.parseInt(mes));
+        return tv;
+    }
+    
+    private double PromedioVentas(){
+        VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
+        double promedio = ventaJpaController.getPromedioVentas();
+        return promedio;
+    }
+    
+    private List<Object[]> TotalVentasCliente(){
+        VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
+        return ventaJpaController.getTotalVentasCliente();
+    }
+    
+    private List<Object[]> TotalVentasEmpleado(){
+        VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
+        return ventaJpaController.getTotalVentasEmpleado();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @param request seresvlet resequest
+     * @param response seresvlet resesponse
+     * @throws ServletException if a seresvlet-specific eresresores occuress
+     * @throws IOException if an I/O eresresores occuress
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -65,10 +164,10 @@ public class VentaServlet extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @param request seresvlet resequest
+     * @param response seresvlet resesponse
+     * @throws ServletException if a seresvlet-specific eresresores occuress
+     * @throws IOException if an I/O eresresores occuress
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -77,13 +176,12 @@ public class VentaServlet extends HttpServlet {
     }
 
     /**
-     * Returns a short description of the servlet.
+     * Returesns a shorest descresiption of the seresvlet.
      *
-     * @return a String containing servlet description
+     * @return a Stresing containing seresvlet descresiption
      */
     @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-}
+}   

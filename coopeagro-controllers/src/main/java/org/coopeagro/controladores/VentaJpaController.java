@@ -7,7 +7,6 @@
 package org.coopeagro.controladores;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -204,13 +203,13 @@ public class VentaJpaController implements Serializable {
     
     public List<Object[]> getTotalVentasCliente(){
         EntityManager em = getEntityManager();
-        Query q = em.createQuery("select cl, COUNT(v.numeroPedido) from Venta v JOIN v.cliente cl GROUP BY cl");
+        Query q = em.createQuery("select cl.llavePrimaria.documento, cl.llavePrimaria.tipoDocumento, cl.nombre, cl.apellidoUno, cl.apellidoDos, COUNT(v.numeroPedido) from Venta v JOIN v.cliente cl GROUP BY cl");
         return q.getResultList();
     }
     
     public List<Object[]> getTotalVentasEmpleado(){
         EntityManager em = getEntityManager();
-        Query q = em.createQuery("select e, COUNT(v.numeroPedido) from Venta v JOIN v.empleado e GROUP BY e");
+        Query q = em.createQuery("select e.llavePrimaria.documento, e.llavePrimaria.tipoDocumento, e.nombre, e.apellidoUno, e.apellidoDos, COUNT(v.numeroPedido) from Venta v JOIN v.empleado e GROUP BY e");
         return q.getResultList();
     }
     

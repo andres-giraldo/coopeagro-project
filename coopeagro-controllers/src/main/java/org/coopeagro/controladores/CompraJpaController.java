@@ -7,13 +7,14 @@
 package org.coopeagro.controladores;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Agricultor;
@@ -202,7 +203,20 @@ public class CompraJpaController implements Serializable {
     
     public List<Object[]> getTotalComprasAgricultor(){
         EntityManager em = getEntityManager();
-        Query q = em.createQuery("select a, COUNT(c.numeroPedido) from Compra c JOIN c.agricultor a GROUP BY a");
+        Query q = em.createQuery("select a.llavePrimaria.documento, a.llavePrimaria.tipoDocumento, a.nombre, a.apellidoUno, a.apellidoDos, COUNT(c.numeroPedido) from Compra c JOIN c.agricultor a GROUP BY a");
         return q.getResultList();
+    }
+    
+    public double getPromedioCompras(){
+        double total;
+        EntityManager em = getEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Double> cq = cb.createQuery(Double.class);
+        Root compra = cq.from(Compra.class);
+        Expression avgExpression = cb.avg(compra.get("total"));
+        cq.select(avgExpression);
+        Query q = em.createQuery(cq);
+        total = (Double)q.getSingleResult();
+        return total;
     }
 }
