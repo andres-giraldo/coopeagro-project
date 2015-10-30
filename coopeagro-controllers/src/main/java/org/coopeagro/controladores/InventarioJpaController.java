@@ -181,7 +181,11 @@ public class InventarioJpaController implements Serializable {
             q.setParameter("producto", producto);
         }
         q.setMaxResults(1);
-        cantidadDisponible = (Double) q.getSingleResult();
+        if (!q.getResultList().isEmpty()) {
+            cantidadDisponible = (Double) q.getSingleResult();
+        }else{
+            cantidadDisponible = 0.0;
+        }
         return cantidadDisponible;
     }
 }
