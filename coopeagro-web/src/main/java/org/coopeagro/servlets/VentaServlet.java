@@ -64,10 +64,8 @@ public class VentaServlet extends HttpServlet {
                         //request.setAttribute("year", anno);
                         //request.setAttribute("month", mes);
                         request.setAttribute("total", total);
-                        break;
                     }else{
                         mensajeError = "No se han encontrado ventas en el periodo de tiempo especificado";
-                        break;
                     }
                 }
                 break;

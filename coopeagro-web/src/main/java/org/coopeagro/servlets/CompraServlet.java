@@ -66,10 +66,8 @@ public class CompraServlet extends HttpServlet {
                         //request.setAttribute("year", anno);
                         //request.setAttribute("month", mes);
                         request.setAttribute("total", total);
-                        break;
                     }else{
                         mensajeError = "No se han encontrado compras en el periodo de tiempo especificado";
-                        break;
                     }
                 }
                 break;
