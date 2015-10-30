@@ -58,6 +58,14 @@ public class Inventario implements Serializable{
         this.cantidadComprometida = cantidadComprometida;
         this.cantidadTotal = cantidadTotal;
     }
+    
+    public Inventario(Integer id, Date fecha, Producto producto, Double cantidadComprometida, Double cantidadTotal) {
+        this.id = id;
+        this.fecha = fecha;
+        this.producto = producto;
+        this.cantidadComprometida = cantidadComprometida;
+        this.cantidadTotal = cantidadTotal;
+    }
 
     public Integer getId() {
         return id;

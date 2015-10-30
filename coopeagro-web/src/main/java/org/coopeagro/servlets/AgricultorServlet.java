@@ -185,19 +185,22 @@ public class AgricultorServlet extends HttpServlet {
         } catch (Exception e) {
             agricultor = null;
         }
+        System.out.println(isEditar);
         if (isEditar != null && !isEditar.isEmpty()) {
-            if (agricultor == null || (agricultor.getLlavePrimaria().getDocumento().toString().equals(documento) && 
-                    agricultor.getLlavePrimaria().getTipoDocumento().equals(tipoDocumento))) {
+            //if (agricultor == null || (agricultor.getLlavePrimaria().getDocumento().toString().equals(documento) && 
+                    //agricultor.getLlavePrimaria().getTipoDocumento().equals(tipoDocumento))) {
+                System.out.println("Estoy editando");
                 try {
                     agricultorJpaController.edit(new Agricultor(documento, tipoDocumento, nombre, apellido1, apellido2, telefono, celular, correo, fechaRegistro, direccion));
                 } catch (Exception ex) {
                     error = "El agricultor no pudo ser guardado";
                 }
-            } else {
+            /*} else {
                 error = "Ya existe un agricultor con el documento ingresado";
-            }
+            }*/
         } else {
             if (agricultor == null) {
+                System.out.println("Estoy creando");
                 try {
                     agricultorJpaController.create(new Agricultor(documento, tipoDocumento, nombre, apellido1, apellido2, telefono, celular, correo, fechaRegistro, direccion));
                 } catch (NumberFormatException e) {
@@ -227,6 +230,7 @@ public class AgricultorServlet extends HttpServlet {
         JSONObject jsonAgricultor = new JSONObject();
         AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
         Agricultor agricultor;
+        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
         try {
             agricultor = agricultorJpaController.findAgricultor(new PersonaPK(documento, tipoDocumento));
         } catch (NumberFormatException e) {
@@ -243,7 +247,7 @@ public class AgricultorServlet extends HttpServlet {
             jsonAgricultor.put("celular", agricultor.getCelular());
             jsonAgricultor.put("correo", agricultor.getCorreo());
             jsonAgricultor.put("direccion", agricultor.getDireccion());
-            jsonAgricultor.put("fechaRegistro", agricultor.getFechaRegistro());
+            jsonAgricultor.put("fechaRegistro", formatoDelTexto.format(agricultor.getFechaRegistro()));
         }
         return jsonAgricultor;
     }

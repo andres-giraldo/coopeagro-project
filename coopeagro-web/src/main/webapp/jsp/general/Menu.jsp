@@ -20,6 +20,7 @@
                 <li><a href="Agricultor">Agricultores</a></li>
                 <li><a href="#">Empleados</a></li>
                 <li><a href="Producto">Productos</a></li>
+                <li><a href="Inventario">Inventario</a></li>
                 <li><a href="Compra">Informe compras</a></li>
                 <li><a href="Venta">Informe ventas</a></li>
             </ul>
@@ -28,6 +29,7 @@
                 <li><a href="Agricultor">Agricultores</a></li>
                 <li><a href="#">Empleados</a></li>
                 <li><a href="Producto">Productos</a></li>
+                <li><a href="Inventario">Inventario</a></li>
                 <li><a href="Compra">Informe compras</a></li>
                 <li><a href="Venta">Informe ventas</a></li>
             </ul>

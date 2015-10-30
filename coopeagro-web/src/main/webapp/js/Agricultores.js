@@ -24,6 +24,7 @@ function consultarAgricultor(documento, tipoDocumento){
         data    :{accion:"consultar", documento:documento, tipoDocumento:tipoDocumento},
         success: function(data) {
             if(data !== undefined){
+                $("#isEditar").val(data.isEditar !== undefined ? data.isEditar : "");
                 $("#documento").val(data.documento !== undefined ? data.documento : "");
                 $("#tipoDocumento").val(data.tipoDocumento !== undefined ? data.tipoDocumento : "");
                 $("#nombre").val(data.nombre !== undefined ? data.nombre : "");
