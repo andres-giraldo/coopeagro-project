@@ -278,7 +278,7 @@ public class AgricultorServlet extends HttpServlet {
                 out.println(    "<td>"+agricultor.getApellidoDos()+"</td>");
                 out.println(    "<td>");
                 out.println(        "<button class=\"btn btn-default\" type=\"button\" onclick=\"consultarAgricultor("+agricultor.getLlavePrimaria().getDocumento()+",'"+agricultor.getLlavePrimaria().getTipoDocumento()+"');\">Editar</button>");
-                out.println(        "<button class=\"btn btn-default\" type=\"button\" data-toggle=\"modal\" data-target=\"#confirmationMessage\" onclick=\"jQuery('#documento').val('"+agricultor.getLlavePrimaria().getDocumento()+"'), jQuery('#tipoDocumento').val('"+agricultor.getLlavePrimaria().getTipoDocumento()+"'));\">Eliminar</button>");
+                out.println(        "<button class=\"btn btn-default\" type=\"button\" data-toggle=\"modal\" data-target=\"#confirmationMessage\" onclick=\"jQuery('#documento').val('"+agricultor.getLlavePrimaria().getDocumento()+"'), jQuery('#tipoDocumento').val('"+agricultor.getLlavePrimaria().getTipoDocumento()+"');\">Eliminar</button>");
                 out.println(    "</td>");
                 out.println("</tr>");
             }
