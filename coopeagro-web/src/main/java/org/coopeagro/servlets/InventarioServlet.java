@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -117,6 +116,7 @@ public class InventarioServlet extends HttpServlet {
         }
         
         if (!accion.equals("consultar") && !accion.equals("listar")) {
+            request.setAttribute("productos", obtenerProductos());
             request.setAttribute("mensajeExito", mensajeExito);
             request.setAttribute("mensajeError", mensajeError);
             request.setAttribute("mensajeAlerta", mensajeAlerta);
@@ -276,6 +276,17 @@ public class InventarioServlet extends HttpServlet {
         InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
         double disponibilidad = inventarioJpaController.getDisponibilidad(Integer.parseInt(idProducto));
         return disponibilidad;
+    }
+    
+    private List<Producto> obtenerProductos(){
+        List<Producto> productos = null;
+        try {
+            InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
+            productos = inventarioJpaController.getAllProducts();
+        } catch (Exception ex) {
+            Logger.getLogger(InventarioServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return productos;
     }
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

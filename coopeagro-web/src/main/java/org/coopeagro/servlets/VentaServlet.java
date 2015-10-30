@@ -61,8 +61,8 @@ public class VentaServlet extends HttpServlet {
                     total = TotalVentasTiempo(anno, mes);
                     if (total > 0) {
                         //mensajeExito = "El agricultor ha sido guardado con éxito";
-                        //request.setAttribute("year", anno);
-                        //request.setAttribute("month", mes);
+                        request.setAttribute("year", anno);
+                        request.setAttribute("month", mes);
                         request.setAttribute("total", total);
                     }else{
                         mensajeError = "No se han encontrado ventas en el periodo de tiempo especificado";
@@ -81,7 +81,11 @@ public class VentaServlet extends HttpServlet {
                 break;
             case "promedio":
                 promedio = PromedioVentas();
-                request.setAttribute("promedio", promedio);
+                if (promedio > 0) {
+                    request.setAttribute("promedio", promedio);
+                }else{
+                    mensajeError = "No se han encontrado ventas registradas";
+                }
                 break;
             case "limpiar":
                 request.setAttribute("year", "");

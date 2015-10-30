@@ -4,7 +4,6 @@
     Author     : YEISSON
 --%>
 
-<%@page import="org.coopeagro.controladores.InventarioJpaController"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -12,9 +11,6 @@
     <head>
         <c:import url="/jsp/general/Head.jsp" />
         <script type="text/javascript" src="js/Inventarios.js"></script>
-        <% InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController"); 
-           request.setAttribute("productos", inventarioJpaController.getAllProducts());
-        %>
         <title>Inventario</title>
     </head>
     <body>
@@ -48,7 +44,7 @@
                                     <option value="">Seleccione</option>
                                     <c:forEach items="${productos}" var = "p">
                                         <c:choose>
-                                            <c:when test="${p.getId() == Integer.parseInt(producto)}">
+                                            <c:when test="${p.getId() == producto}">
                                                 <option value="<c:out value='${p.getId()}'/>" selected><c:out value='${p.getNombre()}'/></option>
                                             </c:when>
                                             <c:otherwise>

@@ -214,7 +214,7 @@ public class CompraJpaController implements Serializable {
     }
     
     public double getPromedioCompras(){
-        double total;
+        double promedio;
         EntityManager em = getEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Double> cq = cb.createQuery(Double.class);
@@ -222,7 +222,11 @@ public class CompraJpaController implements Serializable {
         Expression avgExpression = cb.avg(compra.get("total"));
         cq.select(avgExpression);
         Query q = em.createQuery(cq);
-        total = (Double)q.getSingleResult();
-        return total;
+        if (!q.getResultList().isEmpty()) {
+            promedio = (Double)q.getSingleResult();
+        }else{
+            promedio = 0.0;
+        }
+        return promedio;
     }
 }
