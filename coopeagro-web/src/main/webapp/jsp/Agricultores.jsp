@@ -4,8 +4,6 @@
     Author     : YEISSON
 --%>
 
-<%@page import="org.coopeagro.entidades.TiposDocumento"%>
-<%@page import="org.coopeagro.servlets.AgricultorServlet"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -13,9 +11,6 @@
     <head>
         <c:import url="/jsp/general/Head.jsp" />
         <script type="text/javascript" src="js/Agricultores.js"></script>
-        <%  
-            TiposDocumento[] tiposDocumento = TiposDocumento.values(); 
-        %>
         <title>Agricultores</title>
     </head>
     <body>
@@ -41,11 +36,11 @@
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
                                 <label for="tipoDocumento">* Tipo Documento:</label>
                                 <br/>
-                                <select class="form-control" name="tipoDocumento">
-                                    <option value="">Seleccione</option>
-                                    <% for(int i=0;i< tiposDocumento.length; i++){%> 
-                                        <option value="<%= tiposDocumento[i] %>"  > <%out.print(tiposDocumento[i]);%></option> 
-                                    <%}%>
+                                <select class="form-control" id="tipoDocumento" name="tipoDocumento">
+                                    <option value="0">Seleccione</option>
+                                    <c:forEach items="${tiposDocumento}" var="tipo">
+                                        <option value="${tipo.tipoDocumento}" <c:if test="${tipoDocumento == tipo.tipoDocumento}">selected</c:if> >${tipo.tipoDocumento}</option>
+                                    </c:forEach>
                                 </select>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
@@ -79,6 +74,11 @@
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
                                 <label for="fechaRegistro">* Fecha registro:</label> 
                                 <input class="form-control" type="text" id="fechaRegistro" name="fechaRegistro" value="${fechaRegistro}"/>
+                                <script type="text/javascript">
+                                    $(function() {
+                                        $('#fechaRegistro').datetimepicker({format: 'dd/mm/yyyy', language:'es', weekStart:true, todayBtn:true, autoclose:true, todayHighlight:true, startView:2, minView:2});
+                                    });
+                                </script>
                             </div>
                         </div>
                         <div class="row form-group" align="center">

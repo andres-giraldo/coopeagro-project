@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -67,7 +69,7 @@ public class AgricultorServlet extends HttpServlet {
         String correo = request.getParameter("correo");
         String direccion = request.getParameter("direccion");
         String fechaRegistro = request.getParameter("fechaRegistro");
-        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
         Date fecha = null;
         
         switch (accion) {
@@ -116,6 +118,7 @@ public class AgricultorServlet extends HttpServlet {
         }
         
         if (!accion.equals("consultar") && !accion.equals("listar")) {
+            request.setAttribute("tiposDocumento", new ArrayList<>(Arrays.asList(TiposDocumento.values())));
             request.setAttribute("mensajeExito", mensajeExito);
             request.setAttribute("mensajeError", mensajeError);
             request.setAttribute("mensajeAlerta", mensajeAlerta);
@@ -221,8 +224,6 @@ public class AgricultorServlet extends HttpServlet {
     }
     
     private JSONObject consultarAgricultor(String documento, TiposDocumento tipoDocumento) {
-        System.out.println(documento);
-        System.out.println(tipoDocumento);
         JSONObject jsonAgricultor = new JSONObject();
         AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
         Agricultor agricultor;
@@ -234,7 +235,7 @@ public class AgricultorServlet extends HttpServlet {
         if (agricultor != null) {
             jsonAgricultor.put("isEditar", 1);
             jsonAgricultor.put("documento", agricultor.getLlavePrimaria().getDocumento());
-            jsonAgricultor.put("tipoDocumento", agricultor.getLlavePrimaria().getTipoDocumento());
+            jsonAgricultor.put("tipoDocumento", agricultor.getLlavePrimaria().getTipoDocumento().getTipoDocumento());
             jsonAgricultor.put("nombre", agricultor.getNombre());
             jsonAgricultor.put("apellido1", agricultor.getApellidoUno());
             jsonAgricultor.put("apellido2", agricultor.getApellidoDos());
@@ -272,8 +273,8 @@ public class AgricultorServlet extends HttpServlet {
                 out.println(    "<td>"+agricultor.getApellidoUno()+"</td>");
                 out.println(    "<td>"+agricultor.getApellidoDos()+"</td>");
                 out.println(    "<td>");
-                out.println(        "<button class=\"btn btn-default\" type=\"button\" onclick=\"consultarAgricultor("+agricultor.getLlavePrimaria().getDocumento()+","+agricultor.getLlavePrimaria().getTipoDocumento()+");\">Editar</button>");
-                out.println(        "<button class=\"btn btn-default\" type=\"button\" data-toggle=\"modal\" data-target=\"#confirmationMessage\" onclick=\"jQuery(('#documento').val('"+agricultor.getLlavePrimaria().getDocumento()+"'), ('#tipoDocumento').val('"+agricultor.getLlavePrimaria().getTipoDocumento()+"'));\">Eliminar</button>");
+                out.println(        "<button class=\"btn btn-default\" type=\"button\" onclick=\"consultarAgricultor("+agricultor.getLlavePrimaria().getDocumento()+",'"+agricultor.getLlavePrimaria().getTipoDocumento()+"');\">Editar</button>");
+                out.println(        "<button class=\"btn btn-default\" type=\"button\" data-toggle=\"modal\" data-target=\"#confirmationMessage\" onclick=\"jQuery('#documento').val('"+agricultor.getLlavePrimaria().getDocumento()+"'), jQuery('#tipoDocumento').val('"+agricultor.getLlavePrimaria().getTipoDocumento()+"'));\">Eliminar</button>");
                 out.println(    "</td>");
                 out.println("</tr>");
             }
@@ -286,7 +287,6 @@ public class AgricultorServlet extends HttpServlet {
         out.println("</table>");
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP
      * <code>GET</code> method.
@@ -315,19 +315,5 @@ public class AgricultorServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-    
-    public static TiposDocumento[] getTiposDocumentoValues() {
-        return TiposDocumento.values();
     }
 }

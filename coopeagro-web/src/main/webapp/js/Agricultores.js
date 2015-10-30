@@ -21,14 +21,14 @@ function consultarAgricultor(documento, tipoDocumento){
         type    :"POST",
         url     :"Agricultor",
         dataType:"json",
-        data    :{accion:"consultar",documento:documento, tipoDocumento:tipoDocumento},
+        data    :{accion:"consultar", documento:documento, tipoDocumento:tipoDocumento},
         success: function(data) {
             if(data !== undefined){
-                $("#documento").val(data.llavePrimaria.documento !== undefined ? data.llavePrimaria.documento : "");
-                $("#tipoDocumento").val(data.llavePrimaria.tipoDocumento !== undefined ? data.llavePrimaria.tipoDocumento : "");
+                $("#documento").val(data.documento !== undefined ? data.documento : "");
+                $("#tipoDocumento").val(data.tipoDocumento !== undefined ? data.tipoDocumento : "");
                 $("#nombre").val(data.nombre !== undefined ? data.nombre : "");
-                $("#apellido1").val(data.apellidoUno !== undefined ? data.apellidoUno : "");
-                $("#apellido2").val(data.apellidoDos !== undefined ? data.apellidoDos : "");
+                $("#apellido1").val(data.apellido1 !== undefined ? data.apellido1 : "");
+                $("#apellido2").val(data.apellido2 !== undefined ? data.apellido2 : "");
                 $("#telefono").val(data.telefono !== undefined ? data.telefono : "");
                 $("#celular").val(data.celular !== undefined ? data.celular : "");
                 $("#correo").val(data.correo !== undefined ? data.correo : "");
@@ -36,7 +36,8 @@ function consultarAgricultor(documento, tipoDocumento){
                 $("#direccion").val(data.direccion !== undefined ? data.direccion : "");
             }
         },
-        error: function(){
+        error: function(err){
+            alert('Error' + err);
         }
     });
 }
