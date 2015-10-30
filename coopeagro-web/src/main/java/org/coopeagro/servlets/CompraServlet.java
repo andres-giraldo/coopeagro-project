@@ -78,6 +78,11 @@ public class CompraServlet extends HttpServlet {
                 res = TotalComprasAgricultor();
                 //request.setAttribute("resultados", TotalVentasEmpleado());
                 break;
+            case "empleado":
+                //listarResultados(response, accion);
+                res = TotalComprasEmpleado();
+                //request.setAttribute("resultados", TotalVentasEmpleado());
+                break;
             case "promedio":
                 promedio = PromedioCompras();
                 request.setAttribute("promedio", promedio);
@@ -130,6 +135,11 @@ public class CompraServlet extends HttpServlet {
     private List<Object[]> TotalComprasAgricultor(){
         CompraJpaController compraJpaController = (CompraJpaController) getServletContext().getAttribute("compraJpaController");
         return compraJpaController.getTotalComprasAgricultor();
+    }
+    
+    private List<Object[]> TotalComprasEmpleado(){
+        CompraJpaController compraJpaController = (CompraJpaController) getServletContext().getAttribute("compraJpaController");
+        return compraJpaController.getTotalComprasEmpleado();
     }
     
     private double PromedioCompras(){

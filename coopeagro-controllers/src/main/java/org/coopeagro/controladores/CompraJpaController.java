@@ -207,6 +207,12 @@ public class CompraJpaController implements Serializable {
         return q.getResultList();
     }
     
+    public List<Object[]> getTotalComprasEmpleado(){
+        EntityManager em = getEntityManager();
+        Query q = em.createQuery("select e.llavePrimaria.documento, e.llavePrimaria.tipoDocumento, e.nombre, e.apellidoUno, e.apellidoDos, COUNT(c.numeroPedido) from Compra c JOIN c.empleado e GROUP BY e");
+        return q.getResultList();
+    }
+    
     public double getPromedioCompras(){
         double total;
         EntityManager em = getEntityManager();

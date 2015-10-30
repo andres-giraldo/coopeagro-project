@@ -55,6 +55,7 @@
                             <button class="btn btn-default" type="submit" name="accion" id="totalCompras" value="total">Total</button>
                             <button class="btn btn-default" type="submit" name="accion" id="promedioCompras" value="promedio">Promedio</button>
                             <button class="btn btn-default" type="submit" name="accion" id="filtrarAgricultor" value="agricultor">Agricultor</button>
+                            <button class="btn btn-default" type="submit" name="accion" id="filtrarEmpleado" value="empleado">Empleado</button>
                             <button class="btn btn-default" type="submit" name="accion" id="limpiar" value="limpiar">Limpiar</button>
                         </div>
                     </form>
