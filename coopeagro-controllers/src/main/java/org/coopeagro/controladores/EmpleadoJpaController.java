@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.coopeagro.controladores;
 
 import java.io.Serializable;
@@ -12,7 +11,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.controladores.exceptions.PreexistingEntityException;
@@ -145,5 +146,29 @@ public class EmpleadoJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public List<Empleado> completarEmpleado(String parametro) {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Empleado> cq = cb.createQuery(Empleado.class);
+            Root<Empleado> ew = cq.from(Empleado.class);
+            cq.select(ew);
+            Expression<String> nombre = cb.concat(ew.<String>get("nombre"), " ");
+            Expression<String> apellidoUno = cb.concat(ew.<String>get("apellidoUno"), " ");
+            if (parametro != null && !parametro.isEmpty()) {
+                cq.where(cb.or(
+                        cb.like(cb.lower(ew.get("llavePrimaria").<String>get("documento")), "%" + parametro.toLowerCase() + "%"),
+                        cb.like(cb.lower(cb.concat(nombre, cb.concat(apellidoUno, ew.<String>get("apellidoDos")))), "%" + parametro.toLowerCase() + "%")
+                ));
+            }
+            Query query = em.createQuery(cq);
+            query.setMaxResults(10);
+            return query.getResultList();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 }

@@ -21,6 +21,7 @@ import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Agricultor;
 import org.coopeagro.entidades.Compra;
 import org.coopeagro.entidades.DetalleCompra;
+import org.coopeagro.entidades.Empleado;
 import org.coopeagro.entidades.Producto;
 import org.coopeagro.entidades.TiposDocumento;
 
@@ -183,10 +184,33 @@ public class ProductoJpaController implements Serializable {
         try {
             Query query = em.createQuery("SELECT p FROM Producto p WHERE p.codigo = :codigo");
             query.setParameter("codigo", codigo);
-            Producto producto = (Producto)query.getSingleResult();
+            Producto producto = (Producto) query.getSingleResult();
             return producto;
         } finally {
             em.close();
+        }
+    }
+
+    public List<Producto> completarProducto(String parametro) {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Producto> cq = cb.createQuery(Producto.class);
+            Root<Producto> pw = cq.from(Producto.class);
+            cq.select(pw);
+            if (parametro != null && !parametro.isEmpty()) {
+                cq.where(cb.or(
+                        cb.like(cb.lower(pw.<String>get("codigo")), "%" + parametro.toLowerCase() + "%"),
+                        cb.like(cb.lower(pw.<String>get("nombre")), "%" + parametro.toLowerCase() + "%")
+                ));
+            }
+            Query query = em.createQuery(cq);
+            query.setMaxResults(10);
+            return query.getResultList();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
     }
 }

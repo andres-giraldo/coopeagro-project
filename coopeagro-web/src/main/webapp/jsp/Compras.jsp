@@ -1,36 +1,16 @@
 <%-- 
     Document   : Compras
-    Created on : 28-oct-2015, 15:20:58
-    Author     : YEISSON
+    Created on : 6/11/2015, 08:49:04 PM
+    Author     : Pipe
 --%>
 
-<%@page import="java.util.Map"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="org.coopeagro.servlets.CompraServlet"%>
-<%@page import="java.util.List"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <c:import url="/jsp/general/Head.jsp" />
-        <!--<script type="text/javascript" src="js/ConsultasVentas.js"></script>-->
-        <% List<Object[]> resultado = (List)CompraServlet.res; 
-           Map<Integer, String> meses = new HashMap<Integer, String>();
-           meses.put(1, "Enero");
-           meses.put(2, "Febrero");
-           meses.put(3, "Marzo");
-           meses.put(4, "Abril");
-           meses.put(5, "Mayo");
-           meses.put(6, "Junio");
-           meses.put(7, "Julio");
-           meses.put(8, "Agosto");
-           meses.put(9, "Septiembre");
-           meses.put(10, "Octubre");
-           meses.put(11, "Noviembre");
-           meses.put(12, "Diciembre");
-           request.setAttribute("meses", meses);
-        %>
+        <script type="text/javascript" src="js/Compras.js"></script>
         <title>Compras</title>
     </head>
     <body>
@@ -42,68 +22,76 @@
                 </div>
                 <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9" id="contenido">
                     <form autocomplete="off" action="./Compra" method="POST" id="formularioCompras">
-                        <h2>COMPRAS</h2>
+                        <h2>NUEVA COMPRA</h2>
+                        Los campos marcados con (*) son obligatorios
                         <br>
                         <br>
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
-                                <label for="year"> Año:</label> 
-                                <input class="form-control" type="text" id="year" name="year" value="${year}"/>
+                                <label for="fecha">* Fecha de compra:</label> 
+                                <input class="form-control" type="text" id="fecha" name="fecha" readonly="true" value="${fecha}" />
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
-                                <label for="month"> Mes:</label> 
-                                <select class="form-control" id="month" name="month">
-                                    <option value="0">Seleccione</option>
-                                    <c:forEach items="${meses}" var="mes"> 
-                                        <option value="${mes.key}" <c:if test="${month == mes.key}">selected</c:if> >${mes.value}</option>
-                                    </c:forEach>
-                                </select>
+                                <label for="totalPedido">Total:</label> 
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input class="form-control" type="text" id="totalPedido" name="totalPedido" readonly="true" value="0" />
+                                </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
-                                <label for="total"> Total:</label> 
-                                <input class="form-control" type="text" id="total" name="total" value="${total}" readonly="true"/>
+                                <label for="agricultor">* Agricultor:</label> 
+                                <input class="form-control" type="text" id="agricultor" name="agricultor" value="${agricultor}" />
+                                <input class="form-control" type="hidden" id="idAgricultor" name="idAgricultor" value="${idAgricultor}" />
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
-                                <label for="promedio">$ Promedio:</label> 
-                                <input class="form-control" type="text" id="promedio" name="promedio" value="${promedio}" readonly="true"/>
+                                <label for="empleado">* Empleado:</label> 
+                                <input class="form-control" type="text" id="empleado" name="empleado" value="${empleado}" />
+                                <input class="form-control" type="hidden" id="idEmpleado" name="idEmpleado" value="${idEmpleado}" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
+                                <label for="producto">* Adicionar producto:</label> 
+                                <input class="form-control" type="text" id="producto" name="producto"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+                                <div id="tablaProductos">
+                                    <ul class="list-group">
+                                        <li class="list-group-item" id="item3">
+                                            <div class="row">
+                                                <div class="col-xs-10 col-sm-11 col-md-11 col-lg-11">
+                                                    <div class="row">
+                                                        <div class="col-xs-5 col-sm-3 col-md-3 col-lg-3">
+                                                            PS564D76
+                                                        </div>
+                                                        <div class="hidden-xs col-sm-3 col-md-3 col-lg-3">
+                                                            Papa criolla
+                                                        </div>
+                                                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                                            $ 5000
+                                                        </div>
+                                                        <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                                                            <input type="text" class="form-control" id="cantidad1" name="cantidades" value="1"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1">
+                                                    <span class="glyphicon glyphicon-remove" onclick="$('#item3').remove();"></span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         <div class="row form-group" align="center">
-                            <button class="btn btn-default" type="submit" name="accion" id="totalCompras" value="total">Total</button>
-                            <button class="btn btn-default" type="submit" name="accion" id="promedioCompras" value="promedio">Promedio</button>
-                            <button class="btn btn-default" type="submit" name="accion" id="filtrarAgricultor" value="agricultor">Agricultor</button>
-                            <button class="btn btn-default" type="submit" name="accion" id="filtrarEmpleado" value="empleado">Empleado</button>
-                            <button class="btn btn-default" type="submit" name="accion" id="limpiar" value="limpiar">Limpiar</button>
+                            <button class="btn btn-default" type="submit" name="accion" id="guardarCompra" value="guardarCompra">Guardar</button>
+                            <button class="btn btn-default" type="submit" name="accion" id="cancelarCompra" value="cancelarCompra">Cancelar</button>
+                            <button class="btn btn-default" type="button" name="accion" id="limpiar" value="limpiar" onclick="limpiarDatos();">Limpiar</button>
                         </div>
                     </form>
-                    <table class="table table-striped table-hover table-condensed bordo-tablas">
-                        <thead>
-                            <th>Documento</th>
-                            <th>Tipo documento</th>
-                            <th>Nombre</th>
-                            <th>Primer apellido</th>
-                            <th>Segundo apellido</th>
-                            <th>Total</th>
-                        </thead>
-                        <tbody>
-                            <% if(resultado.size() > 0){
-                                    for (Object[] r : resultado) { %>
-                                        <tr>			
-                                            <td><%out.println(r[0]);%></td>
-                                            <td><%out.println(r[1]);%></td>
-                                            <td><%out.println(r[2]);%></td>
-                                            <td><%out.println(r[3]);%></td>
-                                            <td><%out.println(r[4]);%></td>
-                                            <td><%out.println(r[5]);%></td>
-                                        </tr>
-                                    <% }
-                             }else{ %>
-                                <tr>			
-                                    <td colspan="6">No se encontraron registros</td>
-                                </tr>
-                            <%}%>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
