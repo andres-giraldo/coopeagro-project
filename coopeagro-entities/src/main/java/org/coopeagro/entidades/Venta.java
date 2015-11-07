@@ -5,20 +5,38 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="TCA_VENTAS")
-public class Venta extends Pedido implements Serializable{
+@Table(name = "TCA_VENTAS")
+public class Venta extends Pedido implements Serializable {
+
+    @TableGenerator(name = "VentaGen",
+            table = "TCA_SQ",
+            pkColumnName = "GEN_KEY",
+            valueColumnName = "GEN_VALUE",
+            pkColumnValue = "VENTA_SEQ",
+            initialValue = 0,
+            allocationSize = 1
+    )
 
     @Basic(optional = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "VentaGen")
+    @Column(name = "DNIPEDIDO")
+    private Integer numeroPedido;
+    @Basic(optional = false)
     @Temporal(TemporalType.DATE)
-    @Column(name="FEFECHAESTIMADAENTREGA")
+    @Column(name = "FEFECHAESTIMADAENTREGA")
     private Date fechaEstimadaEntrega;
     @ManyToOne
     @JoinColumns({
@@ -27,12 +45,12 @@ public class Venta extends Pedido implements Serializable{
     })
     private Cliente cliente;
     @Basic(optional = false)
-    @Column(name="DSDIRECCION")
+    @Column(name = "DSDIRECCION")
     private String direccion;
     @Basic(optional = false)
-    @Column(name="DSREMITENTE")
+    @Column(name = "DSREMITENTE")
     private String remitente;
-    
+
     public Venta() {
         this.cliente = new Cliente();
     }
@@ -43,6 +61,14 @@ public class Venta extends Pedido implements Serializable{
         this.cliente = cliente;
         this.direccion = direccion;
         this.remitente = remitente;
+    }
+
+    public Integer getNumeroPedido() {
+        return numeroPedido;
+    }
+
+    public void setNumeroPedido(Integer numeroPedido) {
+        this.numeroPedido = numeroPedido;
     }
 
     public Date getFechaEstimadaEntrega() {
@@ -68,7 +94,7 @@ public class Venta extends Pedido implements Serializable{
     public void setRemitente(String remitente) {
         this.remitente = remitente;
     }
-    
+
     public Cliente getCliente() {
         return cliente;
     }
@@ -79,6 +105,7 @@ public class Venta extends Pedido implements Serializable{
 
     @Override
     public String toString() {
-        return "Venta{" + "fechaEstimadaEntrega=" + fechaEstimadaEntrega + ", cliente=" + cliente + ", direccion=" + direccion + ", remitente=" + remitente + '}';
+        return "Venta{" + "numeroPedido=" + numeroPedido + ", fechaEstimadaEntrega=" + fechaEstimadaEntrega + ", cliente=" + cliente + ", direccion=" + direccion + ", remitente=" + remitente + '}';
     }
+    
 }

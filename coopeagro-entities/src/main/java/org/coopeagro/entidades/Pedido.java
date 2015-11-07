@@ -6,34 +6,15 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @MappedSuperclass
 public class Pedido implements Serializable{
-    
-    @TableGenerator(name="PedidoGen", 
-        table="TCA_SQ", 
-        pkColumnName="GEN_KEY", 
-        valueColumnName="GEN_VALUE", 
-        pkColumnValue="PEDIDO_SEQ", 
-        initialValue=0,
-        allocationSize=1
-    )
-    
-    @Basic(optional = false)
-    @Id
-    @GeneratedValue(strategy=GenerationType.TABLE, generator="PedidoGen")
-    @Column(name="DNIPEDIDO")
-    private Integer numeroPedido;
     @Basic(optional = false)
     @Temporal(TemporalType.DATE)
     @Column(name="FEFECHAPEDIDO")
@@ -53,7 +34,6 @@ public class Pedido implements Serializable{
     
     public Pedido(){
         this.empleado = new Empleado();
-        this.numeroPedido = 0;
         this.total = 0.0;
     }
 
@@ -62,14 +42,6 @@ public class Pedido implements Serializable{
         this.empleado = empleado;
         this.estado = estado;
         this.total = total;
-    }
-
-    public Integer getNumeroPedido() {
-        return numeroPedido;
-    }
-
-    public void setNumeroPedido(Integer numeroPedido) {
-        this.numeroPedido = numeroPedido;
     }
 
     public Date getFechaPedido() {
@@ -106,6 +78,6 @@ public class Pedido implements Serializable{
 
     @Override
     public String toString() {
-        return "Pedido{" + "numeroPedido=" + numeroPedido + ", fechaPedido=" + fechaPedido + ", empleado=" + empleado + ", estado=" + estado + ", total=" + total + '}';
+        return "Pedido{fechaPedido=" + fechaPedido + ", empleado=" + empleado + ", estado=" + estado + ", total=" + total + '}';
     }
 }
