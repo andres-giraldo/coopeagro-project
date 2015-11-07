@@ -1,6 +1,7 @@
 package org.coopeagro.servlets;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,11 +12,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.coopeagro.controladores.AgricultorJpaController;
 import org.coopeagro.controladores.CompraJpaController;
+import org.coopeagro.controladores.DetalleCompraJpaController;
 import org.coopeagro.controladores.EmpleadoJpaController;
 import org.coopeagro.controladores.ProductoJpaController;
 import org.coopeagro.entidades.Agricultor;
+import org.coopeagro.entidades.Compra;
+import org.coopeagro.entidades.DetalleCompra;
 import org.coopeagro.entidades.Empleado;
+import org.coopeagro.entidades.EstadosPedido;
+import org.coopeagro.entidades.PersonaPK;
 import org.coopeagro.entidades.Producto;
+import org.coopeagro.entidades.TiposDocumento;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -24,6 +31,8 @@ import org.json.simple.JSONObject;
  * @author YEISSON
  */
 public class CompraServlet extends HttpServlet {
+
+    private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
 
     public static List<Object[]> res = new ArrayList<>();
 
@@ -56,6 +65,14 @@ public class CompraServlet extends HttpServlet {
         String mes;
 
         String parametro = request.getParameter("parametro");
+        String fecha = request.getParameter("fecha");
+        String idAgricultor = request.getParameter("idAgricultor");
+        String idEmpleado = request.getParameter("idEmpleado");
+        String agricultor = request.getParameter("agricultor");
+        String empleado = request.getParameter("empleado");
+        String[] idProductos = request.getParameterValues("idProductos");
+        String[] valores = request.getParameterValues("valores");
+        String[] cantidades = request.getParameterValues("cantidades");
 
         switch (accion) {
             case "total":
@@ -99,7 +116,6 @@ public class CompraServlet extends HttpServlet {
                 break;
             case "nuevaCompra":
                 redireccion = "jsp/Compras.jsp";
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
                 request.setAttribute("fecha", sdf.format(new Date()));
                 break;
             case "completarAgricultor":
@@ -115,6 +131,20 @@ public class CompraServlet extends HttpServlet {
                 response.getWriter().write(array.toJSONString());
                 break;
             case "guardarCompra":
+                mensajeAlerta = validarGuardado(fecha, idAgricultor, idEmpleado, idProductos);
+                if (mensajeAlerta.isEmpty()) {
+                    mensajeError = guardarCompra(fecha, idAgricultor, idEmpleado, idProductos, valores, cantidades);
+                    if(mensajeError.isEmpty()){
+                        mensajeExito = "La compra ha sido guardada con éxito";
+                        break;
+                    }
+                }
+                request.setAttribute("fecha", fecha);
+                request.setAttribute("idAgricultor", idAgricultor);
+                request.setAttribute("idEmpleado", idEmpleado);
+                request.setAttribute("agricultor", agricultor);
+                request.setAttribute("empleado", empleado);
+                redireccion = "jsp/Compras.jsp";
                 break;
             default:
                 break;
@@ -165,6 +195,10 @@ public class CompraServlet extends HttpServlet {
             JSONObject object = new JSONObject();
             object.put("label", producto.getCodigo() + " " + producto.getNombre());
             object.put("value", producto.getId());
+            object.put("nombre", producto.getNombre());
+            object.put("valor", producto.getValor());
+            object.put("codigo", producto.getCodigo());
+            object.put("cantidad", 1);
             array.add(object);
         }
         return array;
@@ -214,6 +248,90 @@ public class CompraServlet extends HttpServlet {
         CompraJpaController ventaJpaController = (CompraJpaController) getServletContext().getAttribute("compraJpaController");
         double promedio = ventaJpaController.getPromedioCompras();
         return promedio;
+    }
+
+    private String validarGuardado(String fecha, String agricultor, String empleado, String[] idProductos) {
+        String error = "";
+        if (fecha == null || fecha.isEmpty()) {
+            error += "El campo 'Fecha de compra' es obligatorio \n";
+        } else {
+            try {
+                sdf.parse(fecha);
+            } catch (ParseException e) {
+                error += "El campo 'Fecha de compra' no se encuentra en el formato 'dia/mes/año horas:minutos'";
+            }
+        }
+        if (agricultor == null || agricultor.isEmpty()) {
+            error += "El campo 'Agricultor' es obligatorio \n";
+        } else {
+            String[] llavePrimaria = agricultor.split(",");
+            if (llavePrimaria == null || llavePrimaria.length != 2) {
+                error += "El campo 'Agricultor' no fue seleccionado correctamente \n";
+            } else {
+                AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
+                try {
+                    Agricultor a = agricultorJpaController.findAgricultor(new PersonaPK(llavePrimaria[1], TiposDocumento.valueOf(llavePrimaria[0])));
+                    if (a == null) {
+                        error += "El 'Agricultor' ingresado no existe en la base de datos \n";
+                    }
+                } catch (Exception e) {
+                    error += "El 'Agricultor' ingresado no existe en la base de datos \n";
+                }
+            }
+        }
+        if (empleado == null || empleado.isEmpty()) {
+            error += "El campo 'Empleado' es obligatorio \n";
+        } else {
+            String[] llavePrimaria = empleado.split(",");
+            if (llavePrimaria == null || llavePrimaria.length != 2) {
+                error += "El campo 'Empleado' no fue seleccionado correctamente \n";
+            } else {
+                EmpleadoJpaController empleadoJpaController = (EmpleadoJpaController) getServletContext().getAttribute("empleadoJpaController");
+                try {
+                    Empleado e = empleadoJpaController.findEmpleado(new PersonaPK(llavePrimaria[1], TiposDocumento.valueOf(llavePrimaria[0])));
+                    if (e == null) {
+                        error += "El 'Empleado' ingresado no existe en la base de datos \n";
+                    }
+                } catch (Exception e) {
+                    error += "El 'Empleado' ingresado no existe en la base de datos \n";
+                }
+            }
+        }
+        if (idProductos == null || idProductos.length == 0) {
+            error = "Debe adicionar algún producto a la compra \n";
+        }
+        return error;
+    }
+
+    private String guardarCompra(String fecha, String agricultor, String empleado, String[] idProductos, String[] valores, String[] cantidades) {
+        String error = "";
+        try {
+            CompraJpaController compraJpaController = (CompraJpaController) getServletContext().getAttribute("compraJpaController");
+            String[] llavePrimariaE = empleado.split(",");
+            EmpleadoJpaController empleadoJpaController = (EmpleadoJpaController) getServletContext().getAttribute("empleadoJpaController");
+            Empleado e = empleadoJpaController.findEmpleado(new PersonaPK(llavePrimariaE[1], TiposDocumento.valueOf(llavePrimariaE[0])));
+
+            String[] llavePrimariaA = agricultor.split(",");
+            AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
+            Agricultor a = agricultorJpaController.findAgricultor(new PersonaPK(llavePrimariaA[1], TiposDocumento.valueOf(llavePrimariaA[0])));
+            compraJpaController.create(new Compra(a, sdf.parse(fecha), e, EstadosPedido.APROBADO, 0d));
+            
+            Compra compra = compraJpaController.getMaxOrder();
+            DetalleCompraJpaController detalleCompraJpaController = (DetalleCompraJpaController)getServletContext().getAttribute("detalleCompraJpaController");
+            ProductoJpaController productoJpaController = (ProductoJpaController)getServletContext().getAttribute("productoJpaController");
+            
+            Double totalPedido = 0d;
+            for (int i = 0; i < idProductos.length; i++) {
+                Producto producto = productoJpaController.findProducto(Integer.valueOf(idProductos[i]));
+                totalPedido += Double.valueOf(cantidades[i]) * Double.valueOf(valores[i]);
+                detalleCompraJpaController.create(new DetalleCompra(Double.valueOf(cantidades[i]), Double.valueOf(valores[i]), compra, producto));
+            }
+            compra.setTotal(totalPedido);
+            compraJpaController.edit(compra);
+        } catch (Exception ex) {
+            error += "La compra no pudo ser guardada";
+        }
+        return error;
     }
 
     /**

@@ -229,4 +229,16 @@ public class CompraJpaController implements Serializable {
         }
         return promedio;
     }
+    
+    public Compra getMaxOrder(){
+        EntityManager em = getEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Compra> cq = cb.createQuery(Compra.class);
+        Root<Compra> compra = cq.from(Compra.class);
+        cq.select(compra);
+        cq.orderBy(cb.desc(compra.get("numeroPedido")));
+        Query q = em.createQuery(cq);
+        q.setMaxResults(1);
+        return (Compra) q.getSingleResult();
+    }
 }

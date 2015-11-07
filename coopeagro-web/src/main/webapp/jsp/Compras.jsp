@@ -25,6 +25,7 @@
                         <h2>NUEVA COMPRA</h2>
                         Los campos marcados con (*) son obligatorios
                         <br>
+                        <br>
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
                                 <label for="fecha">* Fecha de compra:</label> 
@@ -32,7 +33,10 @@
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
                                 <label for="totalPedido">Total:</label> 
-                                <input class="form-control" type="text" id="totalPedido" name="totalPedido" readonly="true" value="$ 0" />
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input class="form-control" type="text" id="totalPedido" name="totalPedido" readonly="true" value="0" />
+                                </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
                                 <label for="agricultor">* Agricultor:</label> 
@@ -52,26 +56,29 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
                                 <div id="tablaProductos">
                                     <ul class="list-group">
                                         <li class="list-group-item" id="item3">
                                             <div class="row">
                                                 <div class="col-xs-10 col-sm-11 col-md-11 col-lg-11">
-                                                    Martin Moreno
+                                                    <div class="row">
+                                                        <div class="col-xs-5 col-sm-3 col-md-3 col-lg-3">
+                                                            PS564D76
+                                                        </div>
+                                                        <div class="hidden-xs col-sm-3 col-md-3 col-lg-3">
+                                                            Papa criolla
+                                                        </div>
+                                                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                                            $ 5000
+                                                        </div>
+                                                        <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                                                            <input type="text" class="form-control" id="cantidad1" name="cantidades" value="1"/>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1">
                                                     <span class="glyphicon glyphicon-remove" onclick="$('#item3').remove();"></span>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="list-group-item" id="item4">
-                                            <div class="row">
-                                                <div class="col-xs-10 col-sm-11 col-md-11 col-lg-11">
-                                                    Maria Sanchez
-                                                </div>
-                                                <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1">
-                                                    <span class="glyphicon glyphicon-remove" onclick="$('#item4').remove();"></span>
                                                 </div>
                                             </div>
                                         </li>
