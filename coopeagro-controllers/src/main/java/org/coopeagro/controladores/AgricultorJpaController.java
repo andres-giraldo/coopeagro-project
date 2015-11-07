@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.coopeagro.controladores;
 
 import java.io.Serializable;
@@ -12,7 +11,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.controladores.exceptions.PreexistingEntityException;
@@ -145,5 +146,29 @@ public class AgricultorJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public List<Agricultor> completarAgricultor(String parametro) {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Agricultor> cq = cb.createQuery(Agricultor.class);
+            Root<Agricultor> aw = cq.from(Agricultor.class);
+            cq.select(aw);
+            Expression<String> nombre = cb.concat(aw.<String>get("nombre"), " ");
+            Expression<String> apellidoUno = cb.concat(aw.<String>get("apellidoUno"), " ");
+            if (parametro != null && !parametro.isEmpty()) {
+                cq.where(cb.or(
+                        cb.like(cb.lower(aw.get("llavePrimaria").<String>get("documento")), "%" + parametro.toLowerCase() + "%"),
+                        cb.like(cb.lower(cb.concat(nombre, cb.concat(apellidoUno, aw.<String>get("apellidoDos")))), "%" + parametro.toLowerCase() + "%")
+                ));
+            }
+            Query query = em.createQuery(cq);
+            query.setMaxResults(10);
+            return query.getResultList();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 }

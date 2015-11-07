@@ -1,26 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.coopeagro.servlets;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.coopeagro.controladores.AgricultorJpaController;
 import org.coopeagro.controladores.CompraJpaController;
+import org.coopeagro.controladores.EmpleadoJpaController;
+import org.coopeagro.controladores.ProductoJpaController;
+import org.coopeagro.entidades.Agricultor;
+import org.coopeagro.entidades.Empleado;
+import org.coopeagro.entidades.Producto;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
  * @author YEISSON
  */
 public class CompraServlet extends HttpServlet {
-    public static List<Object[]> res = new ArrayList<Object[]>();
+
+    public static List<Object[]> res = new ArrayList<>();
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -30,15 +36,14 @@ public class CompraServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
 
         String mensajeExito = "";
         String mensajeError = "";
         String mensajeAlerta = "";
-        String redireccion = "jsp/Compras.jsp";
+        String redireccion = "jsp/ComprasConsulta.jsp";
         long total;
         double promedio;
 
@@ -46,10 +51,12 @@ public class CompraServlet extends HttpServlet {
         if (accion == null) {
             accion = "";
         }
-        
+
         String anno;
         String mes;
-        
+
+        String parametro = request.getParameter("parametro");
+
         switch (accion) {
             case "total":
                 anno = request.getParameter("year");
@@ -61,30 +68,25 @@ public class CompraServlet extends HttpServlet {
                 if (mensajeAlerta.isEmpty()) {
                     total = TotalComprasTiempo(anno, mes);
                     if (total > 0) {
-                        //mensajeExito = "El agricultor ha sido guardado con éxito";
                         request.setAttribute("year", anno);
                         request.setAttribute("month", mes);
                         request.setAttribute("total", total);
-                    }else{
+                    } else {
                         mensajeError = "No se han encontrado compras en el periodo de tiempo especificado";
                     }
                 }
                 break;
             case "agricultor":
-                //listarResultados(response, accion);
                 res = TotalComprasAgricultor();
-                //request.setAttribute("resultados", TotalVentasEmpleado());
                 break;
             case "empleado":
-                //listarResultados(response, accion);
                 res = TotalComprasEmpleado();
-                //request.setAttribute("resultados", TotalVentasEmpleado());
                 break;
             case "promedio":
                 promedio = PromedioCompras();
                 if (promedio > 0) {
                     request.setAttribute("promedio", promedio);
-                }else{
+                } else {
                     mensajeError = "No se han encontrado compras registradas";
                 }
                 break;
@@ -95,27 +97,92 @@ public class CompraServlet extends HttpServlet {
                 request.setAttribute("promedio", "");
                 res.clear();
                 break;
+            case "nuevaCompra":
+                redireccion = "jsp/Compras.jsp";
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+                request.setAttribute("fecha", sdf.format(new Date()));
+                break;
+            case "completarAgricultor":
+                JSONArray array = completarAgricultor(parametro);
+                response.getWriter().write(array.toJSONString());
+                break;
+            case "completarEmpleado":
+                array = completarEmpleado(parametro);
+                response.getWriter().write(array.toJSONString());
+                break;
+            case "completarProducto":
+                array = completarProducto(parametro);
+                response.getWriter().write(array.toJSONString());
+                break;
+            case "guardarCompra":
+                break;
             default:
                 break;
         }
-        request.setAttribute("mensajeError", mensajeError);
-        request.setAttribute("mensajeAlerta", mensajeAlerta);
-        request.getRequestDispatcher(redireccion).forward(request, response);
+        if (!accion.equals("completarAgricultor") && !accion.equals("completarEmpleado") && !accion.equals("completarProducto")) {
+            request.setAttribute("mensajeError", mensajeError);
+            request.setAttribute("mensajeExito", mensajeExito);
+            request.setAttribute("mensajeAlerta", mensajeAlerta);
+            request.getRequestDispatcher(redireccion).forward(request, response);
+        }
     }
-    
+
+    private JSONArray completarAgricultor(String parametro) {
+        JSONArray array = new JSONArray();
+        AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
+        List<Agricultor> listaAgricultores = agricultorJpaController.completarAgricultor(parametro);
+        for (Agricultor agricultor : listaAgricultores) {
+            JSONObject object = new JSONObject();
+            object.put("label", agricultor.getNombre() + " "
+                    + agricultor.getApellidoUno() + " "
+                    + agricultor.getApellidoDos());
+            object.put("value", agricultor.getLlavePrimaria().getTipoDocumento().getTipoDocumento() + "," + agricultor.getLlavePrimaria().getDocumento());
+            array.add(object);
+        }
+        return array;
+    }
+
+    private JSONArray completarEmpleado(String parametro) {
+        JSONArray array = new JSONArray();
+        EmpleadoJpaController empleadoJpaController = (EmpleadoJpaController) getServletContext().getAttribute("empleadoJpaController");
+        List<Empleado> listaEmpleados = empleadoJpaController.completarEmpleado(parametro);
+        for (Empleado empleado : listaEmpleados) {
+            JSONObject object = new JSONObject();
+            object.put("label", empleado.getNombre() + " "
+                    + empleado.getApellidoUno() + " "
+                    + empleado.getApellidoDos());
+            object.put("value", empleado.getLlavePrimaria().getTipoDocumento().getTipoDocumento() + "," + empleado.getLlavePrimaria().getDocumento());
+            array.add(object);
+        }
+        return array;
+    }
+
+    private JSONArray completarProducto(String parametro) {
+        JSONArray array = new JSONArray();
+        ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
+        List<Producto> listaProductos = productoJpaController.completarProducto(parametro);
+        for (Producto producto : listaProductos) {
+            JSONObject object = new JSONObject();
+            object.put("label", producto.getCodigo() + " " + producto.getNombre());
+            object.put("value", producto.getId());
+            array.add(object);
+        }
+        return array;
+    }
+
     private String validarDatos(String anno, String mes) {
         String validacion = "";
         if (anno.equals("0") && mes.equals("0")) {
             validacion += "Debe ingresar el campo 'Año' o 'Mes' \n";
-        }else{
+        } else {
             if (!anno.isEmpty()) {
                 try {
                     Integer.valueOf(anno);
                 } catch (NumberFormatException e) {
                     validacion += "El valor a ingresar en el campo 'Año' debe ser numérico \n";
                 }
-            }else{
-                if(!mes.isEmpty()){
+            } else {
+                if (!mes.isEmpty()) {
                     try {
                         Integer.valueOf(anno);
                     } catch (NumberFormatException e) {
@@ -126,30 +193,29 @@ public class CompraServlet extends HttpServlet {
         }
         return validacion;
     }
-    
+
     private long TotalComprasTiempo(String anno, String mes) {
         CompraJpaController compraJpaController = (CompraJpaController) getServletContext().getAttribute("compraJpaController");
         long tc = compraJpaController.getTotalComprasTiempo(Integer.parseInt(anno), Integer.parseInt(mes));
         return tc;
     }
-    
-    private List<Object[]> TotalComprasAgricultor(){
+
+    private List<Object[]> TotalComprasAgricultor() {
         CompraJpaController compraJpaController = (CompraJpaController) getServletContext().getAttribute("compraJpaController");
         return compraJpaController.getTotalComprasAgricultor();
     }
-    
-    private List<Object[]> TotalComprasEmpleado(){
+
+    private List<Object[]> TotalComprasEmpleado() {
         CompraJpaController compraJpaController = (CompraJpaController) getServletContext().getAttribute("compraJpaController");
         return compraJpaController.getTotalComprasEmpleado();
     }
-    
-    private double PromedioCompras(){
+
+    private double PromedioCompras() {
         CompraJpaController ventaJpaController = (CompraJpaController) getServletContext().getAttribute("compraJpaController");
         double promedio = ventaJpaController.getPromedioCompras();
         return promedio;
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -177,15 +243,4 @@ public class CompraServlet extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }
