@@ -188,4 +188,32 @@ public class InventarioJpaController implements Serializable {
         }
         return cantidadDisponible;
     }
+    
+    public Inventario getMax(int producto){
+        Inventario inv = new Inventario();
+        EntityManager em = getEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Inventario> cq = cb.createQuery(Inventario.class);
+        Root<Inventario> inventario = cq.from(Inventario.class);
+        cq.select(inventario);
+        Predicate criteria = cb.conjunction();
+        cq.where(cb.and(criteria));
+        if (producto != 0) {
+            ParameterExpression<Integer> productoParameter = cb.parameter(Integer.class, "producto");
+            criteria = cb.and(criteria, cb.equal(inventario.get("producto").get("id"), productoParameter));
+        }
+        if (!criteria.getExpressions().isEmpty()) {
+            cq.where(cb.and(criteria));
+        }
+        cq.orderBy(cb.desc(inventario.get("id")));
+        Query q = em.createQuery(cq);
+        if (producto != 0) {
+            q.setParameter("producto", producto);
+        }
+        q.setMaxResults(1);
+        if (!q.getResultList().isEmpty()) {
+            inv = (Inventario) q.getSingleResult();
+        }
+        return inv;
+    }
 }

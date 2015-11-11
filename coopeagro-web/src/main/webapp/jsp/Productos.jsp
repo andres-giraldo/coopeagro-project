@@ -38,6 +38,16 @@
                                 <input class="form-control" type="text" id="nombre" name="nombre" value="${nombre}" />
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
+                                <label for="unidadMedida">* Unidad de medida:</label>
+                                <br/>
+                                <select class="form-control" id="unidadMedida" name="unidadMedida">
+                                    <option value="0">Seleccione</option>
+                                    <c:forEach items="${unidadesMedida}" var="unidad">
+                                        <option value="${unidad.unidadMedida}" <c:if test="${unidadMedida == unidad.unidadMedida}">selected</c:if> >${unidad.unidadMedida}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
                                 <label for="valor">* Precio de venta:</label> 
                                 <input class="form-control" type="text" id="valor" name="valor" value="${valor}" />
                             </div>

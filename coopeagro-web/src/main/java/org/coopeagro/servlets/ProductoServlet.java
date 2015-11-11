@@ -6,6 +6,8 @@ package org.coopeagro.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.coopeagro.controladores.ProductoJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Producto;
+import org.coopeagro.entidades.UnidadesMedida;
 import org.json.simple.JSONObject;
 
 /**
@@ -48,13 +51,14 @@ public class ProductoServlet extends HttpServlet {
         String id = request.getParameter("idProducto");
         String codigo = request.getParameter("codigo");
         String nombre = request.getParameter("nombre");
+        String unidadMedida = request.getParameter("unidadMedida");
         String valor = request.getParameter("valor");
 
         switch (accion) {
             case "guardar":
-                mensajeAlerta = validarDatos(codigo, nombre, valor);
+                mensajeAlerta = validarDatos(codigo, nombre, valor, unidadMedida);
                 if (mensajeAlerta.isEmpty()) {
-                    mensajeError = guardarProducto(id, codigo, nombre, valor);
+                    mensajeError = guardarProducto(id, codigo, nombre, valor, unidadMedida);
                     if (mensajeError.isEmpty()) {
                         mensajeExito = "El producto ha sido guardado con éxito";
                         break;
@@ -63,6 +67,7 @@ public class ProductoServlet extends HttpServlet {
                 request.setAttribute("idProducto", id);
                 request.setAttribute("codigo", codigo);
                 request.setAttribute("nombre", nombre);
+                request.setAttribute("unidadMedida", unidadMedida);
                 request.setAttribute("valor", valor);
                 break;
             case "eliminar":
@@ -84,6 +89,7 @@ public class ProductoServlet extends HttpServlet {
         }
 
         if (!accion.equals("consultar") && !accion.equals("listar")) {
+            request.setAttribute("unidadesMedida", new ArrayList<>(Arrays.asList(UnidadesMedida.values())));
             request.setAttribute("mensajeExito", mensajeExito);
             request.setAttribute("mensajeError", mensajeError);
             request.setAttribute("mensajeAlerta", mensajeAlerta);
@@ -91,7 +97,7 @@ public class ProductoServlet extends HttpServlet {
         }
     }
 
-    private String validarDatos(String codigo, String nombre, String valor) {
+    private String validarDatos(String codigo, String nombre, String valor, String unidadMedida) {
         String validacion = "";
         if (codigo == null || codigo.isEmpty()) {
             validacion += "Debe ingresar el campo 'Código' \n";
@@ -108,10 +114,13 @@ public class ProductoServlet extends HttpServlet {
                 validacion += "El valor a ingresar en el campo 'Valor' debe ser numérico \n";
             }
         }
+        if (unidadMedida == null || unidadMedida.isEmpty()) {
+            validacion += "Debe ingresar el campo 'Unidad de medida' \n";
+        }
         return validacion;
     }
 
-    private String guardarProducto(String id, String codigo, String nombre, String valor) {
+    private String guardarProducto(String id, String codigo, String nombre, String valor, String unidadMedida) {
         String error = "";
         ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
         Producto producto;
@@ -123,7 +132,7 @@ public class ProductoServlet extends HttpServlet {
         if (id != null && !id.isEmpty()) {
             if (producto == null || producto.getId().toString().equals(id)) {
                 try {
-                    productoJpaController.edit(new Producto(Integer.valueOf(id), codigo, nombre, Double.valueOf(valor)));
+                    productoJpaController.edit(new Producto(Integer.valueOf(id), codigo, nombre, Double.valueOf(valor), UnidadesMedida.valueOf(unidadMedida)));
                 } catch (Exception ex) {
                     error = "El producto no pudo ser guardado";
                 }
@@ -133,7 +142,7 @@ public class ProductoServlet extends HttpServlet {
         } else {
             if (producto == null) {
                 try {
-                    productoJpaController.create(new Producto(codigo, nombre, Double.valueOf(valor)));
+                    productoJpaController.create(new Producto(codigo, nombre, Double.valueOf(valor), UnidadesMedida.valueOf(unidadMedida)));
                 } catch (NumberFormatException e) {
                     error = "El producto no pudo ser guardado";
                 }
@@ -168,6 +177,7 @@ public class ProductoServlet extends HttpServlet {
             jsonProducto.put("id", producto.getId());
             jsonProducto.put("codigo", producto.getCodigo());
             jsonProducto.put("nombre", producto.getNombre());
+            jsonProducto.put("unidadMedida", producto.getUnidadMedida().getUnidadMedida());
             jsonProducto.put("valor", producto.getValor());
         }
         return jsonProducto;
@@ -182,6 +192,7 @@ public class ProductoServlet extends HttpServlet {
         out.println(        "<tr>");			
         out.println(            "<th>Código</th>");
         out.println(            "<th>Nombre</th>");
+        out.println(            "<th>Unidad de medida</th>");
         out.println(            "<th>Precio de venta</th>");
         out.println(            "<th>Acciones</th>");
         out.println(        "</tr>");
@@ -192,6 +203,7 @@ public class ProductoServlet extends HttpServlet {
                 out.println("<tr>");			
                 out.println(    "<td>"+producto.getCodigo()+"</td>");
                 out.println(    "<td>"+producto.getNombre()+"</td>");
+                out.println(    "<td>"+producto.getUnidadMedida().getUnidadMedida()+"</td>");
                 out.println(    "<td>$"+producto.getValor()+"</td>");
                 out.println(    "<td>");
                 out.println(        "<button class=\"btn btn-default\" type=\"button\" onclick=\"consultarProducto("+producto.getId()+");\">Editar</button>");
@@ -201,7 +213,7 @@ public class ProductoServlet extends HttpServlet {
             }
         } else {
             out.println("   <tr>");			
-            out.println(        "<td colspan=\"4\">No se encontraron registros</td>");
+            out.println(        "<td colspan=\"5\">No se encontraron registros</td>");
             out.println(    "</tr>");
         }
         out.println(    "</tbody>");

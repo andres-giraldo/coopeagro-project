@@ -111,11 +111,20 @@ public class InventarioServlet extends HttpServlet {
             case "listar":
                 listarInventarios(response, fecha, idProducto);
                 break;
+            case "cantidadTotal":
+                JSONObject jsonInventario = new JSONObject();
+                if (idProducto == null || idProducto.isEmpty()) {
+                    jsonInventario.put("cantidadTotal", "");
+                }else{
+                    jsonInventario.put("cantidadTotal", disponibilidadProducto(idProducto));
+                }
+                response.getWriter().write(jsonInventario.toString());
+                break;
             default:
                 break;
         }
         
-        if (!accion.equals("consultar") && !accion.equals("listar")) {
+        if (!accion.equals("consultar") && !accion.equals("listar") && !accion.equals("cantidadTotal")) {
             request.setAttribute("productos", obtenerProductos());
             request.setAttribute("mensajeExito", mensajeExito);
             request.setAttribute("mensajeError", mensajeError);
@@ -136,6 +145,7 @@ public class InventarioServlet extends HttpServlet {
         }
         if (cantidadComprometida == null || cantidadComprometida.isEmpty()) {
             validacion += "Debe ingresar el campo 'Cantidad comprometida' \n";
+            cc = 1;
         } else {
             try {
                 Double.valueOf(cantidadComprometida);
@@ -146,6 +156,7 @@ public class InventarioServlet extends HttpServlet {
         }
         if (cantidadTotal == null || cantidadTotal.isEmpty()) {
             validacion += "Debe ingresar el campo 'Cantidad total' \n";
+            ct = 1;
         } else {
             try {
                 Double.valueOf(cantidadComprometida);
@@ -154,7 +165,7 @@ public class InventarioServlet extends HttpServlet {
                 ct = 1;
             }
         }
-        if (cc != 1 && ct != 1) {
+        if (cc == 0 && ct == 0) {
             if (Double.parseDouble(cantidadComprometida)> Double.parseDouble(cantidadTotal)) {
                 validacion += "El valor a ingresar en el campo 'Cantidad comprometida' no puede ser mayor a 'Cantidad total' \n";
             }
@@ -216,8 +227,8 @@ public class InventarioServlet extends HttpServlet {
                 out.println(    "<td>"+inventario.getId()+"</td>");
                 out.println(    "<td>"+formatoDelTexto.format(inventario.getFecha())+"</td>");
                 out.println(    "<td>"+inventario.getProducto().getNombre()+"</td>");
-                out.println(    "<td>"+inventario.getCantidadComprometida()+"</td>");
-                out.println(    "<td>"+inventario.getCantidadTotal()+"</td>");
+                out.println(    "<td>"+inventario.getCantidadComprometida()+" "+inventario.getProducto().getUnidadMedida()+"</td>");
+                out.println(    "<td>"+inventario.getCantidadTotal()+" "+inventario.getProducto().getUnidadMedida()+"</td>");
                 out.println(    "<td>");
                 out.println(        "<button class=\"btn btn-default\" type=\"button\" onclick=\"consultarInventario("+inventario.getId()+");\">Editar</button>");
                 out.println(        "<button class=\"btn btn-default\" type=\"button\" data-toggle=\"modal\" data-target=\"#confirmationMessage\" onclick=\"jQuery('#idInventario').val('"+inventario.getId()+"');\">Eliminar</button>");

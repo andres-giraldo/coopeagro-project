@@ -4,6 +4,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,21 +39,27 @@ public class Producto implements Serializable{
     @Basic(optional = false)
     @Column(name="NMVALOR")
     private Double valor;
+    @Basic(optional = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name="DSUNIDADMEDIDA")
+    private UnidadesMedida unidadMedida;
     
     public Producto(){
     }
 
-    public Producto(String codigo, String nombre, Double valor) {
+    public Producto(String codigo, String nombre, Double valor, UnidadesMedida unidadMedida) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.valor = valor;
+        this.unidadMedida = unidadMedida;
     }
 
-    public Producto(Integer id, String codigo, String nombre, Double valor) {
+    public Producto(Integer id, String codigo, String nombre, Double valor, UnidadesMedida unidadMedida) {
         this.id = id;
         this.codigo = codigo;
         this.nombre = nombre;
         this.valor = valor;
+        this.unidadMedida = unidadMedida;
     }
 
     public Integer getId() {
@@ -86,8 +94,16 @@ public class Producto implements Serializable{
         this.valor = valor;
     }
 
+    public UnidadesMedida getUnidadMedida() {
+        return unidadMedida;
+    }
+
+    public void setUnidadMedida(UnidadesMedida unidadMedida) {
+        this.unidadMedida = unidadMedida;
+    }
+
     @Override
     public String toString() {
-        return "Producto{" + "id=" + id + ", codigo=" + codigo + ", nombre=" + nombre + ", valor=" + valor + '}';
+        return "Producto{" + "id=" + id + ", codigo=" + codigo + ", nombre=" + nombre + ", valor=" + valor + ", unidadMedida=" + unidadMedida + '}';
     }
 }

@@ -57,11 +57,13 @@ public class Test {
         }
         
         InventarioJpaController inventarioJpaController = new InventarioJpaController(emf);
-        double dp = inventarioJpaController.getDisponibilidad(2);
+        double dp = inventarioJpaController.getDisponibilidad(1);
         System.out.println(dp);
         
         //VentaJpaController ventaJpaController = new VentaJpaController(emf);
-        double total = ventaJpaController.getPromedioVentas();
-        System.out.println(total);
+//        double total = ventaJpaController.getPromedioVentas();
+//        System.out.println(total);
+        
+        System.out.println(inventarioJpaController.getMax(2).toString());
     }
 }

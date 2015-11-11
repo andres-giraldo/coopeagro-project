@@ -2,10 +2,28 @@ $(document).ready(function() {
     listarDatos();
 });
 
+jQuery(document).ready(function($) {
+    $('#cantidadTotal').click(function(e) {
+        var p = $('#producto').val();
+        $.ajax({
+             type: "POST",
+             url: "Inventario",
+             dataType:"json",
+             data: {accion:"cantidadTotal",producto: p},
+             success: function(data) {
+                 $("#cantidadTotal").val(data.cantidadTotal);
+             },
+             error: function(err) {
+                 alert('Error' + err);
+             }
+         }); 
+    });
+});
+
 function limpiarDatos(){
     $('#idInventario').val('');
     $('#fecha').val('');
-    $('#sProducto').val('');
+    $('#producto').val('');
     $('#cantidadComprometida').val('');
     $('#cantidadTotal').val('');
     $('#disponibilidad').val('');
@@ -21,7 +39,7 @@ function consultarInventario(id){
             if(data !== undefined){
                 $("#idInventario").val(data.id !== undefined ? data.id : "");
                 $("#fecha").val(data.fecha !== undefined ? data.fecha : "");
-                $("#sProducto").val(data.producto !== undefined ? data.producto : "");
+                $("#producto").val(data.producto !== undefined ? data.producto : "");
                 $("#cantidadComprometida").val(data.cantidadComprometida !== undefined ? data.cantidadComprometida : "");
                 $("#cantidadTotal").val(data.cantidadTotal !== undefined ? data.cantidadTotal : "");
             }

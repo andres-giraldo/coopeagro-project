@@ -39,7 +39,7 @@ public class InicioSesionServlet extends HttpServlet {
             if (mensajeAlerta.isEmpty()) {
                 mensajeError = validarIngreso(usuario, clave);
                 if (mensajeError.isEmpty()) {
-                    redireccion = "jsp/Productos.jsp";
+                    redireccion = "Producto";
                 } else {
                     request.setAttribute("usuario", usuario);
                 }

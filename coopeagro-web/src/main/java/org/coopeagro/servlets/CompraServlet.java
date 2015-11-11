@@ -14,12 +14,14 @@ import org.coopeagro.controladores.AgricultorJpaController;
 import org.coopeagro.controladores.CompraJpaController;
 import org.coopeagro.controladores.DetalleCompraJpaController;
 import org.coopeagro.controladores.EmpleadoJpaController;
+import org.coopeagro.controladores.InventarioJpaController;
 import org.coopeagro.controladores.ProductoJpaController;
 import org.coopeagro.entidades.Agricultor;
 import org.coopeagro.entidades.Compra;
 import org.coopeagro.entidades.DetalleCompra;
 import org.coopeagro.entidades.Empleado;
 import org.coopeagro.entidades.EstadosPedido;
+import org.coopeagro.entidades.Inventario;
 import org.coopeagro.entidades.PersonaPK;
 import org.coopeagro.entidades.Producto;
 import org.coopeagro.entidades.TiposDocumento;
@@ -319,12 +321,19 @@ public class CompraServlet extends HttpServlet {
             Compra compra = compraJpaController.getMaxOrder();
             DetalleCompraJpaController detalleCompraJpaController = (DetalleCompraJpaController)getServletContext().getAttribute("detalleCompraJpaController");
             ProductoJpaController productoJpaController = (ProductoJpaController)getServletContext().getAttribute("productoJpaController");
+            InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
             
             Double totalPedido = 0d;
             for (int i = 0; i < idProductos.length; i++) {
                 Producto producto = productoJpaController.findProducto(Integer.valueOf(idProductos[i]));
                 totalPedido += Double.valueOf(cantidades[i]) * Double.valueOf(valores[i]);
                 detalleCompraJpaController.create(new DetalleCompra(Double.valueOf(cantidades[i]), Double.valueOf(valores[i]), compra, producto));
+                Inventario inventario = inventarioJpaController.getMax(Integer.valueOf(idProductos[i]));
+                if (inventario.getId() != 0) {
+                    inventarioJpaController.create(new Inventario(sdf.parse(fecha), producto, inventario.getCantidadComprometida(), inventario.getCantidadTotal()+Double.valueOf(cantidades[i])));
+                }else{
+                    inventarioJpaController.create(new Inventario(sdf.parse(fecha), producto, 0.0, Double.valueOf(cantidades[i])));
+                }
             }
             compra.setTotal(totalPedido);
             compraJpaController.edit(compra);
