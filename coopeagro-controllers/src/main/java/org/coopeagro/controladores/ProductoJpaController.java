@@ -21,7 +21,6 @@ import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Agricultor;
 import org.coopeagro.entidades.Compra;
 import org.coopeagro.entidades.DetalleCompra;
-import org.coopeagro.entidades.Empleado;
 import org.coopeagro.entidades.Producto;
 import org.coopeagro.entidades.TiposDocumento;
 

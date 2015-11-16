@@ -17,6 +17,16 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.coopeagro</groupId>
+      <artifactId>Interfaces</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>Controllers</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>javaee</groupId>
       <artifactId>javaee-api</artifactId>
       <version>5</version>

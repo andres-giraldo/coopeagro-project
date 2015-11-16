@@ -247,8 +247,8 @@ public class CompraServlet extends HttpServlet {
     }
 
     private double PromedioCompras() {
-        CompraJpaController ventaJpaController = (CompraJpaController) getServletContext().getAttribute("compraJpaController");
-        double promedio = ventaJpaController.getPromedioCompras();
+        CompraJpaController compraJpaController = (CompraJpaController) getServletContext().getAttribute("compraJpaController");
+        double promedio = compraJpaController.getPromedioCompras();
         return promedio;
     }
 
