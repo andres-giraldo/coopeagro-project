@@ -9,6 +9,8 @@ import java.util.List;
 import javax.ejb.Remote;
 import org.coopeagro.entidades.Agricultor;
 import org.coopeagro.entidades.PersonaPK;
+import org.coopeagro.excepciones.InexistenteException;
+import org.coopeagro.excepciones.DuplicadaException;
 
 /**
  *
@@ -17,11 +19,11 @@ import org.coopeagro.entidades.PersonaPK;
 @Remote
 public interface AgricultorSessionBeanRemote {
 
-    void create(Agricultor agricultor);
+    void create(Agricultor agricultor)throws DuplicadaException, Exception;
 
-    void edit(Agricultor agricultor);
+    void edit(Agricultor agricultor)throws InexistenteException, Exception;
 
-    void destroy(PersonaPK id);
+    void destroy(PersonaPK id)throws InexistenteException;
 
     Agricultor findAgricultor(PersonaPK id);
 

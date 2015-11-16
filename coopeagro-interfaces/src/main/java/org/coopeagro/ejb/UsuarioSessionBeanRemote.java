@@ -8,6 +8,8 @@ package org.coopeagro.ejb;
 import java.util.List;
 import javax.ejb.Remote;
 import org.coopeagro.entidades.Usuario;
+import org.coopeagro.excepciones.InexistenteException;
+import org.coopeagro.excepciones.DuplicadaException;
 
 /**
  *
@@ -20,11 +22,11 @@ public interface UsuarioSessionBeanRemote {
 
     Usuario findUsuarioForUserName(String usuario);
 
-    void create(Usuario usuario);
+    void create(Usuario usuario)throws DuplicadaException, Exception;
 
-    void edit(Usuario usuario);
+    void edit(Usuario usuario)throws InexistenteException, Exception;
 
-    void destroy(int id);
+    void destroy(int id)throws InexistenteException;
 
     Usuario findUsuario(int id);
 

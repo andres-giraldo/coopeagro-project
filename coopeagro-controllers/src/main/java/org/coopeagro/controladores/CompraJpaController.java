@@ -172,14 +172,14 @@ public class CompraJpaController implements Serializable {
         }
     }
     
-    public double getTotal(int numeroPedido){
+    /*public double getTotal(int numeroPedido){
         double total;
         EntityManager em = getEntityManager();
         Query q = em.createQuery("select SUM(dc.cantidad*dc.precio) from DetalleCompra dc where dc.compra.numeroPedido = :numeroPedido");
         q.setParameter("numeroPedido", numeroPedido);
         total = (Double)q.getSingleResult();
         return total;
-    }
+    }*/
     
     public long getTotalComprasTiempo(int anno, int mes){
         long count;

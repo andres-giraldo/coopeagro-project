@@ -8,6 +8,7 @@ package org.coopeagro.ejb;
 import java.util.List;
 import javax.ejb.Remote;
 import org.coopeagro.entidades.Producto;
+import org.coopeagro.excepciones.InexistenteException;
 
 /**
  *
@@ -24,9 +25,9 @@ public interface ProductoSessionBeanRemote {
 
     void create(Producto producto);
 
-    void edit(Producto producto);
+    void edit(Producto producto)throws InexistenteException, Exception;
 
-    void destroy(int id);
+    void destroy(int id)throws InexistenteException;
 
     Producto findProducto(int id);
 

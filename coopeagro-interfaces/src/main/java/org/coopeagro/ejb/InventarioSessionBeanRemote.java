@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ejb.Remote;
 import org.coopeagro.entidades.Inventario;
 import org.coopeagro.entidades.Producto;
+import org.coopeagro.excepciones.InexistenteException;
 
 /**
  *
@@ -19,13 +20,13 @@ public interface InventarioSessionBeanRemote {
 
     Double getDisponibilidad(int producto);
 
-    org.coopeagro.entidades.Inventario getMax(int producto);
+    Inventario getMax(int producto);
 
     void create(Inventario inventario);
 
-    void edit(Inventario inventario);
+    void edit(Inventario inventario)throws InexistenteException, Exception;
 
-    void destroy(int id);
+    void destroy(int id)throws InexistenteException;
 
     Inventario findInventario(int id);
 

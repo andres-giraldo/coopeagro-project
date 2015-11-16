@@ -12,6 +12,7 @@ import org.coopeagro.controladores.ProductoJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Producto;
 import org.coopeagro.entidades.TiposDocumento;
+import org.coopeagro.excepciones.InexistenteException;
 
 @EJB(mappedName = "ejb/ProductoBean")
 @Stateless
@@ -27,22 +28,24 @@ public class ProductoSessionBean implements ProductoSessionBeanRemote {
     }
     
     @Override
-    public void edit(Producto producto) {
+    public void edit(Producto producto) throws InexistenteException {
         try {
             ProductoJpaController productoJpaController = new ProductoJpaController(emf);
             productoJpaController.edit(producto);
         } catch (Exception ex) {
             Logger.getLogger(ProductoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new InexistenteException(ex.getMessage());
         }
     }
     
     @Override
-    public void destroy(int id) {
+    public void destroy(int id) throws InexistenteException {
         try {
             ProductoJpaController productoJpaController = new ProductoJpaController(emf);
             productoJpaController.destroy(id);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(ProductoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new InexistenteException(ex.getMessage());
         }
     }
     

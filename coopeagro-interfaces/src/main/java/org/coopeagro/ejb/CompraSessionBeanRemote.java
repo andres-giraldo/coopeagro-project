@@ -5,6 +5,7 @@ import javax.ejb.Remote;
 import org.coopeagro.entidades.Agricultor;
 import org.coopeagro.entidades.Compra;
 import org.coopeagro.entidades.Empleado;
+import org.coopeagro.excepciones.InexistenteException;
 
 @Remote
 public interface CompraSessionBeanRemote {
@@ -19,9 +20,9 @@ public interface CompraSessionBeanRemote {
 
     void create(Compra compra);
 
-    void edit(Compra compra);
+    void edit(Compra compra)throws InexistenteException, Exception;
 
-    void destroy(int id);
+    void destroy(int id)throws InexistenteException;
 
     Compra findCompra(int id);
 

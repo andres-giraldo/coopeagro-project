@@ -172,14 +172,14 @@ public class VentaJpaController implements Serializable {
         }
     }
     
-    public double getTotal(int numeroPedido){
+    /*public double getTotal(int numeroPedido){
         double total;
         EntityManager em = getEntityManager();
         Query q = em.createQuery("select SUM(dv.cantidad*dv.precio) from DetalleVenta dv where dv.venta.numeroPedido = :numeroPedido");
         q.setParameter("numeroPedido", numeroPedido);
         total = (Double)q.getSingleResult();
         return total;
-    }
+    }*/
     
     public long getTotalVentasTiempo(int anno, int mes){
         long count;

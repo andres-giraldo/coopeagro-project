@@ -11,6 +11,8 @@ import javax.persistence.PersistenceContext;
 import org.coopeagro.controladores.UsuarioJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Usuario;
+import org.coopeagro.excepciones.DuplicadaException;
+import org.coopeagro.excepciones.InexistenteException;
 
 @EJB(mappedName = "ejb/UsuarioBean")
 @Stateless
@@ -20,32 +22,35 @@ public class UsuarioSessionBean implements UsuarioSessionBeanRemote {
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("coopeagroPU");
 
     @Override
-    public void create(Usuario usuario) {
+    public void create(Usuario usuario) throws DuplicadaException {
         try {
             UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
             usuarioJpaController.create(usuario);
         } catch (Exception ex) {
             Logger.getLogger(UsuarioSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DuplicadaException(ex.getMessage());
         }
     }
     
     @Override
-    public void edit(Usuario usuario) {
+    public void edit(Usuario usuario) throws InexistenteException {
         try {
             UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
             usuarioJpaController.edit(usuario);
         } catch (Exception ex) {
             Logger.getLogger(UsuarioSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new InexistenteException(ex.getMessage());
         }
     }
     
     @Override
-    public void destroy(int id) {
+    public void destroy(int id) throws InexistenteException {
         try {
             UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
             usuarioJpaController.destroy(id);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(UsuarioSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new InexistenteException(ex.getMessage());
         }
     }
     

@@ -12,6 +12,8 @@ import org.coopeagro.controladores.EmpleadoJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Empleado;
 import org.coopeagro.entidades.PersonaPK;
+import org.coopeagro.excepciones.DuplicadaException;
+import org.coopeagro.excepciones.InexistenteException;
 
 @EJB(mappedName = "ejb/EmpleadoBean")
 @Stateless
@@ -21,32 +23,35 @@ public class EmpleadoSessionBean implements EmpleadoSessionBeanRemote {
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("coopeagroPU");
 
     @Override
-    public void create(Empleado empleado) {
+    public void create(Empleado empleado) throws DuplicadaException {
         try {
             EmpleadoJpaController empleadoJpaController = new EmpleadoJpaController(emf);
             empleadoJpaController.create(empleado);
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DuplicadaException(ex.getMessage());
         }
     }
 
     @Override
-    public void edit(Empleado empleado) {
+    public void edit(Empleado empleado) throws InexistenteException {
         try {
             EmpleadoJpaController empleadoJpaController = new EmpleadoJpaController(emf);
             empleadoJpaController.edit(empleado);
         } catch (Exception ex) {
             Logger.getLogger(EmpleadoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new InexistenteException(ex.getMessage());
         }
     }
 
     @Override
-    public void destroy(PersonaPK id) {
+    public void destroy(PersonaPK id) throws InexistenteException {
         try {
             EmpleadoJpaController empleadoJpaController = new EmpleadoJpaController(emf);
             empleadoJpaController.destroy(id);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(EmpleadoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new InexistenteException(ex.getMessage());
         }
     }
 

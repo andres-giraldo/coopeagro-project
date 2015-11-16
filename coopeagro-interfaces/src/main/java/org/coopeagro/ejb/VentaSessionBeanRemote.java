@@ -10,6 +10,7 @@ import javax.ejb.Remote;
 import org.coopeagro.entidades.Cliente;
 import org.coopeagro.entidades.Empleado;
 import org.coopeagro.entidades.Venta;
+import org.coopeagro.excepciones.InexistenteException;
 
 /**
  *
@@ -28,9 +29,9 @@ public interface VentaSessionBeanRemote {
 
     void create(Venta venta);
 
-    void edit(Venta venta);
+    void edit(Venta venta)throws InexistenteException, Exception;
 
-    void destroy(int id);
+    void destroy(int id)throws InexistenteException;
 
     Venta findVenta(int id);
 

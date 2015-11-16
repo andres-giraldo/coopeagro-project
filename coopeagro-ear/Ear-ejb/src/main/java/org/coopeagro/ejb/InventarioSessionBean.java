@@ -13,6 +13,7 @@ import org.coopeagro.controladores.InventarioJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Inventario;
 import org.coopeagro.entidades.Producto;
+import org.coopeagro.excepciones.InexistenteException;
 
 @EJB(mappedName = "ejb/InventarioBean")
 @Stateless
@@ -28,22 +29,24 @@ public class InventarioSessionBean implements InventarioSessionBeanRemote {
     }
     
     @Override
-    public void edit(Inventario inventario) {
+    public void edit(Inventario inventario) throws InexistenteException {
         try {
             InventarioJpaController inventarioJpaController = new InventarioJpaController(emf);
             inventarioJpaController.edit(inventario);
         } catch (Exception ex) {
             Logger.getLogger(InventarioSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new InexistenteException(ex.getMessage());
         }
     }
     
     @Override
-    public void destroy(int id) {
+    public void destroy(int id) throws InexistenteException {
         try {
             InventarioJpaController inventarioJpaController = new InventarioJpaController(emf);
             inventarioJpaController.destroy(id);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(InventarioSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new InexistenteException(ex.getMessage());
         }
     }
     

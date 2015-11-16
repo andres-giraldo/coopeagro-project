@@ -14,6 +14,7 @@ import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.DetalleVenta;
 import org.coopeagro.entidades.Producto;
 import org.coopeagro.entidades.Venta;
+import org.coopeagro.excepciones.InexistenteException;
 
 @EJB(mappedName = "ejb/DetalleVentaBean")
 @Stateless
@@ -29,22 +30,24 @@ public class DetalleVentaSessionBean implements DetalleVentaSessionBeanRemote {
     }
 
     @Override
-    public void edit(DetalleVenta detalleVenta) {
+    public void edit(DetalleVenta detalleVenta) throws InexistenteException {
         try {
             DetalleVentaJpaController detalleVentaJpaController = new DetalleVentaJpaController(emf);
             detalleVentaJpaController.edit(detalleVenta);
         } catch (Exception ex) {
             Logger.getLogger(DetalleVentaSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new InexistenteException(ex.getMessage());
         }
     }
 
     @Override
-    public void destroy(int id) {
+    public void destroy(int id) throws InexistenteException {
         try {
             DetalleVentaJpaController detalleVentaJpaController = new DetalleVentaJpaController(emf);
             detalleVentaJpaController.destroy(id);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(DetalleVentaSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new InexistenteException(ex.getMessage());
         }
     }
 

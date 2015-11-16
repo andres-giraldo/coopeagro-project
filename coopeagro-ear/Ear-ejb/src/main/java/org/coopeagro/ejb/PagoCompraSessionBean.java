@@ -13,6 +13,7 @@ import org.coopeagro.controladores.PagoCompraJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Compra;
 import org.coopeagro.entidades.PagoCompra;
+import org.coopeagro.excepciones.InexistenteException;
 
 @EJB(mappedName = "ejb/PagoCompraBean")
 @Stateless
@@ -28,22 +29,24 @@ public class PagoCompraSessionBean implements PagoCompraSessionBeanRemote {
     }
 
     @Override
-    public void edit(PagoCompra pagoCompra) {
+    public void edit(PagoCompra pagoCompra) throws InexistenteException {
         try {
             PagoCompraJpaController pagoCompraJpaController = new PagoCompraJpaController(emf);
             pagoCompraJpaController.edit(pagoCompra);
         } catch (Exception ex) {
             Logger.getLogger(PagoCompraSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new InexistenteException(ex.getMessage());
         }
     }
 
     @Override
-    public void destroy(int id) {
+    public void destroy(int id) throws InexistenteException {
         try {
             PagoCompraJpaController pagoCompraJpaController = new PagoCompraJpaController(emf);
             pagoCompraJpaController.destroy(id);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(PagoCompraSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            throw new InexistenteException(ex.getMessage());
         }
     }
 
