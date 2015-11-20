@@ -14,8 +14,8 @@ import org.coopeagro.entidades.Usuario;
 import org.coopeagro.excepciones.DuplicadaException;
 import org.coopeagro.excepciones.InexistenteException;
 
-@EJB(mappedName = "ejb/UsuarioBean")
 @Stateless
+@EJB(name = "ejb/UsuarioBean", beanInterface = UsuarioSessionBeanRemote.class)
 public class UsuarioSessionBean implements UsuarioSessionBeanRemote {
 
     @PersistenceContext(unitName = "coopeagroPU")

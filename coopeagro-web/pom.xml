@@ -73,6 +73,16 @@
             <version>1.2</version>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Interfaces</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Ear-ejb</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>javaee</groupId>
             <artifactId>javaee-api</artifactId>
             <version>5</version>

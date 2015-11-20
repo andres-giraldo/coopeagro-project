@@ -15,8 +15,8 @@ import org.coopeagro.entidades.Inventario;
 import org.coopeagro.entidades.Producto;
 import org.coopeagro.excepciones.InexistenteException;
 
-@EJB(mappedName = "ejb/InventarioBean")
 @Stateless
+@EJB(name = "ejb/InventarioBean", beanInterface = InventarioSessionBeanRemote.class)
 public class InventarioSessionBean implements InventarioSessionBeanRemote {
 
     @PersistenceContext(unitName = "coopeagroPU")
