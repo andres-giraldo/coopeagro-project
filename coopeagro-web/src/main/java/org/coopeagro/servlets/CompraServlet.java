@@ -6,6 +6,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +21,12 @@ import org.coopeagro.controladores.DetalleCompraJpaController;
 import org.coopeagro.controladores.EmpleadoJpaController;
 import org.coopeagro.controladores.InventarioJpaController;
 import org.coopeagro.controladores.ProductoJpaController;
+import org.coopeagro.ejb.AgricultorSessionBeanRemote;
+import org.coopeagro.ejb.CompraSessionBeanRemote;
+import org.coopeagro.ejb.DetalleCompraSessionBeanRemote;
+import org.coopeagro.ejb.EmpleadoSessionBeanRemote;
+import org.coopeagro.ejb.InventarioSessionBeanRemote;
+import org.coopeagro.ejb.ProductoSessionBeanRemote;
 import org.coopeagro.entidades.Agricultor;
 import org.coopeagro.entidades.Compra;
 import org.coopeagro.entidades.DetalleCompra;
@@ -37,6 +48,27 @@ public class CompraServlet extends HttpServlet {
     private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
 
     public static List<Object[]> res = new ArrayList<>();
+    
+    private CompraSessionBeanRemote compraBean = null;
+    private AgricultorSessionBeanRemote agricultorBean = null;
+    private EmpleadoSessionBeanRemote empleadoBean = null;
+    private DetalleCompraSessionBeanRemote detalleCompraBean = null;
+    private ProductoSessionBeanRemote productoBean = null;
+    private InventarioSessionBeanRemote inventarioBean = null;
+
+    public CompraServlet() {
+        try {
+            Context context = new InitialContext();
+            compraBean = (CompraSessionBeanRemote) context.lookup("ejb/CompraBean");
+            agricultorBean = (AgricultorSessionBeanRemote) context.lookup("ejb/AgricultorBean");
+            empleadoBean = (EmpleadoSessionBeanRemote) context.lookup("ejb/EmpleadoBean");
+            detalleCompraBean = (DetalleCompraSessionBeanRemote) context.lookup("ejb/DetalleCompraBean");
+            productoBean = (ProductoSessionBeanRemote) context.lookup("ejb/ProductoBean");
+            inventarioBean = (InventarioSessionBeanRemote) context.lookup("ejb/InventarioBean");
+        } catch (NamingException ex) {
+            Logger.getLogger(CompraServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -162,6 +194,7 @@ public class CompraServlet extends HttpServlet {
     private JSONArray completarAgricultor(String parametro) {
         JSONArray array = new JSONArray();
         AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
+        //List<Agricultor> listaAgricultores = agricultorBean.completarAgricultor(parametro);
         List<Agricultor> listaAgricultores = agricultorJpaController.completarAgricultor(parametro);
         for (Agricultor agricultor : listaAgricultores) {
             JSONObject object = new JSONObject();
@@ -177,6 +210,7 @@ public class CompraServlet extends HttpServlet {
     private JSONArray completarEmpleado(String parametro) {
         JSONArray array = new JSONArray();
         EmpleadoJpaController empleadoJpaController = (EmpleadoJpaController) getServletContext().getAttribute("empleadoJpaController");
+        //List<Empleado> listaEmpleados = empleadoBean.completarEmpleado(parametro);
         List<Empleado> listaEmpleados = empleadoJpaController.completarEmpleado(parametro);
         for (Empleado empleado : listaEmpleados) {
             JSONObject object = new JSONObject();
@@ -192,6 +226,7 @@ public class CompraServlet extends HttpServlet {
     private JSONArray completarProducto(String parametro) {
         JSONArray array = new JSONArray();
         ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
+        //List<Producto> listaProductos = productoBean.completarProducto(parametro);
         List<Producto> listaProductos = productoJpaController.completarProducto(parametro);
         for (Producto producto : listaProductos) {
             JSONObject object = new JSONObject();
@@ -232,22 +267,26 @@ public class CompraServlet extends HttpServlet {
 
     private long TotalComprasTiempo(String anno, String mes) {
         CompraJpaController compraJpaController = (CompraJpaController) getServletContext().getAttribute("compraJpaController");
+        //long tc = compraBean.getTotalComprasTiempo(Integer.parseInt(anno), Integer.parseInt(mes));
         long tc = compraJpaController.getTotalComprasTiempo(Integer.parseInt(anno), Integer.parseInt(mes));
         return tc;
     }
 
     private List<Object[]> TotalComprasAgricultor() {
         CompraJpaController compraJpaController = (CompraJpaController) getServletContext().getAttribute("compraJpaController");
+        //return compraBean.getTotalComprasAgricultor();
         return compraJpaController.getTotalComprasAgricultor();
     }
 
     private List<Object[]> TotalComprasEmpleado() {
         CompraJpaController compraJpaController = (CompraJpaController) getServletContext().getAttribute("compraJpaController");
+        //return compraBean.getTotalComprasEmpleado();
         return compraJpaController.getTotalComprasEmpleado();
     }
 
     private double PromedioCompras() {
         CompraJpaController compraJpaController = (CompraJpaController) getServletContext().getAttribute("compraJpaController");
+        //double promedio = compraBean.getPromedioCompras();
         double promedio = compraJpaController.getPromedioCompras();
         return promedio;
     }
@@ -272,6 +311,7 @@ public class CompraServlet extends HttpServlet {
             } else {
                 AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
                 try {
+                    //Agricultor a = agricultorBean.findAgricultor(new PersonaPK(llavePrimaria[1], TiposDocumento.valueOf(llavePrimaria[0])));
                     Agricultor a = agricultorJpaController.findAgricultor(new PersonaPK(llavePrimaria[1], TiposDocumento.valueOf(llavePrimaria[0])));
                     if (a == null) {
                         error += "El 'Agricultor' ingresado no existe en la base de datos \n";
@@ -290,6 +330,7 @@ public class CompraServlet extends HttpServlet {
             } else {
                 EmpleadoJpaController empleadoJpaController = (EmpleadoJpaController) getServletContext().getAttribute("empleadoJpaController");
                 try {
+                    //Empleado e = empleadoBean.findEmpleado(new PersonaPK(llavePrimaria[1], TiposDocumento.valueOf(llavePrimaria[0])));
                     Empleado e = empleadoJpaController.findEmpleado(new PersonaPK(llavePrimaria[1], TiposDocumento.valueOf(llavePrimaria[0])));
                     if (e == null) {
                         error += "El 'Empleado' ingresado no existe en la base de datos \n";
@@ -311,13 +352,17 @@ public class CompraServlet extends HttpServlet {
             CompraJpaController compraJpaController = (CompraJpaController) getServletContext().getAttribute("compraJpaController");
             String[] llavePrimariaE = empleado.split(",");
             EmpleadoJpaController empleadoJpaController = (EmpleadoJpaController) getServletContext().getAttribute("empleadoJpaController");
+            //Empleado e = empleadoBean.findEmpleado(new PersonaPK(llavePrimariaE[1], TiposDocumento.valueOf(llavePrimariaE[0])));
             Empleado e = empleadoJpaController.findEmpleado(new PersonaPK(llavePrimariaE[1], TiposDocumento.valueOf(llavePrimariaE[0])));
 
             String[] llavePrimariaA = agricultor.split(",");
             AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
+            //Agricultor a = agricultorBean.findAgricultor(new PersonaPK(llavePrimariaA[1], TiposDocumento.valueOf(llavePrimariaA[0])));
             Agricultor a = agricultorJpaController.findAgricultor(new PersonaPK(llavePrimariaA[1], TiposDocumento.valueOf(llavePrimariaA[0])));
+            //compraBean.create(new Compra(a, sdf.parse(fecha), e, EstadosPedido.APROBADO, 0d));
             compraJpaController.create(new Compra(a, sdf.parse(fecha), e, EstadosPedido.APROBADO, 0d));
             
+            //Compra compra = compraBean.getMaxOrder();
             Compra compra = compraJpaController.getMaxOrder();
             DetalleCompraJpaController detalleCompraJpaController = (DetalleCompraJpaController)getServletContext().getAttribute("detalleCompraJpaController");
             ProductoJpaController productoJpaController = (ProductoJpaController)getServletContext().getAttribute("productoJpaController");
@@ -325,17 +370,23 @@ public class CompraServlet extends HttpServlet {
             
             Double totalPedido = 0d;
             for (int i = 0; i < idProductos.length; i++) {
+                //Producto producto = productoBean.findProducto(Integer.valueOf(idProductos[i]));
                 Producto producto = productoJpaController.findProducto(Integer.valueOf(idProductos[i]));
                 totalPedido += Double.valueOf(cantidades[i]) * Double.valueOf(valores[i]);
+                //detalleCompraBean.create(new DetalleCompra(Double.valueOf(cantidades[i]), Double.valueOf(valores[i]), compra, producto));
                 detalleCompraJpaController.create(new DetalleCompra(Double.valueOf(cantidades[i]), Double.valueOf(valores[i]), compra, producto));
+                //Inventario inventario = inventarioBean.getMax(Integer.valueOf(idProductos[i]));
                 Inventario inventario = inventarioJpaController.getMax(Integer.valueOf(idProductos[i]));
                 if (inventario.getId() != 0) {
+                    //inventarioBean.create(new Inventario(sdf.parse(fecha), producto, inventario.getCantidadComprometida(), inventario.getCantidadTotal()+Double.valueOf(cantidades[i])));
                     inventarioJpaController.create(new Inventario(sdf.parse(fecha), producto, inventario.getCantidadComprometida(), inventario.getCantidadTotal()+Double.valueOf(cantidades[i])));
                 }else{
+                    //inventarioBean.create(new Inventario(sdf.parse(fecha), producto, 0.0, Double.valueOf(cantidades[i])));
                     inventarioJpaController.create(new Inventario(sdf.parse(fecha), producto, 0.0, Double.valueOf(cantidades[i])));
                 }
             }
             compra.setTotal(totalPedido);
+            //compraBean.edit(compra);
             compraJpaController.edit(compra);
         } catch (Exception ex) {
             error += "La compra no pudo ser guardada";

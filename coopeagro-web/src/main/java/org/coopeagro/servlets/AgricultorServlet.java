@@ -16,15 +16,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.coopeagro.controladores.AgricultorJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
+import org.coopeagro.ejb.AgricultorSessionBeanRemote;
 import org.coopeagro.entidades.Agricultor;
 import org.coopeagro.entidades.PersonaPK;
 import org.coopeagro.entidades.TiposDocumento;
+import org.coopeagro.excepciones.InexistenteException;
 import org.json.simple.JSONObject;
 
 /**
@@ -33,6 +38,17 @@ import org.json.simple.JSONObject;
  */
 public class AgricultorServlet extends HttpServlet {
 
+    private AgricultorSessionBeanRemote agricultorBean = null;
+
+    public AgricultorServlet() {
+        try {
+            Context context = new InitialContext();
+            agricultorBean = (AgricultorSessionBeanRemote) context.lookup("ejb/AgricultorBean");
+        } catch (NamingException ex) {
+            Logger.getLogger(AgricultorServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -181,27 +197,23 @@ public class AgricultorServlet extends HttpServlet {
         AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
         Agricultor agricultor;
         try {
+            //agricultor = agricultorBean.findAgricultor(new PersonaPK(documento, tipoDocumento));
             agricultor = agricultorJpaController.findAgricultor(new PersonaPK(documento, tipoDocumento));
         } catch (Exception e) {
             agricultor = null;
         }
         System.out.println(isEditar);
         if (isEditar != null && !isEditar.isEmpty()) {
-            //if (agricultor == null || (agricultor.getLlavePrimaria().getDocumento().toString().equals(documento) && 
-                    //agricultor.getLlavePrimaria().getTipoDocumento().equals(tipoDocumento))) {
-                System.out.println("Estoy editando");
-                try {
-                    agricultorJpaController.edit(new Agricultor(documento, tipoDocumento, nombre, apellido1, apellido2, telefono, celular, correo, fechaRegistro, direccion));
-                } catch (Exception ex) {
-                    error = "El agricultor no pudo ser guardado";
-                }
-            /*} else {
-                error = "Ya existe un agricultor con el documento ingresado";
-            }*/
+            try {
+                //agricultorBean.edit(new Agricultor(documento, tipoDocumento, nombre, apellido1, apellido2, telefono, celular, correo, fechaRegistro, direccion));
+                agricultorJpaController.edit(new Agricultor(documento, tipoDocumento, nombre, apellido1, apellido2, telefono, celular, correo, fechaRegistro, direccion));
+            } catch (Exception ex) {
+                error = "El agricultor no pudo ser guardado";
+            }
         } else {
             if (agricultor == null) {
-                System.out.println("Estoy creando");
                 try {
+                    //agricultorBean.create(new Agricultor(documento, tipoDocumento, nombre, apellido1, apellido2, telefono, celular, correo, fechaRegistro, direccion));
                     agricultorJpaController.create(new Agricultor(documento, tipoDocumento, nombre, apellido1, apellido2, telefono, celular, correo, fechaRegistro, direccion));
                 } catch (NumberFormatException e) {
                     error = "El agricultor no pudo ser guardado";
@@ -219,9 +231,13 @@ public class AgricultorServlet extends HttpServlet {
         boolean eliminacion = false;
         AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
         try {
+            //agricultorBean.destroy(new PersonaPK(documento, tipoDocumento));
             agricultorJpaController.destroy(new PersonaPK(documento, tipoDocumento));
             eliminacion = true;
         } catch (NonexistentEntityException ex) {
+//        } catch (InexistenteException ex) {
+//            Logger.getLogger(AgricultorServlet.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         }
         return eliminacion;
     }
@@ -232,6 +248,7 @@ public class AgricultorServlet extends HttpServlet {
         Agricultor agricultor;
         SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
         try {
+            //agricultor = agricultorBean.findAgricultor(new PersonaPK(documento, tipoDocumento));
             agricultor = agricultorJpaController.findAgricultor(new PersonaPK(documento, tipoDocumento));
         } catch (NumberFormatException e) {
             agricultor = null;
@@ -254,6 +271,7 @@ public class AgricultorServlet extends HttpServlet {
     
     private void listarAgricultores(HttpServletResponse response, String documento) throws ServletException, IOException {
         AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
+        //List<Agricultor> listaAgricultores = agricultorBean.findAgricultorEntities(10, 0);
         List<Agricultor> listaAgricultores = agricultorJpaController.findAgricultorEntities(10, 0);
         PrintWriter out = response.getWriter();
         out.println("<table class=\"table table-striped table-hover table-condensed bordo-tablas\">");

@@ -31,5 +31,7 @@ public interface CompraSessionBeanRemote {
     List<Agricultor> getAllAgricultors();
 
     List<Empleado> getAllEmployees();
+
+    Compra getMaxOrder();
     
 }

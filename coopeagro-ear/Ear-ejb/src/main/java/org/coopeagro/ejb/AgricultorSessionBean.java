@@ -16,7 +16,7 @@ import org.coopeagro.excepciones.DuplicadaException;
 import org.coopeagro.excepciones.InexistenteException;
 
 @Stateless
-@EJB(name = "ejb/AgricultorBean", beanInterface = AgricultorSessionBeanRemote.class)
+@EJB(name="AgricultorBean", mappedName = "ejb/AgricultorBean", beanInterface = AgricultorSessionBeanRemote.class)
 public class AgricultorSessionBean implements AgricultorSessionBeanRemote {
 
     @PersistenceContext(unitName = "coopeagroPU")

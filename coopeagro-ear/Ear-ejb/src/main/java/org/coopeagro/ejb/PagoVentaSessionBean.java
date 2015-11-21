@@ -16,7 +16,7 @@ import org.coopeagro.entidades.Venta;
 import org.coopeagro.excepciones.InexistenteException;
 
 @Stateless
-@EJB(name = "ejb/PagoVentaBean", beanInterface = PagoVentaSessionBeanRemote.class)
+@EJB(name = "PagoVentaBean", mappedName = "ejb/PagoVentaBean", beanInterface = PagoVentaSessionBeanRemote.class)
 public class PagoVentaSessionBean implements PagoVentaSessionBeanRemote {
 
     @PersistenceContext(unitName = "coopeagroPU")

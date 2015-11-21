@@ -8,11 +8,17 @@ package org.coopeagro.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.coopeagro.controladores.ClienteJpaController;
+import org.coopeagro.ejb.ClienteSessionBeanRemote;
 
 /**
  *
@@ -20,6 +26,17 @@ import org.coopeagro.controladores.ClienteJpaController;
  */
 public class ClienteServlet extends HttpServlet {
 
+    private ClienteSessionBeanRemote clienteBean = null;
+
+    public ClienteServlet() {
+        try {
+            Context context = new InitialContext();
+            clienteBean = (ClienteSessionBeanRemote) context.lookup("ejb/ClienteBean");
+        } catch (NamingException ex) {
+            Logger.getLogger(ClienteServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.

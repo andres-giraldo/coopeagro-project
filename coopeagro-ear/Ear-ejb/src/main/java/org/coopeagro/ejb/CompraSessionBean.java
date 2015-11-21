@@ -22,7 +22,7 @@ import org.coopeagro.entidades.Empleado;
 import org.coopeagro.excepciones.InexistenteException;
 
 @Stateless
-@EJB(name = "ejb/CompraBean", beanInterface = CompraSessionBeanRemote.class)
+@EJB(name = "CompraBean", mappedName = "ejb/CompraBean", beanInterface = CompraSessionBeanRemote.class)
 public class CompraSessionBean implements CompraSessionBeanRemote {
 
     @PersistenceContext(unitName = "coopeagroPU")
@@ -116,5 +116,11 @@ public class CompraSessionBean implements CompraSessionBeanRemote {
         CompraJpaController compraJpaController = new CompraJpaController(emf);
         double promedio = compraJpaController.getPromedioCompras();
         return promedio;
+    }
+
+    @Override
+    public Compra getMaxOrder() {
+        CompraJpaController compraJpaController = new CompraJpaController(emf);
+        return compraJpaController.getMaxOrder();
     }
 }

@@ -9,14 +9,21 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.coopeagro.controladores.ProductoJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
+import org.coopeagro.ejb.ProductoSessionBeanRemote;
 import org.coopeagro.entidades.Producto;
 import org.coopeagro.entidades.UnidadesMedida;
+import org.coopeagro.excepciones.InexistenteException;
 import org.json.simple.JSONObject;
 
 /**
@@ -24,6 +31,17 @@ import org.json.simple.JSONObject;
  * @author sala306
  */
 public class ProductoServlet extends HttpServlet {
+    
+    private ProductoSessionBeanRemote productoBean = null;
+
+    public ProductoServlet() {
+        try {
+            Context context = new InitialContext();
+            productoBean = (ProductoSessionBeanRemote) context.lookup("ejb/ProductoBean");
+        } catch (NamingException ex) {
+            Logger.getLogger(ProductoServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -125,6 +143,7 @@ public class ProductoServlet extends HttpServlet {
         ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
         Producto producto;
         try {
+            //producto = productoBean.findProductByCodigo(codigo);
             producto = productoJpaController.findProductByCodigo(codigo);
         } catch (Exception e) {
             producto = null;
@@ -132,6 +151,7 @@ public class ProductoServlet extends HttpServlet {
         if (id != null && !id.isEmpty()) {
             if (producto == null || producto.getId().toString().equals(id)) {
                 try {
+                    //productoBean.edit(new Producto(Integer.valueOf(id), codigo, nombre, Double.valueOf(valor), UnidadesMedida.valueOf(unidadMedida)));
                     productoJpaController.edit(new Producto(Integer.valueOf(id), codigo, nombre, Double.valueOf(valor), UnidadesMedida.valueOf(unidadMedida)));
                 } catch (Exception ex) {
                     error = "El producto no pudo ser guardado";
@@ -142,6 +162,7 @@ public class ProductoServlet extends HttpServlet {
         } else {
             if (producto == null) {
                 try {
+                    //productoBean.create(new Producto(codigo, nombre, Double.valueOf(valor), UnidadesMedida.valueOf(unidadMedida)));
                     productoJpaController.create(new Producto(codigo, nombre, Double.valueOf(valor), UnidadesMedida.valueOf(unidadMedida)));
                 } catch (NumberFormatException e) {
                     error = "El producto no pudo ser guardado";
@@ -157,9 +178,13 @@ public class ProductoServlet extends HttpServlet {
         boolean eliminacion = false;
         ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
         try {
+            //productoBean.destroy(Integer.valueOf(id));
             productoJpaController.destroy(Integer.valueOf(id));
             eliminacion = true;
         } catch (NumberFormatException | NonexistentEntityException ex) {
+//        } catch (InexistenteException ex) {
+//            Logger.getLogger(ProductoServlet.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         }
         return eliminacion;
     }
@@ -169,6 +194,7 @@ public class ProductoServlet extends HttpServlet {
         ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
         Producto producto;
         try {
+            //producto = productoBean.findProducto(Integer.valueOf(id));
             producto = productoJpaController.findProducto(Integer.valueOf(id));
         } catch (NumberFormatException e) {
             producto = null;
@@ -185,6 +211,7 @@ public class ProductoServlet extends HttpServlet {
     
     private void listarProductos(HttpServletResponse response, String codigo, String nombre) throws ServletException, IOException {
         ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
+        //List<Producto> listaProductos = productoBean.findProductoEntities(10, 0);
         List<Producto> listaProductos = productoJpaController.findProductoEntities(10, 0);
         PrintWriter out = response.getWriter();
         out.println("<table class=\"table table-striped table-hover table-condensed bordo-tablas\">");

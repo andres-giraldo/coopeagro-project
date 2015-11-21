@@ -9,11 +9,22 @@ package org.coopeagro.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.coopeagro.controladores.VentaJpaController;
+import org.coopeagro.ejb.ClienteSessionBeanRemote;
+import org.coopeagro.ejb.DetalleVentaSessionBeanRemote;
+import org.coopeagro.ejb.EmpleadoSessionBeanRemote;
+import org.coopeagro.ejb.InventarioSessionBeanRemote;
+import org.coopeagro.ejb.ProductoSessionBeanRemote;
+import org.coopeagro.ejb.VentaSessionBeanRemote;
 
 /**
  *
@@ -21,6 +32,28 @@ import org.coopeagro.controladores.VentaJpaController;
  */
 public class VentaServlet extends HttpServlet {
     public static List<Object[]> res = new ArrayList<Object[]>();
+    
+    private VentaSessionBeanRemote ventaBean = null;
+    private ClienteSessionBeanRemote clienteBean = null;
+    private EmpleadoSessionBeanRemote empleadoBean = null;
+    private DetalleVentaSessionBeanRemote detalleVentaBean = null;
+    private ProductoSessionBeanRemote productoBean = null;
+    private InventarioSessionBeanRemote inventarioBean = null;
+
+    public VentaServlet() {
+        try {
+            Context context = new InitialContext();
+            ventaBean = (VentaSessionBeanRemote) context.lookup("ejb/VentaBean");
+            clienteBean = (ClienteSessionBeanRemote) context.lookup("ejb/ClienteBean");
+            empleadoBean = (EmpleadoSessionBeanRemote) context.lookup("ejb/EmpleadoBean");
+            detalleVentaBean = (DetalleVentaSessionBeanRemote) context.lookup("ejb/DetalleVentaBean");
+            productoBean = (ProductoSessionBeanRemote) context.lookup("ejb/ProductoBean");
+            inventarioBean = (InventarioSessionBeanRemote) context.lookup("ejb/InventarioBean");
+        } catch (NamingException ex) {
+            Logger.getLogger(VentaServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * Presocesses resequests fores both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -128,23 +161,27 @@ public class VentaServlet extends HttpServlet {
     
     private long TotalVentasTiempo(String anno, String mes) {
         VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
+        //long tv = ventaBean.getTotalVentasTiempo(Integer.parseInt(anno), Integer.parseInt(mes));
         long tv = ventaJpaController.getTotalVentasTiempo(Integer.parseInt(anno), Integer.parseInt(mes));
         return tv;
     }
     
     private double PromedioVentas(){
         VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
+        //double promedio = ventaBean.getPromedioVentas();
         double promedio = ventaJpaController.getPromedioVentas();
         return promedio;
     }
     
     private List<Object[]> TotalVentasCliente(){
         VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
+        //return ventaBean.getTotalVentasCliente();
         return ventaJpaController.getTotalVentasCliente();
     }
     
     private List<Object[]> TotalVentasEmpleado(){
         VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
+        //return ventaBean.getTotalVentasEmpleado();
         return ventaJpaController.getTotalVentasEmpleado();
     }
 

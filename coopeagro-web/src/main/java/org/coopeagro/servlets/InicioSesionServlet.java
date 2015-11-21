@@ -1,11 +1,17 @@
 package org.coopeagro.servlets;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.coopeagro.controladores.UsuarioJpaController;
+import org.coopeagro.ejb.UsuarioSessionBeanRemote;
 import org.coopeagro.entidades.Usuario;
 
 /**
@@ -13,6 +19,17 @@ import org.coopeagro.entidades.Usuario;
  * @author Pipe
  */
 public class InicioSesionServlet extends HttpServlet {
+    
+    private UsuarioSessionBeanRemote usuarioBean = null;
+
+    public InicioSesionServlet() {
+        try {
+            Context context = new InitialContext();
+            usuarioBean = (UsuarioSessionBeanRemote) context.lookup("ejb/UsuarioBean");
+        } catch (NamingException ex) {
+            Logger.getLogger(InicioSesionServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -69,6 +86,7 @@ public class InicioSesionServlet extends HttpServlet {
         UsuarioJpaController usuarioJpaController = (UsuarioJpaController) getServletContext().getAttribute("usuarioJpaController");
         Usuario objetoUsuario;
         try {
+            //objetoUsuario = usuarioBean.findUsuarioForUserName(usuario);
             objetoUsuario = usuarioJpaController.findUsuarioForUserName(usuario);
         } catch (Exception e) {
             objetoUsuario = null;

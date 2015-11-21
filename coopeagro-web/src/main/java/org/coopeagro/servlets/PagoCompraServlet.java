@@ -8,17 +8,37 @@ package org.coopeagro.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.coopeagro.controladores.PagoCompraJpaController;
+import org.coopeagro.ejb.CompraSessionBeanRemote;
+import org.coopeagro.ejb.PagoCompraSessionBeanRemote;
 
 /**
  *
  * @author YEISSON
  */
 public class PagoCompraServlet extends HttpServlet {
+    
+    private PagoCompraSessionBeanRemote pagoCompraBean = null;
+    private CompraSessionBeanRemote compraBean = null;
+
+    public PagoCompraServlet() {
+        try {
+            Context context = new InitialContext();
+            pagoCompraBean = (PagoCompraSessionBeanRemote) context.lookup("ejb/PagoCompraBean");
+            compraBean = (CompraSessionBeanRemote) context.lookup("ejb/CompraBean");
+        } catch (NamingException ex) {
+            Logger.getLogger(PagoCompraServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

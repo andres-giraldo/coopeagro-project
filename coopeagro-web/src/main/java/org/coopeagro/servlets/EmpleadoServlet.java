@@ -8,11 +8,18 @@ package org.coopeagro.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.coopeagro.controladores.EmpleadoJpaController;
+import org.coopeagro.ejb.EmpleadoSessionBeanRemote;
+import org.coopeagro.ejb.UsuarioSessionBeanRemote;
 
 /**
  *
@@ -20,6 +27,19 @@ import org.coopeagro.controladores.EmpleadoJpaController;
  */
 public class EmpleadoServlet extends HttpServlet {
 
+    private EmpleadoSessionBeanRemote empleadoBean = null;
+    private UsuarioSessionBeanRemote usuarioBean = null;
+
+    public EmpleadoServlet() {
+        try {
+            Context context = new InitialContext();
+            empleadoBean = (EmpleadoSessionBeanRemote) context.lookup("ejb/EmpleadoBean");
+            usuarioBean = (UsuarioSessionBeanRemote) context.lookup("ejb/UsuarioBean");
+        } catch (NamingException ex) {
+            Logger.getLogger(EmpleadoServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
