@@ -13,6 +13,7 @@ import org.coopeagro.controladores.CompraJpaController;
 import org.coopeagro.controladores.InventarioJpaController;
 import org.coopeagro.controladores.ProductoJpaController;
 import org.coopeagro.controladores.VentaJpaController;
+import org.coopeagro.entidades.DetalleCompra;
 import org.coopeagro.entidades.TiposDocumento;
 
 /**
@@ -65,5 +66,12 @@ public class Test {
 //        System.out.println(total);
         
         System.out.println(inventarioJpaController.getMax(2).toString());
+        
+        for (DetalleCompra dc : compraJpaController.getDetalles(9)) {
+            System.out.println(dc.getId());
+            System.out.println(dc.getProducto());
+            System.out.println(dc.getPrecio());
+            System.out.println(dc.getCantidad());
+        }
     }
 }

@@ -27,6 +27,7 @@
                         <br>
                         <br>
                         <div class="row">
+                            <input type="hidden" id="idCompra" name="idCompra" value="${idCompra}"/>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
                                 <label for="fecha">* Fecha de compra:</label> 
                                 <input class="form-control" type="text" id="fecha" name="fecha" readonly="true" value="${fecha}" />
@@ -91,6 +92,7 @@
                             <button class="btn btn-default" type="submit" name="accion" id="cancelarCompra" value="cancelarCompra">Cancelar</button>
                             <button class="btn btn-default" type="button" name="accion" id="limpiar" value="limpiar" onclick="limpiarDatos();">Limpiar</button>
                         </div>
+                        <div id="tablaCompras"></div>
                     </form>
                 </div>
             </div>

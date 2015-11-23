@@ -4,6 +4,7 @@ import java.util.List;
 import javax.ejb.Remote;
 import org.coopeagro.entidades.Agricultor;
 import org.coopeagro.entidades.Compra;
+import org.coopeagro.entidades.DetalleCompra;
 import org.coopeagro.entidades.Empleado;
 import org.coopeagro.excepciones.InexistenteException;
 
@@ -33,5 +34,7 @@ public interface CompraSessionBeanRemote {
     List<Empleado> getAllEmployees();
 
     Compra getMaxOrder();
+
+    List<DetalleCompra> getDetalles(int compra);
     
 }

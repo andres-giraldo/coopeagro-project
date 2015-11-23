@@ -11,6 +11,7 @@ import javax.persistence.PersistenceUnit;
 import org.coopeagro.controladores.VentaJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Cliente;
+import org.coopeagro.entidades.DetalleVenta;
 import org.coopeagro.entidades.Empleado;
 import org.coopeagro.entidades.Venta;
 import org.coopeagro.excepciones.InexistenteException;
@@ -114,5 +115,17 @@ public class VentaSessionBean implements VentaSessionBeanRemote {
         VentaJpaController ventaJpaController = new VentaJpaController(emf);
         double promedio = ventaJpaController.getPromedioVentas();
         return promedio;
+    }
+
+    @Override
+    public Venta getMaxOrder() {
+        VentaJpaController ventaJpaController = new VentaJpaController(emf);
+        return ventaJpaController.getMaxOrder();
+    }
+
+    @Override
+    public List<DetalleVenta> getDetalles(int venta) {
+        VentaJpaController ventaJpaController = new VentaJpaController(emf);
+        return ventaJpaController.getDetalles(venta);
     }
 }

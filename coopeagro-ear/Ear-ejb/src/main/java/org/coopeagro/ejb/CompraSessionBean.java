@@ -17,6 +17,7 @@ import org.coopeagro.controladores.CompraJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Agricultor;
 import org.coopeagro.entidades.Compra;
+import org.coopeagro.entidades.DetalleCompra;
 import org.coopeagro.entidades.Empleado;
 import org.coopeagro.excepciones.InexistenteException;
 
@@ -125,5 +126,11 @@ public class CompraSessionBean implements CompraSessionBeanRemote {
     public Compra getMaxOrder() {
         CompraJpaController compraJpaController = new CompraJpaController(emf);
         return compraJpaController.getMaxOrder();
+    }
+
+    @Override
+    public List<DetalleCompra> getDetalles(int compra) {
+        CompraJpaController compraJpaController = new CompraJpaController(emf);
+        return compraJpaController.getDetalles(compra);
     }
 }

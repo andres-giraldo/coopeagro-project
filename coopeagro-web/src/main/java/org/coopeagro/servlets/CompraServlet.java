@@ -2,6 +2,7 @@ package org.coopeagro.servlets;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -106,6 +107,7 @@ public class CompraServlet extends HttpServlet {
         String mes;
 
         String parametro = request.getParameter("parametro");
+        String id = request.getParameter("idCompra");
         String fecha = request.getParameter("fecha");
         String idAgricultor = request.getParameter("idAgricultor");
         String idEmpleado = request.getParameter("idEmpleado");
@@ -187,10 +189,20 @@ public class CompraServlet extends HttpServlet {
                 request.setAttribute("empleado", empleado);
                 redireccion = "jsp/Compras.jsp";
                 break;
+            case "listar":
+                listarCompras(response);
+                break;
+            case "cancelar":
+                mensajeError = cancelarCompra(id);
+                if(mensajeError.isEmpty()){
+                    mensajeExito = "La compra ha sido cancelada con éxito";
+                    break;
+                }
+                break;
             default:
                 break;
         }
-        if (!accion.equals("completarAgricultor") && !accion.equals("completarEmpleado") && !accion.equals("completarProducto")) {
+        if (!accion.equals("completarAgricultor") && !accion.equals("completarEmpleado") && !accion.equals("completarProducto") && !accion.equals("listar")) {
             request.setAttribute("mensajeError", mensajeError);
             request.setAttribute("mensajeExito", mensajeExito);
             request.setAttribute("mensajeAlerta", mensajeAlerta);
@@ -399,6 +411,65 @@ public class CompraServlet extends HttpServlet {
             error += "La compra no pudo ser guardada";
         }
         return error;
+    }
+    
+    private String cancelarCompra(String id) {
+        String error = "";
+        try {
+            Compra compra = compraBean.findCompra(Integer.parseInt(id));
+            compra.setEstado(EstadosPedido.CANCELADO);
+            compraBean.edit(compra);
+            for (DetalleCompra dc : compraBean.getDetalles(compra.getNumeroPedido())) {
+                Inventario inventario = inventarioBean.getMax(dc.getProducto().getId());
+                inventarioBean.create(new Inventario(new Date(), dc.getProducto(), inventario.getCantidadComprometida(), inventario.getCantidadTotal()-dc.getCantidad()));
+            }
+        } catch (Exception ex) {
+            error += "La compra no pudo ser cancelada";
+        }
+        return error;
+    }
+    
+    private void listarCompras(HttpServletResponse response) throws ServletException, IOException {
+        //ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
+        List<Compra> listaCompras = compraBean.findCompraEntities(10, 0);
+        //List<Producto> listaProductos = productoJpaController.findProductoEntities(10, 0);
+        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
+        PrintWriter out = response.getWriter();
+        out.println("<table class=\"table table-striped table-hover table-condensed bordo-tablas\">");
+        out.println(    "<thead>");
+        out.println(        "<tr>");			
+        out.println(            "<th>Fecha</th>");
+        out.println(            "<th>Agricultor</th>");
+        out.println(            "<th>Empleado</th>");
+        out.println(            "<th>Total</th>");
+        out.println(            "<th>Estado</th>");
+        out.println(            "<th>Acciones</th>");
+        out.println(        "</tr>");
+        out.println(    "</thead>");
+        out.println(    "<tbody>");
+        if(listaCompras != null && !listaCompras.isEmpty()){
+            for (Compra compra : listaCompras) {
+                out.println("<tr>");			
+                out.println(    "<td>"+formatoDelTexto.format(compra.getFechaPedido())+"</td>");
+                out.println(    "<td>"+compra.getAgricultor().getLlavePrimaria().getDocumento()+" - "+
+                        compra.getAgricultor().getLlavePrimaria().getTipoDocumento().getTipoDocumento()+"</td>");
+                out.println(    "<td>"+compra.getEmpleado().getLlavePrimaria().getDocumento()+" - "+
+                        compra.getEmpleado().getLlavePrimaria().getTipoDocumento().getTipoDocumento()+"</td>");
+                out.println(    "<td>$"+compra.getTotal()+"</td>");
+                out.println(    "<td>"+compra.getEstado()+"</td>");
+                out.println(    "<td>");
+                out.println(        "<button class=\"btn btn-default\" type=\"button\" onclick=\"consultarDetalles("+compra.getNumeroPedido()+");\">Detalles</button>");
+                out.println(        "<button class=\"btn btn-default\" type=\"button\" onclick=\"cancelarCompra("+compra.getNumeroPedido()+");\">Cancelar</button>");
+                out.println(    "</td>");
+                out.println("</tr>");
+            }
+        } else {
+            out.println("   <tr>");			
+            out.println(        "<td colspan=\"7\">No se encontraron registros</td>");
+            out.println(    "</tr>");
+        }
+        out.println(    "</tbody>");
+        out.println("</table>");
     }
 
     /**

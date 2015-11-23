@@ -15,10 +15,13 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Agricultor;
 import org.coopeagro.entidades.Compra;
+import org.coopeagro.entidades.DetalleCompra;
 import org.coopeagro.entidades.Empleado;
 
 /**
@@ -240,5 +243,27 @@ public class CompraJpaController implements Serializable {
         Query q = em.createQuery(cq);
         q.setMaxResults(1);
         return (Compra) q.getSingleResult();
+    }
+    
+    public List<DetalleCompra> getDetalles(int compra){
+        EntityManager em = getEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<DetalleCompra> cq = cb.createQuery(DetalleCompra.class);
+        Root<DetalleCompra> dc = cq.from(DetalleCompra.class);
+        cq.select(dc);
+        Predicate criteria = cb.conjunction();
+        cq.where(cb.and(criteria));
+        if (compra != 0) {
+            ParameterExpression<Integer> compraParameter = cb.parameter(Integer.class, "compra");
+            criteria = cb.and(criteria, cb.equal(dc.get("compra").get("numeroPedido"), compraParameter));
+        }
+        if (!criteria.getExpressions().isEmpty()) {
+            cq.where(cb.and(criteria));
+        }
+        Query q = em.createQuery(cq);
+        if (compra != 0) {
+            q.setParameter("compra", compra);
+        }
+        return q.getResultList();
     }
 }

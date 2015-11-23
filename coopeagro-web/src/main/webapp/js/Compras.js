@@ -1,7 +1,8 @@
 var productos = {};
 var productosSeleccionados = {};
-
+    
 $(function() {
+    listarDatos();
     pintarDetalles();
     $("#agricultor").typeahead({
         onSelect: function(item) {
@@ -145,4 +146,20 @@ function actualizarValores(idProducto){
     productos[idProducto] = producto;
     productosSeleccionados[idProducto] = producto;
     pintarDetalles();
+}
+
+function listarDatos(){
+    $.ajax({
+        type    :"POST",
+        url     :"Compra",
+        dataType:"html",
+        data    :{accion:"listar"},
+        success: function(data) {
+            if(data !== undefined){
+                $('#tablaCompras').html(data);
+            }
+        },
+        error: function(){
+        }
+    });
 }

@@ -8,6 +8,7 @@ package org.coopeagro.ejb;
 import java.util.List;
 import javax.ejb.Remote;
 import org.coopeagro.entidades.Cliente;
+import org.coopeagro.entidades.DetalleVenta;
 import org.coopeagro.entidades.Empleado;
 import org.coopeagro.entidades.Venta;
 import org.coopeagro.excepciones.InexistenteException;
@@ -40,5 +41,9 @@ public interface VentaSessionBeanRemote {
     List<Cliente> getAllCustomers();
 
     List<Empleado> getAllEmployees();
+
+    Venta getMaxOrder();
+
+    List<DetalleVenta> getDetalles(int venta);
     
 }

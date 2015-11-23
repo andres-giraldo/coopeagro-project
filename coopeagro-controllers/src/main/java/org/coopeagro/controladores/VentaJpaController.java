@@ -15,9 +15,12 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Cliente;
+import org.coopeagro.entidades.DetalleVenta;
 import org.coopeagro.entidades.Empleado;
 import org.coopeagro.entidades.Venta;
 
@@ -228,5 +231,39 @@ public class VentaJpaController implements Serializable {
             promedio = 0.0;
         }
         return promedio;
+    }
+    
+    public Venta getMaxOrder(){
+        EntityManager em = getEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Venta> cq = cb.createQuery(Venta.class);
+        Root<Venta> venta = cq.from(Venta.class);
+        cq.select(venta);
+        cq.orderBy(cb.desc(venta.get("numeroPedido")));
+        Query q = em.createQuery(cq);
+        q.setMaxResults(1);
+        return (Venta) q.getSingleResult();
+    }
+    
+    public List<DetalleVenta> getDetalles(int venta){
+        EntityManager em = getEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<DetalleVenta> cq = cb.createQuery(DetalleVenta.class);
+        Root<DetalleVenta> dv = cq.from(DetalleVenta.class);
+        cq.select(dv);
+        Predicate criteria = cb.conjunction();
+        cq.where(cb.and(criteria));
+        if (venta != 0) {
+            ParameterExpression<Integer> ventaParameter = cb.parameter(Integer.class, "venta");
+            criteria = cb.and(criteria, cb.equal(dv.get("venta").get("numeroPedido"), ventaParameter));
+        }
+        if (!criteria.getExpressions().isEmpty()) {
+            cq.where(cb.and(criteria));
+        }
+        Query q = em.createQuery(cq);
+        if (venta != 0) {
+            q.setParameter("venta", venta);
+        }
+        return q.getResultList();
     }
 }
