@@ -6,30 +6,32 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import org.coopeagro.controladores.AgricultorJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
+import org.coopeagro.controladores.exceptions.PreexistingEntityException;
 import org.coopeagro.entidades.Agricultor;
 import org.coopeagro.entidades.PersonaPK;
 import org.coopeagro.excepciones.DuplicadaException;
 import org.coopeagro.excepciones.InexistenteException;
 
+@EJB(name = "AgricultorBean", mappedName = "ejb/AgricultorBean", beanInterface = AgricultorSessionBeanRemote.class)
 @Stateless
-@EJB(name="AgricultorBean", mappedName = "ejb/AgricultorBean", beanInterface = AgricultorSessionBeanRemote.class)
 public class AgricultorSessionBean implements AgricultorSessionBeanRemote {
 
-    @PersistenceContext(unitName = "coopeagroPU")
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("coopeagroPU");
+    @PersistenceUnit(unitName = "coopeagroPU")
+    EntityManagerFactory emf;
 
     @Override
     public void create(Agricultor agricultor) throws DuplicadaException {
         try {
             AgricultorJpaController agricultorJpaController = new AgricultorJpaController(emf);
             agricultorJpaController.create(agricultor);
-        } catch (Exception ex) {
+        } catch (PreexistingEntityException ex) {
             Logger.getLogger(AgricultorSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new DuplicadaException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(AgricultorSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -38,9 +40,11 @@ public class AgricultorSessionBean implements AgricultorSessionBeanRemote {
         try {
             AgricultorJpaController agricultorJpaController = new AgricultorJpaController(emf);
             agricultorJpaController.edit(agricultor);
-        } catch (Exception ex) {
+        } catch (NonexistentEntityException ex) {
             Logger.getLogger(AgricultorSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(AgricultorSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -52,6 +56,8 @@ public class AgricultorSessionBean implements AgricultorSessionBeanRemote {
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(AgricultorSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(AgricultorSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

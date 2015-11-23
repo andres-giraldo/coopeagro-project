@@ -1,18 +1,19 @@
 package org.coopeagro.servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
+import javax.ejb.EJB;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.coopeagro.controladores.UsuarioJpaController;
 import org.coopeagro.ejb.UsuarioSessionBeanRemote;
 import org.coopeagro.entidades.Usuario;
+import org.coopeagro.serviceLocator.CoopeagroServiceLocator;
 
 /**
  *
@@ -20,14 +21,20 @@ import org.coopeagro.entidades.Usuario;
  */
 public class InicioSesionServlet extends HttpServlet {
     
+    @EJB
     private UsuarioSessionBeanRemote usuarioBean = null;
 
     public InicioSesionServlet() {
-        try {
-            Context context = new InitialContext();
-            usuarioBean = (UsuarioSessionBeanRemote) context.lookup("ejb/UsuarioBean");
-        } catch (NamingException ex) {
-            Logger.getLogger(InicioSesionServlet.class.getName()).log(Level.SEVERE, null, ex);
+        Properties props = new Properties();
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("CoopeagroServiceLocator.properties");
+        if (inputStream != null) {
+            try {
+                props.load(inputStream);
+                CoopeagroServiceLocator cesl = new CoopeagroServiceLocator(props);
+                usuarioBean = cesl.<UsuarioSessionBeanRemote>getEJBInstance("ejb/UsuarioBean");
+            } catch (NamingException | IOException ex) {
+                Logger.getLogger(InicioSesionServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -83,11 +90,11 @@ public class InicioSesionServlet extends HttpServlet {
 
     private String validarIngreso(String usuario, String clave) {
         String validacion = "";
-        UsuarioJpaController usuarioJpaController = (UsuarioJpaController) getServletContext().getAttribute("usuarioJpaController");
+        //UsuarioJpaController usuarioJpaController = (UsuarioJpaController) getServletContext().getAttribute("usuarioJpaController");
         Usuario objetoUsuario;
         try {
-            //objetoUsuario = usuarioBean.findUsuarioForUserName(usuario);
-            objetoUsuario = usuarioJpaController.findUsuarioForUserName(usuario);
+            objetoUsuario = usuarioBean.findUsuarioForUserName(usuario);
+            //objetoUsuario = usuarioJpaController.findUsuarioForUserName(usuario);
         } catch (Exception e) {
             objetoUsuario = null;
         }

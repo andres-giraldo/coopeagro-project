@@ -12,8 +12,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import org.coopeagro.controladores.CompraJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Agricultor;
@@ -21,12 +20,12 @@ import org.coopeagro.entidades.Compra;
 import org.coopeagro.entidades.Empleado;
 import org.coopeagro.excepciones.InexistenteException;
 
-@Stateless
 @EJB(name = "CompraBean", mappedName = "ejb/CompraBean", beanInterface = CompraSessionBeanRemote.class)
+@Stateless
 public class CompraSessionBean implements CompraSessionBeanRemote {
 
-    @PersistenceContext(unitName = "coopeagroPU")
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("coopeagroPU");
+    @PersistenceUnit(unitName = "coopeagroPU")
+    EntityManagerFactory emf;
 
     @Override
     public void create(Compra compra) {
@@ -39,9 +38,11 @@ public class CompraSessionBean implements CompraSessionBeanRemote {
         try {
             CompraJpaController compraJpaController = new CompraJpaController(emf);
             compraJpaController.edit(compra);
-        } catch (Exception ex) {
+        } catch (NonexistentEntityException ex) {
             Logger.getLogger(CompraSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(CompraSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -53,6 +54,8 @@ public class CompraSessionBean implements CompraSessionBeanRemote {
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(CompraSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(CompraSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

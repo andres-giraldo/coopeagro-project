@@ -7,19 +7,20 @@
 package org.coopeagro.servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
+import javax.ejb.EJB;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.coopeagro.controladores.PagoVentaJpaController;
 import org.coopeagro.ejb.PagoVentaSessionBeanRemote;
 import org.coopeagro.ejb.VentaSessionBeanRemote;
+import org.coopeagro.serviceLocator.CoopeagroServiceLocator;
 
 /**
  *
@@ -27,16 +28,23 @@ import org.coopeagro.ejb.VentaSessionBeanRemote;
  */
 public class PagoVentaServlet extends HttpServlet {
 
+    @EJB
     private PagoVentaSessionBeanRemote pagoVentaBean = null;
+    @EJB
     private VentaSessionBeanRemote ventaBean = null;
 
     public PagoVentaServlet() {
-        try {
-            Context context = new InitialContext();
-            pagoVentaBean = (PagoVentaSessionBeanRemote) context.lookup("ejb/PagoVentaBean");
-            ventaBean = (VentaSessionBeanRemote) context.lookup("ejb/VentaBean");
-        } catch (NamingException ex) {
-            Logger.getLogger(PagoVentaServlet.class.getName()).log(Level.SEVERE, null, ex);
+        Properties props = new Properties();
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("CoopeagroServiceLocator.properties");
+        if (inputStream != null) {
+            try {
+                props.load(inputStream);
+                CoopeagroServiceLocator cesl = new CoopeagroServiceLocator(props);
+                pagoVentaBean = cesl.<PagoVentaSessionBeanRemote>getEJBInstance("ejb/PagoVentaBean");
+                ventaBean = cesl.<VentaSessionBeanRemote>getEJBInstance("ejb/VentaBean");
+            } catch (NamingException | IOException ex) {
+                Logger.getLogger(PagoVentaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -51,7 +59,7 @@ public class PagoVentaServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PagoVentaJpaController controller = (PagoVentaJpaController) getServletContext().getAttribute("pagoVentaJpaController");
+        //PagoVentaJpaController controller = (PagoVentaJpaController) getServletContext().getAttribute("pagoVentaJpaController");
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */

@@ -7,20 +7,19 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import org.coopeagro.controladores.InventarioJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Inventario;
 import org.coopeagro.entidades.Producto;
 import org.coopeagro.excepciones.InexistenteException;
 
-@Stateless
 @EJB(name = "InventarioBean", mappedName = "ejb/InventarioBean", beanInterface = InventarioSessionBeanRemote.class)
+@Stateless
 public class InventarioSessionBean implements InventarioSessionBeanRemote {
 
-    @PersistenceContext(unitName = "coopeagroPU")
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("coopeagroPU");
+    @PersistenceUnit(unitName = "coopeagroPU")
+    EntityManagerFactory emf;
 
     @Override
     public void create(Inventario inventario) {
@@ -33,9 +32,11 @@ public class InventarioSessionBean implements InventarioSessionBeanRemote {
         try {
             InventarioJpaController inventarioJpaController = new InventarioJpaController(emf);
             inventarioJpaController.edit(inventario);
-        } catch (Exception ex) {
+        } catch (NonexistentEntityException ex) {
             Logger.getLogger(InventarioSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(InventarioSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -47,6 +48,8 @@ public class InventarioSessionBean implements InventarioSessionBeanRemote {
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(InventarioSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(InventarioSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

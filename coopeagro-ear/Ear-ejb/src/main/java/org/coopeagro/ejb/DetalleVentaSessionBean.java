@@ -7,8 +7,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import org.coopeagro.controladores.DetalleVentaJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.DetalleVenta;
@@ -16,12 +15,12 @@ import org.coopeagro.entidades.Producto;
 import org.coopeagro.entidades.Venta;
 import org.coopeagro.excepciones.InexistenteException;
 
+@EJB(name = "DetalleVentaBean", mappedName = "ejb/DetalleVentaBean", beanInterface = DetalleVentaSessionBeanRemote.class)
 @Stateless
-@EJB(name = "DetalleCompraBean", mappedName = "ejb/DetalleVentaBean", beanInterface = DetalleVentaSessionBeanRemote.class)
 public class DetalleVentaSessionBean implements DetalleVentaSessionBeanRemote {
 
-    @PersistenceContext(unitName = "coopeagroPU")
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("coopeagroPU");
+    @PersistenceUnit(unitName = "coopeagroPU")
+    EntityManagerFactory emf;
 
     @Override
     public void create(DetalleVenta detalleVenta) {
@@ -34,9 +33,11 @@ public class DetalleVentaSessionBean implements DetalleVentaSessionBeanRemote {
         try {
             DetalleVentaJpaController detalleVentaJpaController = new DetalleVentaJpaController(emf);
             detalleVentaJpaController.edit(detalleVenta);
-        } catch (Exception ex) {
+        } catch (NonexistentEntityException ex) {
             Logger.getLogger(DetalleVentaSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(DetalleVentaSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -48,6 +49,8 @@ public class DetalleVentaSessionBean implements DetalleVentaSessionBeanRemote {
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(DetalleVentaSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(DetalleVentaSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

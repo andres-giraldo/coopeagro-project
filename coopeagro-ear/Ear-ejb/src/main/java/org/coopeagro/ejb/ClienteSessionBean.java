@@ -6,30 +6,32 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import org.coopeagro.controladores.ClienteJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
+import org.coopeagro.controladores.exceptions.PreexistingEntityException;
 import org.coopeagro.entidades.Cliente;
 import org.coopeagro.entidades.PersonaPK;
 import org.coopeagro.excepciones.DuplicadaException;
 import org.coopeagro.excepciones.InexistenteException;
 
-@Stateless
 @EJB(name = "ClienteBean", mappedName = "ejb/ClienteBean", beanInterface = ClienteSessionBeanRemote.class)
+@Stateless
 public class ClienteSessionBean implements ClienteSessionBeanRemote {
 
-    @PersistenceContext(unitName = "coopeagroPU")
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("coopeagroPU");
+    @PersistenceUnit(unitName = "coopeagroPU")
+    EntityManagerFactory emf;
 
     @Override
     public void create(Cliente cliente) throws DuplicadaException {
         try {
             ClienteJpaController clienteJpaController = new ClienteJpaController(emf);
             clienteJpaController.create(cliente);
-        } catch (Exception ex) {
+        } catch (PreexistingEntityException ex) {
             Logger.getLogger(ClienteSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new DuplicadaException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(ClienteSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -38,9 +40,11 @@ public class ClienteSessionBean implements ClienteSessionBeanRemote {
         try {
             ClienteJpaController clienteJpaController = new ClienteJpaController(emf);
             clienteJpaController.edit(cliente);
-        } catch (Exception ex) {
+        } catch (NonexistentEntityException ex) {
             Logger.getLogger(ClienteSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(ClienteSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -52,6 +56,8 @@ public class ClienteSessionBean implements ClienteSessionBeanRemote {
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(ClienteSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(ClienteSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

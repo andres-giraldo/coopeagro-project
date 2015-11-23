@@ -5,6 +5,7 @@
 package org.coopeagro.servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,24 +13,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.naming.Context;
-import javax.naming.InitialContext;
+import javax.ejb.EJB;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.coopeagro.controladores.AgricultorJpaController;
-import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.ejb.AgricultorSessionBeanRemote;
 import org.coopeagro.entidades.Agricultor;
 import org.coopeagro.entidades.PersonaPK;
 import org.coopeagro.entidades.TiposDocumento;
 import org.coopeagro.excepciones.InexistenteException;
+import org.coopeagro.serviceLocator.CoopeagroServiceLocator;
 import org.json.simple.JSONObject;
 
 /**
@@ -38,14 +38,20 @@ import org.json.simple.JSONObject;
  */
 public class AgricultorServlet extends HttpServlet {
 
+    @EJB
     private AgricultorSessionBeanRemote agricultorBean = null;
 
     public AgricultorServlet() {
-        try {
-            Context context = new InitialContext();
-            agricultorBean = (AgricultorSessionBeanRemote) context.lookup("ejb/AgricultorBean");
-        } catch (NamingException ex) {
-            Logger.getLogger(AgricultorServlet.class.getName()).log(Level.SEVERE, null, ex);
+        Properties props = new Properties();
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("CoopeagroServiceLocator.properties");
+        if (inputStream != null) {
+            try {
+                props.load(inputStream);
+                CoopeagroServiceLocator cesl = new CoopeagroServiceLocator(props);
+                agricultorBean = cesl.<AgricultorSessionBeanRemote>getEJBInstance("ejb/AgricultorBean");
+            } catch (IOException | NamingException ex) {
+                Logger.getLogger(AgricultorServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -194,27 +200,27 @@ public class AgricultorServlet extends HttpServlet {
     
     private String guardarAgricultor(String isEditar, String documento, TiposDocumento tipoDocumento, String nombre, String apellido1, String apellido2, String telefono, String celular, String correo, String direccion, Date fechaRegistro) {
         String error = "";
-        AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
+        //AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
         Agricultor agricultor;
         try {
-            //agricultor = agricultorBean.findAgricultor(new PersonaPK(documento, tipoDocumento));
-            agricultor = agricultorJpaController.findAgricultor(new PersonaPK(documento, tipoDocumento));
+            agricultor = agricultorBean.findAgricultor(new PersonaPK(documento, tipoDocumento));
+            //agricultor = agricultorJpaController.findAgricultor(new PersonaPK(documento, tipoDocumento));
         } catch (Exception e) {
             agricultor = null;
         }
         System.out.println(isEditar);
         if (isEditar != null && !isEditar.isEmpty()) {
             try {
-                //agricultorBean.edit(new Agricultor(documento, tipoDocumento, nombre, apellido1, apellido2, telefono, celular, correo, fechaRegistro, direccion));
-                agricultorJpaController.edit(new Agricultor(documento, tipoDocumento, nombre, apellido1, apellido2, telefono, celular, correo, fechaRegistro, direccion));
+                agricultorBean.edit(new Agricultor(documento, tipoDocumento, nombre, apellido1, apellido2, telefono, celular, correo, fechaRegistro, direccion));
+                //agricultorJpaController.edit(new Agricultor(documento, tipoDocumento, nombre, apellido1, apellido2, telefono, celular, correo, fechaRegistro, direccion));
             } catch (Exception ex) {
                 error = "El agricultor no pudo ser guardado";
             }
         } else {
             if (agricultor == null) {
                 try {
-                    //agricultorBean.create(new Agricultor(documento, tipoDocumento, nombre, apellido1, apellido2, telefono, celular, correo, fechaRegistro, direccion));
-                    agricultorJpaController.create(new Agricultor(documento, tipoDocumento, nombre, apellido1, apellido2, telefono, celular, correo, fechaRegistro, direccion));
+                    agricultorBean.create(new Agricultor(documento, tipoDocumento, nombre, apellido1, apellido2, telefono, celular, correo, fechaRegistro, direccion));
+                    //agricultorJpaController.create(new Agricultor(documento, tipoDocumento, nombre, apellido1, apellido2, telefono, celular, correo, fechaRegistro, direccion));
                 } catch (NumberFormatException e) {
                     error = "El agricultor no pudo ser guardado";
                 } catch (Exception ex) {
@@ -229,27 +235,27 @@ public class AgricultorServlet extends HttpServlet {
     
     private boolean eliminarAgricultor(String documento, TiposDocumento tipoDocumento) {
         boolean eliminacion = false;
-        AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
+        //AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
         try {
-            //agricultorBean.destroy(new PersonaPK(documento, tipoDocumento));
-            agricultorJpaController.destroy(new PersonaPK(documento, tipoDocumento));
+            agricultorBean.destroy(new PersonaPK(documento, tipoDocumento));
+            //agricultorJpaController.destroy(new PersonaPK(documento, tipoDocumento));
             eliminacion = true;
-        } catch (NonexistentEntityException ex) {
-//        } catch (InexistenteException ex) {
-//            Logger.getLogger(AgricultorServlet.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        //} catch (NonexistentEntityException ex) {
+        } catch (InexistenteException ex) {
+            Logger.getLogger(AgricultorServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //}
         return eliminacion;
     }
     
     private JSONObject consultarAgricultor(String documento, TiposDocumento tipoDocumento) {
         JSONObject jsonAgricultor = new JSONObject();
-        AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
+        //AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
         Agricultor agricultor;
         SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
         try {
-            //agricultor = agricultorBean.findAgricultor(new PersonaPK(documento, tipoDocumento));
-            agricultor = agricultorJpaController.findAgricultor(new PersonaPK(documento, tipoDocumento));
+            agricultor = agricultorBean.findAgricultor(new PersonaPK(documento, tipoDocumento));
+            //agricultor = agricultorJpaController.findAgricultor(new PersonaPK(documento, tipoDocumento));
         } catch (NumberFormatException e) {
             agricultor = null;
         }
@@ -270,9 +276,9 @@ public class AgricultorServlet extends HttpServlet {
     }
     
     private void listarAgricultores(HttpServletResponse response, String documento) throws ServletException, IOException {
-        AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
-        //List<Agricultor> listaAgricultores = agricultorBean.findAgricultorEntities(10, 0);
-        List<Agricultor> listaAgricultores = agricultorJpaController.findAgricultorEntities(10, 0);
+        //AgricultorJpaController agricultorJpaController = (AgricultorJpaController) getServletContext().getAttribute("agricultorJpaController");
+        List<Agricultor> listaAgricultores = agricultorBean.findAgricultorEntities(10, 0);
+        //List<Agricultor> listaAgricultores = agricultorJpaController.findAgricultorEntities(10, 0);
         PrintWriter out = response.getWriter();
         out.println("<table class=\"table table-striped table-hover table-condensed bordo-tablas\">");
         out.println(    "<thead>");

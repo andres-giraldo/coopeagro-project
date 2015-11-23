@@ -5,25 +5,25 @@
 package org.coopeagro.servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
+import javax.ejb.EJB;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.coopeagro.controladores.ProductoJpaController;
-import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.ejb.ProductoSessionBeanRemote;
 import org.coopeagro.entidades.Producto;
 import org.coopeagro.entidades.UnidadesMedida;
 import org.coopeagro.excepciones.InexistenteException;
+import org.coopeagro.serviceLocator.CoopeagroServiceLocator;
 import org.json.simple.JSONObject;
 
 /**
@@ -32,14 +32,20 @@ import org.json.simple.JSONObject;
  */
 public class ProductoServlet extends HttpServlet {
     
+    @EJB
     private ProductoSessionBeanRemote productoBean = null;
 
     public ProductoServlet() {
-        try {
-            Context context = new InitialContext();
-            productoBean = (ProductoSessionBeanRemote) context.lookup("ejb/ProductoBean");
-        } catch (NamingException ex) {
-            Logger.getLogger(ProductoServlet.class.getName()).log(Level.SEVERE, null, ex);
+        Properties props = new Properties();
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("CoopeagroServiceLocator.properties");
+        if (inputStream != null) {
+            try {
+                props.load(inputStream);
+                CoopeagroServiceLocator cesl = new CoopeagroServiceLocator(props);
+                productoBean = cesl.<ProductoSessionBeanRemote>getEJBInstance("ejb/ProductoBean");
+            } catch (NamingException | IOException ex) {
+                Logger.getLogger(ProductoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -140,19 +146,19 @@ public class ProductoServlet extends HttpServlet {
 
     private String guardarProducto(String id, String codigo, String nombre, String valor, String unidadMedida) {
         String error = "";
-        ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
+        //ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
         Producto producto;
         try {
-            //producto = productoBean.findProductByCodigo(codigo);
-            producto = productoJpaController.findProductByCodigo(codigo);
+            producto = productoBean.findProductByCodigo(codigo);
+            //producto = productoJpaController.findProductByCodigo(codigo);
         } catch (Exception e) {
             producto = null;
         }
         if (id != null && !id.isEmpty()) {
             if (producto == null || producto.getId().toString().equals(id)) {
                 try {
-                    //productoBean.edit(new Producto(Integer.valueOf(id), codigo, nombre, Double.valueOf(valor), UnidadesMedida.valueOf(unidadMedida)));
-                    productoJpaController.edit(new Producto(Integer.valueOf(id), codigo, nombre, Double.valueOf(valor), UnidadesMedida.valueOf(unidadMedida)));
+                    productoBean.edit(new Producto(Integer.valueOf(id), codigo, nombre, Double.valueOf(valor), UnidadesMedida.valueOf(unidadMedida)));
+                    //productoJpaController.edit(new Producto(Integer.valueOf(id), codigo, nombre, Double.valueOf(valor), UnidadesMedida.valueOf(unidadMedida)));
                 } catch (Exception ex) {
                     error = "El producto no pudo ser guardado";
                 }
@@ -162,8 +168,8 @@ public class ProductoServlet extends HttpServlet {
         } else {
             if (producto == null) {
                 try {
-                    //productoBean.create(new Producto(codigo, nombre, Double.valueOf(valor), UnidadesMedida.valueOf(unidadMedida)));
-                    productoJpaController.create(new Producto(codigo, nombre, Double.valueOf(valor), UnidadesMedida.valueOf(unidadMedida)));
+                    productoBean.create(new Producto(codigo, nombre, Double.valueOf(valor), UnidadesMedida.valueOf(unidadMedida)));
+                    //productoJpaController.create(new Producto(codigo, nombre, Double.valueOf(valor), UnidadesMedida.valueOf(unidadMedida)));
                 } catch (NumberFormatException e) {
                     error = "El producto no pudo ser guardado";
                 }
@@ -176,26 +182,26 @@ public class ProductoServlet extends HttpServlet {
 
     private boolean eliminarProducto(String id) {
         boolean eliminacion = false;
-        ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
+        //ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
         try {
-            //productoBean.destroy(Integer.valueOf(id));
-            productoJpaController.destroy(Integer.valueOf(id));
+            productoBean.destroy(Integer.valueOf(id));
+            //productoJpaController.destroy(Integer.valueOf(id));
             eliminacion = true;
-        } catch (NumberFormatException | NonexistentEntityException ex) {
-//        } catch (InexistenteException ex) {
-//            Logger.getLogger(ProductoServlet.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        //} catch (NumberFormatException | NonexistentEntityException ex) {
+        } catch (InexistenteException ex) {
+            Logger.getLogger(ProductoServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //}
         return eliminacion;
     }
 
     private JSONObject consultarProducto(String id) {
         JSONObject jsonProducto = new JSONObject();
-        ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
+        //ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
         Producto producto;
         try {
-            //producto = productoBean.findProducto(Integer.valueOf(id));
-            producto = productoJpaController.findProducto(Integer.valueOf(id));
+            producto = productoBean.findProducto(Integer.valueOf(id));
+            //producto = productoJpaController.findProducto(Integer.valueOf(id));
         } catch (NumberFormatException e) {
             producto = null;
         }
@@ -210,9 +216,9 @@ public class ProductoServlet extends HttpServlet {
     }
     
     private void listarProductos(HttpServletResponse response, String codigo, String nombre) throws ServletException, IOException {
-        ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
-        //List<Producto> listaProductos = productoBean.findProductoEntities(10, 0);
-        List<Producto> listaProductos = productoJpaController.findProductoEntities(10, 0);
+        //ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
+        List<Producto> listaProductos = productoBean.findProductoEntities(10, 0);
+        //List<Producto> listaProductos = productoJpaController.findProductoEntities(10, 0);
         PrintWriter out = response.getWriter();
         out.println("<table class=\"table table-striped table-hover table-condensed bordo-tablas\">");
         out.println(    "<thead>");

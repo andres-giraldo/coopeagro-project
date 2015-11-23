@@ -7,28 +7,27 @@
 package org.coopeagro.servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
+import javax.ejb.EJB;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.coopeagro.controladores.InventarioJpaController;
-import org.coopeagro.controladores.ProductoJpaController;
-import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.ejb.InventarioSessionBeanRemote;
 import org.coopeagro.ejb.ProductoSessionBeanRemote;
 import org.coopeagro.entidades.Inventario;
 import org.coopeagro.entidades.Producto;
 import org.coopeagro.excepciones.InexistenteException;
+import org.coopeagro.serviceLocator.CoopeagroServiceLocator;
 import org.json.simple.JSONObject;
 
 /**
@@ -37,16 +36,23 @@ import org.json.simple.JSONObject;
  */
 public class InventarioServlet extends HttpServlet {
     
+    @EJB
     private InventarioSessionBeanRemote inventarioBean = null;
+    @EJB
     private ProductoSessionBeanRemote productoBean = null;
 
     public InventarioServlet() {
-        try {
-            Context context = new InitialContext();
-            inventarioBean = (InventarioSessionBeanRemote) context.lookup("ejb/InventarioBean");
-            productoBean = (ProductoSessionBeanRemote) context.lookup("ejb/ProductoBean");
-        } catch (NamingException ex) {
-            Logger.getLogger(InventarioServlet.class.getName()).log(Level.SEVERE, null, ex);
+        Properties props = new Properties();
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("CoopeagroServiceLocator.properties");
+        if (inputStream != null) {
+            try {
+                props.load(inputStream);
+                CoopeagroServiceLocator cesl = new CoopeagroServiceLocator(props);
+                inventarioBean = cesl.<InventarioSessionBeanRemote>getEJBInstance("ejb/InventarioBean");
+                productoBean = cesl.<ProductoSessionBeanRemote>getEJBInstance("ejb/ProductoBean");
+            } catch (NamingException | IOException ex) {
+                Logger.getLogger(InventarioServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -194,27 +200,27 @@ public class InventarioServlet extends HttpServlet {
 
     private boolean eliminarInventario(String id) {
         boolean eliminacion = false;
-        InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
+        //InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
         try {
-            //inventarioBean.destroy(Integer.valueOf(id));
-            inventarioJpaController.destroy(Integer.valueOf(id));
+            inventarioBean.destroy(Integer.valueOf(id));
+            //inventarioJpaController.destroy(Integer.valueOf(id));
             eliminacion = true;
-        } catch (NumberFormatException | NonexistentEntityException ex) {
-//        } catch (InexistenteException ex) {
-//            Logger.getLogger(InventarioServlet.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        //} catch (NumberFormatException | NonexistentEntityException ex) {
+        } catch (InexistenteException ex) {
+            Logger.getLogger(InventarioServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //}
         return eliminacion;
     }
 
     private JSONObject consultarInventario(String id) {
         JSONObject jsonInventario = new JSONObject();
-        InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
+        //InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
         Inventario inventario;
         SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
         try {
-            //inventario = inventarioBean.findInventario(Integer.valueOf(id));
-            inventario = inventarioJpaController.findInventario(Integer.valueOf(id));
+            inventario = inventarioBean.findInventario(Integer.valueOf(id));
+            //inventario = inventarioJpaController.findInventario(Integer.valueOf(id));
         } catch (NumberFormatException e) {
             inventario = null;
         }
@@ -229,9 +235,9 @@ public class InventarioServlet extends HttpServlet {
     }
 
     private void listarInventarios(HttpServletResponse response, String fecha, String idProducto) throws IOException {
-        InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
-        //List<Inventario> listaInventarios = inventarioBean.findInventarioEntities(10, 0);
-        List<Inventario> listaInventarios = inventarioJpaController.findInventarioEntities(10, 0); 
+        //InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
+        List<Inventario> listaInventarios = inventarioBean.findInventarioEntities(10, 0);
+        //List<Inventario> listaInventarios = inventarioJpaController.findInventarioEntities(10, 0); 
         SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
         PrintWriter out = response.getWriter();
         out.println("<table class=\"table table-striped table-hover table-condensed bordo-tablas\">");
@@ -271,24 +277,24 @@ public class InventarioServlet extends HttpServlet {
 
     private String guardarInventario(String id, Date fecha, String idProducto, String cantidadComprometida, String cantidadTotal) {
         String error = "";
-        ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
+        //ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
         Producto producto;
-        productoBean.findProducto(Integer.parseInt(idProducto));
-        producto = productoJpaController.findProducto(Integer.parseInt(idProducto));
+        producto = productoBean.findProducto(Integer.parseInt(idProducto));
+        //producto = productoJpaController.findProducto(Integer.parseInt(idProducto));
         producto.setId(Integer.parseInt(idProducto));
-        InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
+        //InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
         Inventario inventario;
         try {
-            //inventario = inventarioBean.findInventario(Integer.parseInt(id));
-            inventario = inventarioJpaController.findInventario(Integer.parseInt(id));
+            inventario = inventarioBean.findInventario(Integer.parseInt(id));
+            //inventario = inventarioJpaController.findInventario(Integer.parseInt(id));
         } catch (Exception e) {
             inventario = null;
         }
         if (id != null && !id.isEmpty()) {
             if (inventario == null || inventario.getId().toString().equals(id)) {
                 try {
-                    //inventarioBean.edit(new Inventario(Integer.valueOf(id), fecha, producto, Double.valueOf(cantidadComprometida), Double.valueOf(cantidadTotal)));
-                    inventarioJpaController.edit(new Inventario(Integer.valueOf(id), fecha, producto, Double.valueOf(cantidadComprometida), Double.valueOf(cantidadTotal)));
+                    inventarioBean.edit(new Inventario(Integer.valueOf(id), fecha, producto, Double.valueOf(cantidadComprometida), Double.valueOf(cantidadTotal)));
+                    //inventarioJpaController.edit(new Inventario(Integer.valueOf(id), fecha, producto, Double.valueOf(cantidadComprometida), Double.valueOf(cantidadTotal)));
                 } catch (Exception ex) {
                     error = "El registro del inventario no pudo ser guardado";
                 }
@@ -296,8 +302,8 @@ public class InventarioServlet extends HttpServlet {
         } else {
             if (inventario == null) {
                 try {
-                    //inventarioBean.create(new Inventario(fecha, producto, Double.valueOf(cantidadComprometida), Double.valueOf(cantidadTotal)));
-                    inventarioJpaController.create(new Inventario(fecha, producto, Double.valueOf(cantidadComprometida), Double.valueOf(cantidadTotal)));
+                    inventarioBean.create(new Inventario(fecha, producto, Double.valueOf(cantidadComprometida), Double.valueOf(cantidadTotal)));
+                    //inventarioJpaController.create(new Inventario(fecha, producto, Double.valueOf(cantidadComprometida), Double.valueOf(cantidadTotal)));
                 } catch (NumberFormatException e) {
                     error = "El registro del inventario no pudo ser guardado";
                 }
@@ -307,18 +313,18 @@ public class InventarioServlet extends HttpServlet {
     }
     
     private double disponibilidadProducto(String idProducto){
-        InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
-        //double disponibilidad = inventarioBean.getDisponibilidad(Integer.parseInt(idProducto));
-        double disponibilidad = inventarioJpaController.getDisponibilidad(Integer.parseInt(idProducto));
+        //InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
+        double disponibilidad = inventarioBean.getDisponibilidad(Integer.parseInt(idProducto));
+        //double disponibilidad = inventarioJpaController.getDisponibilidad(Integer.parseInt(idProducto));
         return disponibilidad;
     }
     
     private List<Producto> obtenerProductos(){
         List<Producto> productos = null;
         try {
-            InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
-            //productos = inventarioBean.getAllProducts();
-            productos = inventarioJpaController.getAllProducts();
+            //InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
+            productos = inventarioBean.getAllProducts();
+            //productos = inventarioJpaController.getAllProducts();
         } catch (Exception ex) {
             Logger.getLogger(InventarioServlet.class.getName()).log(Level.SEVERE, null, ex);
         }

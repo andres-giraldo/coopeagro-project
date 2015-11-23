@@ -6,30 +6,32 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import org.coopeagro.controladores.EmpleadoJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
+import org.coopeagro.controladores.exceptions.PreexistingEntityException;
 import org.coopeagro.entidades.Empleado;
 import org.coopeagro.entidades.PersonaPK;
 import org.coopeagro.excepciones.DuplicadaException;
 import org.coopeagro.excepciones.InexistenteException;
 
-@Stateless
 @EJB(name = "EmpleadoBean", mappedName = "ejb/EmpleadoBean", beanInterface = EmpleadoSessionBeanRemote.class)
+@Stateless
 public class EmpleadoSessionBean implements EmpleadoSessionBeanRemote {
 
-    @PersistenceContext(unitName = "coopeagroPU")
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("coopeagroPU");
+    @PersistenceUnit(unitName = "coopeagroPU")
+    EntityManagerFactory emf;
 
     @Override
     public void create(Empleado empleado) throws DuplicadaException {
         try {
             EmpleadoJpaController empleadoJpaController = new EmpleadoJpaController(emf);
             empleadoJpaController.create(empleado);
-        } catch (Exception ex) {
+        } catch (PreexistingEntityException ex) {
             Logger.getLogger(EmpleadoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new DuplicadaException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(EmpleadoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -38,9 +40,11 @@ public class EmpleadoSessionBean implements EmpleadoSessionBeanRemote {
         try {
             EmpleadoJpaController empleadoJpaController = new EmpleadoJpaController(emf);
             empleadoJpaController.edit(empleado);
-        } catch (Exception ex) {
+        } catch (NonexistentEntityException ex) {
             Logger.getLogger(EmpleadoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(EmpleadoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -52,6 +56,8 @@ public class EmpleadoSessionBean implements EmpleadoSessionBeanRemote {
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(EmpleadoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(EmpleadoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

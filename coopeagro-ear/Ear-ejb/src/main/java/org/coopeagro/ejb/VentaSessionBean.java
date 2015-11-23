@@ -7,8 +7,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import org.coopeagro.controladores.VentaJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Cliente;
@@ -16,12 +15,12 @@ import org.coopeagro.entidades.Empleado;
 import org.coopeagro.entidades.Venta;
 import org.coopeagro.excepciones.InexistenteException;
 
-@Stateless
 @EJB(name = "VentaBean", mappedName = "ejb/VentaBean", beanInterface = VentaSessionBeanRemote.class)
+@Stateless
 public class VentaSessionBean implements VentaSessionBeanRemote {
 
-    @PersistenceContext(unitName = "coopeagroPU")
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("coopeagroPU");
+    @PersistenceUnit(unitName = "coopeagroPU")
+    EntityManagerFactory emf;
 
     @Override
     public void create(Venta venta) {
@@ -34,9 +33,11 @@ public class VentaSessionBean implements VentaSessionBeanRemote {
         try {
             VentaJpaController ventaJpaController = new VentaJpaController(emf);
             ventaJpaController.edit(venta);
-        } catch (Exception ex) {
+        } catch (NonexistentEntityException ex) {
             Logger.getLogger(VentaSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(VentaSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -48,6 +49,8 @@ public class VentaSessionBean implements VentaSessionBeanRemote {
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(VentaSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(VentaSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

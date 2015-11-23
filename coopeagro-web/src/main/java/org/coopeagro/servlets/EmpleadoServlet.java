@@ -7,19 +7,20 @@
 package org.coopeagro.servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
+import javax.ejb.EJB;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.coopeagro.controladores.EmpleadoJpaController;
 import org.coopeagro.ejb.EmpleadoSessionBeanRemote;
 import org.coopeagro.ejb.UsuarioSessionBeanRemote;
+import org.coopeagro.serviceLocator.CoopeagroServiceLocator;
 
 /**
  *
@@ -27,16 +28,23 @@ import org.coopeagro.ejb.UsuarioSessionBeanRemote;
  */
 public class EmpleadoServlet extends HttpServlet {
 
+    @EJB
     private EmpleadoSessionBeanRemote empleadoBean = null;
+    @EJB
     private UsuarioSessionBeanRemote usuarioBean = null;
 
     public EmpleadoServlet() {
-        try {
-            Context context = new InitialContext();
-            empleadoBean = (EmpleadoSessionBeanRemote) context.lookup("ejb/EmpleadoBean");
-            usuarioBean = (UsuarioSessionBeanRemote) context.lookup("ejb/UsuarioBean");
-        } catch (NamingException ex) {
-            Logger.getLogger(EmpleadoServlet.class.getName()).log(Level.SEVERE, null, ex);
+        Properties props = new Properties();
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("CoopeagroServiceLocator.properties");
+        if (inputStream != null) {
+            try {
+                props.load(inputStream);
+                CoopeagroServiceLocator cesl = new CoopeagroServiceLocator(props);
+                empleadoBean = cesl.<EmpleadoSessionBeanRemote>getEJBInstance("ejb/EmpleadoBean");
+                usuarioBean = cesl.<UsuarioSessionBeanRemote>getEJBInstance("ejb/UsuarioBean");
+            } catch (NamingException | IOException ex) {
+                Logger.getLogger(EmpleadoServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -51,7 +59,7 @@ public class EmpleadoServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        EmpleadoJpaController controller = (EmpleadoJpaController) getServletContext().getAttribute("empleadoJpaController");
+        //EmpleadoJpaController controller = (EmpleadoJpaController) getServletContext().getAttribute("empleadoJpaController");
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */

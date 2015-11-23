@@ -7,20 +7,19 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import org.coopeagro.controladores.PagoCompraJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Compra;
 import org.coopeagro.entidades.PagoCompra;
 import org.coopeagro.excepciones.InexistenteException;
 
-@Stateless
 @EJB(name = "PagoCompraBean", mappedName = "ejb/PagoCompraBean", beanInterface = PagoCompraSessionBeanRemote.class)
+@Stateless
 public class PagoCompraSessionBean implements PagoCompraSessionBeanRemote {
 
-    @PersistenceContext(unitName = "coopeagroPU")
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("coopeagroPU");
+    @PersistenceUnit(unitName = "coopeagroPU")
+    EntityManagerFactory emf;
 
     @Override
     public void create(PagoCompra pagoCompra) {
@@ -33,9 +32,11 @@ public class PagoCompraSessionBean implements PagoCompraSessionBeanRemote {
         try {
             PagoCompraJpaController pagoCompraJpaController = new PagoCompraJpaController(emf);
             pagoCompraJpaController.edit(pagoCompra);
-        } catch (Exception ex) {
+        } catch (NonexistentEntityException ex) {
             Logger.getLogger(PagoCompraSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(PagoCompraSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -47,6 +48,8 @@ public class PagoCompraSessionBean implements PagoCompraSessionBeanRemote {
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(PagoCompraSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(PagoCompraSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

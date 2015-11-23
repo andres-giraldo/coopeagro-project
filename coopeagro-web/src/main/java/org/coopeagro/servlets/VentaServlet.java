@@ -7,24 +7,25 @@
 package org.coopeagro.servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
+import javax.ejb.EJB;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.coopeagro.controladores.VentaJpaController;
 import org.coopeagro.ejb.ClienteSessionBeanRemote;
 import org.coopeagro.ejb.DetalleVentaSessionBeanRemote;
 import org.coopeagro.ejb.EmpleadoSessionBeanRemote;
 import org.coopeagro.ejb.InventarioSessionBeanRemote;
 import org.coopeagro.ejb.ProductoSessionBeanRemote;
 import org.coopeagro.ejb.VentaSessionBeanRemote;
+import org.coopeagro.serviceLocator.CoopeagroServiceLocator;
 
 /**
  *
@@ -33,24 +34,35 @@ import org.coopeagro.ejb.VentaSessionBeanRemote;
 public class VentaServlet extends HttpServlet {
     public static List<Object[]> res = new ArrayList<Object[]>();
     
+    @EJB
     private VentaSessionBeanRemote ventaBean = null;
+    @EJB
     private ClienteSessionBeanRemote clienteBean = null;
+    @EJB
     private EmpleadoSessionBeanRemote empleadoBean = null;
+    @EJB
     private DetalleVentaSessionBeanRemote detalleVentaBean = null;
+    @EJB
     private ProductoSessionBeanRemote productoBean = null;
+    @EJB
     private InventarioSessionBeanRemote inventarioBean = null;
 
     public VentaServlet() {
-        try {
-            Context context = new InitialContext();
-            ventaBean = (VentaSessionBeanRemote) context.lookup("ejb/VentaBean");
-            clienteBean = (ClienteSessionBeanRemote) context.lookup("ejb/ClienteBean");
-            empleadoBean = (EmpleadoSessionBeanRemote) context.lookup("ejb/EmpleadoBean");
-            detalleVentaBean = (DetalleVentaSessionBeanRemote) context.lookup("ejb/DetalleVentaBean");
-            productoBean = (ProductoSessionBeanRemote) context.lookup("ejb/ProductoBean");
-            inventarioBean = (InventarioSessionBeanRemote) context.lookup("ejb/InventarioBean");
-        } catch (NamingException ex) {
-            Logger.getLogger(VentaServlet.class.getName()).log(Level.SEVERE, null, ex);
+        Properties props = new Properties();
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("CoopeagroServiceLocator.properties");
+        if (inputStream != null) {
+            try {
+                props.load(inputStream);
+                CoopeagroServiceLocator cesl = new CoopeagroServiceLocator(props);
+                ventaBean = cesl.<VentaSessionBeanRemote>getEJBInstance("ejb/VentaBean");
+                clienteBean = cesl.<ClienteSessionBeanRemote>getEJBInstance("ejb/ClienteBean");
+                empleadoBean = cesl.<EmpleadoSessionBeanRemote>getEJBInstance("ejb/EmpleadoBean");
+                detalleVentaBean = cesl.<DetalleVentaSessionBeanRemote>getEJBInstance("ejb/DetalleVentaBean");
+                productoBean = cesl.<ProductoSessionBeanRemote>getEJBInstance("ejb/ProductoBean");
+                inventarioBean = cesl.<InventarioSessionBeanRemote>getEJBInstance("ejb/InventarioBean");
+            } catch (NamingException | IOException ex) {
+                Logger.getLogger(VentaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -160,29 +172,29 @@ public class VentaServlet extends HttpServlet {
     }
     
     private long TotalVentasTiempo(String anno, String mes) {
-        VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
-        //long tv = ventaBean.getTotalVentasTiempo(Integer.parseInt(anno), Integer.parseInt(mes));
-        long tv = ventaJpaController.getTotalVentasTiempo(Integer.parseInt(anno), Integer.parseInt(mes));
+        //VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
+        long tv = ventaBean.getTotalVentasTiempo(Integer.parseInt(anno), Integer.parseInt(mes));
+        //long tv = ventaJpaController.getTotalVentasTiempo(Integer.parseInt(anno), Integer.parseInt(mes));
         return tv;
     }
     
     private double PromedioVentas(){
-        VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
-        //double promedio = ventaBean.getPromedioVentas();
-        double promedio = ventaJpaController.getPromedioVentas();
+        //VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
+        double promedio = ventaBean.getPromedioVentas();
+        //double promedio = ventaJpaController.getPromedioVentas();
         return promedio;
     }
     
     private List<Object[]> TotalVentasCliente(){
-        VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
-        //return ventaBean.getTotalVentasCliente();
-        return ventaJpaController.getTotalVentasCliente();
+        //VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
+        return ventaBean.getTotalVentasCliente();
+        //return ventaJpaController.getTotalVentasCliente();
     }
     
     private List<Object[]> TotalVentasEmpleado(){
-        VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
-        //return ventaBean.getTotalVentasEmpleado();
-        return ventaJpaController.getTotalVentasEmpleado();
+        //VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
+        return ventaBean.getTotalVentasEmpleado();
+        //return ventaJpaController.getTotalVentasEmpleado();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

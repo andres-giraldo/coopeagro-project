@@ -1,6 +1,8 @@
 package org.coopeagro.entidades;
 
-public enum UnidadesMedida {
+import java.io.Serializable;
+
+public enum UnidadesMedida implements Serializable{
     KILO("KILO"),
     LIBRA("LIBRA"),
     LITRO("LITRO"),

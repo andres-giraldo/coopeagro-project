@@ -6,20 +6,19 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import org.coopeagro.controladores.ProductoJpaController;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Producto;
 import org.coopeagro.entidades.TiposDocumento;
 import org.coopeagro.excepciones.InexistenteException;
 
-@Stateless
 @EJB(name = "ProductoBean", mappedName = "ejb/ProductoBean", beanInterface = ProductoSessionBeanRemote.class)
+@Stateless
 public class ProductoSessionBean implements ProductoSessionBeanRemote {
 
-    @PersistenceContext(unitName = "coopeagroPU")
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("coopeagroPU");
+    @PersistenceUnit(unitName = "coopeagroPU")
+    EntityManagerFactory emf;
 
     @Override
     public void create(Producto producto) {
@@ -32,9 +31,11 @@ public class ProductoSessionBean implements ProductoSessionBeanRemote {
         try {
             ProductoJpaController productoJpaController = new ProductoJpaController(emf);
             productoJpaController.edit(producto);
-        } catch (Exception ex) {
+        } catch (NonexistentEntityException ex) {
             Logger.getLogger(ProductoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(ProductoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -46,6 +47,8 @@ public class ProductoSessionBean implements ProductoSessionBeanRemote {
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(ProductoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
             throw new InexistenteException(ex.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(ProductoSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

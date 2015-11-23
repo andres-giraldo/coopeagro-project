@@ -7,18 +7,19 @@
 package org.coopeagro.servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.Context;
-import javax.naming.InitialContext;
+import javax.ejb.EJB;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.coopeagro.controladores.ClienteJpaController;
 import org.coopeagro.ejb.ClienteSessionBeanRemote;
+import org.coopeagro.serviceLocator.CoopeagroServiceLocator;
 
 /**
  *
@@ -26,14 +27,20 @@ import org.coopeagro.ejb.ClienteSessionBeanRemote;
  */
 public class ClienteServlet extends HttpServlet {
 
+    @EJB
     private ClienteSessionBeanRemote clienteBean = null;
 
     public ClienteServlet() {
-        try {
-            Context context = new InitialContext();
-            clienteBean = (ClienteSessionBeanRemote) context.lookup("ejb/ClienteBean");
-        } catch (NamingException ex) {
-            Logger.getLogger(ClienteServlet.class.getName()).log(Level.SEVERE, null, ex);
+        Properties props = new Properties();
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("CoopeagroServiceLocator.properties");
+        if (inputStream != null) {
+            try {
+                props.load(inputStream);
+                CoopeagroServiceLocator cesl = new CoopeagroServiceLocator(props);
+                clienteBean = cesl.<ClienteSessionBeanRemote>getEJBInstance("ejb/ClienteBean");
+            } catch (IOException | NamingException ex) {
+                Logger.getLogger(AgricultorServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -48,7 +55,7 @@ public class ClienteServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ClienteJpaController controller = (ClienteJpaController) getServletContext().getAttribute("clienteJpaController");
+        //ClienteJpaController controller = (ClienteJpaController) getServletContext().getAttribute("clienteJpaController");
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
