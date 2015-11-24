@@ -11,6 +11,19 @@
     <head>
         <c:import url="/jsp/general/Head.jsp" />
         <script type="text/javascript" src="js/Compras.js"></script>
+        <script type="text/javascript">
+            function consultarDetalles(id)
+            {
+                document.getElementById("idCompra").value = id;
+                document.formularioCompras.submit();
+            }
+            
+            function cancelar(id)
+            {
+                document.getElementById("idCompra").value = id;
+                document.formularioCompras.submit();
+            }
+        </script>
         <title>Compras</title>
     </head>
     <body>

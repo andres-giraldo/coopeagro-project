@@ -199,6 +199,20 @@ public class CompraServlet extends HttpServlet {
                     break;
                 }
                 break;
+            case "detalles":
+                Compra compra = compraBean.findCompra(Integer.parseInt(id));
+                request.setAttribute("idCompra", compra.getNumeroPedido());
+                request.setAttribute("fecha", sdf.format(compra.getFechaPedido()));
+                request.setAttribute("totalPedido", compra.getTotal());
+                request.setAttribute("agricultor", compra.getAgricultor().getNombre() + " " + compra.getAgricultor().getApellidoUno() + 
+                        " " + compra.getAgricultor().getApellidoDos());
+                request.setAttribute("empleado", compra.getEmpleado().getNombre() + " " + compra.getEmpleado().getApellidoUno() + 
+                        " " + compra.getEmpleado().getApellidoDos());
+                request.setAttribute("detalles", detallesCompra(id));
+                redireccion = "jsp/DetalleCompras.jsp";
+                break;
+            case "regresarCompra":
+                redireccion = "jsp/Compras.jsp";
             default:
                 break;
         }
@@ -417,16 +431,24 @@ public class CompraServlet extends HttpServlet {
         String error = "";
         try {
             Compra compra = compraBean.findCompra(Integer.parseInt(id));
-            compra.setEstado(EstadosPedido.CANCELADO);
-            compraBean.edit(compra);
-            for (DetalleCompra dc : compraBean.getDetalles(compra.getNumeroPedido())) {
-                Inventario inventario = inventarioBean.getMax(dc.getProducto().getId());
-                inventarioBean.create(new Inventario(new Date(), dc.getProducto(), inventario.getCantidadComprometida(), inventario.getCantidadTotal()-dc.getCantidad()));
+            if (!compra.getEstado().getEstadoPedido().equals("CANCELADO")) {
+                compra.setEstado(EstadosPedido.CANCELADO);
+                compraBean.edit(compra);
+                for (DetalleCompra dc : compraBean.getDetalles(compra.getNumeroPedido())) {
+                    Inventario inventario = inventarioBean.getMax(dc.getProducto().getId());
+                    inventarioBean.create(new Inventario(new Date(), dc.getProducto(), inventario.getCantidadComprometida(), inventario.getCantidadTotal()-dc.getCantidad()));
+                }
+            }else{
+               error += "La compra ya se encuentra cancelada"; 
             }
         } catch (Exception ex) {
             error += "La compra no pudo ser cancelada";
         }
         return error;
+    }
+    
+    public List<DetalleCompra> detallesCompra(String id){
+        return compraBean.getDetalles(Integer.parseInt(id));
     }
     
     private void listarCompras(HttpServletResponse response) throws ServletException, IOException {
@@ -458,8 +480,8 @@ public class CompraServlet extends HttpServlet {
                 out.println(    "<td>$"+compra.getTotal()+"</td>");
                 out.println(    "<td>"+compra.getEstado()+"</td>");
                 out.println(    "<td>");
-                out.println(        "<button class=\"btn btn-default\" type=\"button\" onclick=\"consultarDetalles("+compra.getNumeroPedido()+");\">Detalles</button>");
-                out.println(        "<button class=\"btn btn-default\" type=\"button\" onclick=\"cancelarCompra("+compra.getNumeroPedido()+");\">Cancelar</button>");
+                out.println(        "<button class=\"btn btn-default\" type=\"submit\" name=\"accion\" id=\"detalleCompra\" value=\"detalles\" onclick=\"consultarDetalles("+compra.getNumeroPedido()+")\">Detalles</button>");
+                out.println(        "<button class=\"btn btn-default\" type=\"submit\" name=\"accion\" id=\"cancelarCompra\" value=\"cancelar\" onclick=\"cancelar("+compra.getNumeroPedido()+")\">Cancelar</button>");
                 out.println(    "</td>");
                 out.println("</tr>");
             }
