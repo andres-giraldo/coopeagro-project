@@ -248,7 +248,7 @@ public class InventarioServlet extends HttpServlet {
         out.println(            "<th>Producto</th>");
         out.println(            "<th>Comprometida</th>");
         out.println(            "<th>Total</th>");
-        out.println(            "<th>Acciones</th>");
+        //out.println(            "<th>Acciones</th>");
         out.println(        "</tr>");
         out.println(    "</thead>");
         out.println(    "<tbody>");
