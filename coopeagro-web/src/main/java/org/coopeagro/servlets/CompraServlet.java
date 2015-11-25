@@ -208,7 +208,7 @@ public class CompraServlet extends HttpServlet {
                         " " + compra.getAgricultor().getApellidoDos());
                 request.setAttribute("empleado", compra.getEmpleado().getNombre() + " " + compra.getEmpleado().getApellidoUno() + 
                         " " + compra.getEmpleado().getApellidoDos());
-                request.setAttribute("detalles", detallesCompra(id));
+                request.setAttribute("detalles", compraBean.getDetalles(Integer.parseInt(id)));
                 redireccion = "jsp/DetalleCompras.jsp";
                 break;
             case "regresarCompra":
@@ -432,11 +432,15 @@ public class CompraServlet extends HttpServlet {
         try {
             Compra compra = compraBean.findCompra(Integer.parseInt(id));
             if (!compra.getEstado().getEstadoPedido().equals("CANCELADO")) {
-                compra.setEstado(EstadosPedido.CANCELADO);
-                compraBean.edit(compra);
-                for (DetalleCompra dc : compraBean.getDetalles(compra.getNumeroPedido())) {
-                    Inventario inventario = inventarioBean.getMax(dc.getProducto().getId());
-                    inventarioBean.create(new Inventario(new Date(), dc.getProducto(), inventario.getCantidadComprometida(), inventario.getCantidadTotal()-dc.getCantidad()));
+                if (compraBean.pagosCompra(Integer.parseInt(id)) == 0) {
+                    compra.setEstado(EstadosPedido.CANCELADO);
+                    compraBean.edit(compra);
+                    for (DetalleCompra dc : compraBean.getDetalles(compra.getNumeroPedido())) {
+                        Inventario inventario = inventarioBean.getMax(dc.getProducto().getId());
+                        inventarioBean.create(new Inventario(new Date(), dc.getProducto(), inventario.getCantidadComprometida(), inventario.getCantidadTotal()-dc.getCantidad()));
+                    }
+                }else{
+                   error += "La compra ya se encuentra paga"; 
                 }
             }else{
                error += "La compra ya se encuentra cancelada"; 
@@ -445,10 +449,6 @@ public class CompraServlet extends HttpServlet {
             error += "La compra no pudo ser cancelada";
         }
         return error;
-    }
-    
-    public List<DetalleCompra> detallesCompra(String id){
-        return compraBean.getDetalles(Integer.parseInt(id));
     }
     
     private void listarCompras(HttpServletResponse response) throws ServletException, IOException {

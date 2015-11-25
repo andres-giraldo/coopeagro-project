@@ -20,14 +20,14 @@ jQuery(document).ready(function($) {
     });
 });
 
-function limpiarDatos(){
-    $('#idInventario').val('');
-    $('#fecha').val('');
-    $('#producto').val('');
-    $('#cantidadComprometida').val('');
-    $('#cantidadTotal').val('');
-    $('#disponibilidad').val('');
-}
+//function limpiarDatos(){
+//    $('#idInventario').val('');
+//    $('#fecha').val('');
+//    $('#producto').val('');
+//    $('#cantidadComprometida').val('');
+//    $('#cantidadTotal').val('');
+//    $('#disponibilidad').val('');
+//}
 
 function consultarInventario(id){
     $.ajax({

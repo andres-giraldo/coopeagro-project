@@ -35,7 +35,7 @@ import org.json.simple.JSONObject;
  * @author YEISSON
  */
 public class InventarioServlet extends HttpServlet {
-    
+    private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
     @EJB
     private InventarioSessionBeanRemote inventarioBean = null;
     @EJB
@@ -85,7 +85,7 @@ public class InventarioServlet extends HttpServlet {
         String idProducto = request.getParameter("producto");
         String cantidadComprometida = request.getParameter("cantidadComprometida");
         String cantidadTotal = request.getParameter("cantidadTotal");
-        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
+        //SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
         Date fechaInventario = null;
         double disponibilidad = 0;
         
@@ -94,7 +94,7 @@ public class InventarioServlet extends HttpServlet {
                 mensajeAlerta = validarDatos(fecha, idProducto, cantidadComprometida, cantidadTotal);
                 if (mensajeAlerta.isEmpty()) {
                     try {
-                        fechaInventario = formatoDelTexto.parse(fecha);
+                        fechaInventario = sdf.parse(fecha);
                     } catch (ParseException ex) {
                         Logger.getLogger(AgricultorServlet.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -150,6 +150,7 @@ public class InventarioServlet extends HttpServlet {
         }
         
         if (!accion.equals("consultar") && !accion.equals("listar") && !accion.equals("cantidadTotal")) {
+            request.setAttribute("fecha", sdf.format(new Date()));
             request.setAttribute("productos", obtenerProductos());
             request.setAttribute("mensajeExito", mensajeExito);
             request.setAttribute("mensajeError", mensajeError);
@@ -217,7 +218,7 @@ public class InventarioServlet extends HttpServlet {
         JSONObject jsonInventario = new JSONObject();
         //InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
         Inventario inventario;
-        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
+        //SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
         try {
             inventario = inventarioBean.findInventario(Integer.valueOf(id));
             //inventario = inventarioJpaController.findInventario(Integer.valueOf(id));
@@ -226,7 +227,7 @@ public class InventarioServlet extends HttpServlet {
         }
         if (inventario != null) {
             jsonInventario.put("id", inventario.getId());
-            jsonInventario.put("fecha", formatoDelTexto.format(inventario.getFecha()));
+            jsonInventario.put("fecha", sdf.format(inventario.getFecha()));
             jsonInventario.put("producto", inventario.getProducto().getId());
             jsonInventario.put("cantidadComprometida", inventario.getCantidadComprometida());
             jsonInventario.put("cantidadTotal", inventario.getCantidadTotal());
@@ -238,7 +239,7 @@ public class InventarioServlet extends HttpServlet {
         //InventarioJpaController inventarioJpaController = (InventarioJpaController) getServletContext().getAttribute("inventarioJpaController");
         List<Inventario> listaInventarios = inventarioBean.findInventarioEntities(10, 0);
         //List<Inventario> listaInventarios = inventarioJpaController.findInventarioEntities(10, 0); 
-        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
+        //SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
         PrintWriter out = response.getWriter();
         out.println("<table class=\"table table-striped table-hover table-condensed bordo-tablas\">");
         out.println(    "<thead>");
@@ -256,7 +257,7 @@ public class InventarioServlet extends HttpServlet {
             for (Inventario inventario : listaInventarios) {
                 out.println("<tr>");			
                 out.println(    "<td>"+inventario.getId()+"</td>");
-                out.println(    "<td>"+formatoDelTexto.format(inventario.getFecha())+"</td>");
+                out.println(    "<td>"+sdf.format(inventario.getFecha())+"</td>");
                 out.println(    "<td>"+inventario.getProducto().getNombre()+"</td>");
                 out.println(    "<td>"+inventario.getCantidadComprometida()+" "+inventario.getProducto().getUnidadMedida()+"</td>");
                 out.println(    "<td>"+inventario.getCantidadTotal()+" "+inventario.getProducto().getUnidadMedida()+"</td>");

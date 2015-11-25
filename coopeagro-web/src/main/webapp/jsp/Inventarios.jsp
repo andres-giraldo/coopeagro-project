@@ -31,12 +31,7 @@
                             <input type="hidden" id="idInventario" name="idInventario" value="${idInventario}"/>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
                                 <label for="fecha">* Fecha:</label> 
-                                <input class="form-control" type="text" id="fecha" name="fecha" value="${fecha}"/>
-                                <script type="text/javascript">
-                                    $(function() {
-                                        $('#fecha').datetimepicker({format: 'dd/mm/yyyy', language:'es', weekStart:true, todayBtn:true, autoclose:true, todayHighlight:true, startView:2, minView:2});
-                                    });
-                                </script>
+                                <input class="form-control" type="text" id="fecha" name="fecha" readonly="true" value="${fecha}"/>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
                                 <label for="producto">* Producto:</label> 
@@ -71,7 +66,7 @@
                             <button class="btn btn-default" type="button" name="accion" id="consultar" value="listar" onclick="listarDatos();">Listar</button>
                             <button class="btn btn-default" type="submit" name="accion" id="guardar" value="guardar">Guardar</button>
                             <button class="btn btn-default" type="submit" name="accion" id="disponibilidadProducto" value="disponibilidad">Disponibilidad</button>
-                            <button class="btn btn-default" type="button" name="accion" id="limpiar" value="limpiar" onclick="limpiarDatos();">Limpiar</button>
+                            <button class="btn btn-default" type="button" name="accion" id="limpiar" value="limpiar" onclick="limpiarDatos()">Limpiar</button>
                         </div>
                         <div id="tablaInventarios"></div>
                     </form>
@@ -79,4 +74,20 @@
             </div>
         </div>
     </body>
+    <script type="text/javascript">
+        var f = new Date();
+        var factual = f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear() + " " + f.getHours() + ":" + f.getMinutes();
+        document.getElementById("fecha").value = factual;
+        
+        function limpiarDatos(){
+            var f = new Date();
+            var factual = f.getDate() + "/" + (f.getMonth() +1) + "/" + f.getFullYear() + " " + f.getHours() + ":" + f.getMinutes();
+            document.getElementById("fecha").value = factual;
+            document.getElementById("idInventario").value = "";
+            document.getElementById("producto").value = "";
+            document.getElementById("cantidadComprometida").value = "";
+            document.getElementById("cantidadTotal").value = "";
+            document.getElementById("disponibilidad").value = "";
+        }
+    </script>
 </html>

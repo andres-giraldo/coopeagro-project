@@ -133,4 +133,10 @@ public class CompraSessionBean implements CompraSessionBeanRemote {
         CompraJpaController compraJpaController = new CompraJpaController(emf);
         return compraJpaController.getDetalles(compra);
     }
+
+    @Override
+    public long pagosCompra(int compra) {
+        CompraJpaController compraJpaController = new CompraJpaController(emf);
+        return compraJpaController.pagosCompra(compra);
+    }
 }

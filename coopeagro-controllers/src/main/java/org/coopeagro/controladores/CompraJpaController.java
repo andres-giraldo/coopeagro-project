@@ -23,6 +23,7 @@ import org.coopeagro.entidades.Agricultor;
 import org.coopeagro.entidades.Compra;
 import org.coopeagro.entidades.DetalleCompra;
 import org.coopeagro.entidades.Empleado;
+import org.coopeagro.entidades.PagoCompra;
 
 /**
  *
@@ -265,5 +266,33 @@ public class CompraJpaController implements Serializable {
             q.setParameter("compra", compra);
         }
         return q.getResultList();
+    }
+    
+    public long pagosCompra(int compra){
+        long pagos;
+        EntityManager em = getEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<PagoCompra> pc = cq.from(PagoCompra.class);
+        cq.select(cb.countDistinct(pc));
+        Predicate criteria = cb.conjunction();
+        cq.where(cb.and(criteria));
+        if (compra != 0) {
+            ParameterExpression<Integer> compraParameter = cb.parameter(Integer.class, "compra");
+            criteria = cb.and(criteria, cb.equal(pc.get("compra").get("numeroPedido"), compraParameter));
+        }
+        if (!criteria.getExpressions().isEmpty()) {
+            cq.where(cb.and(criteria));
+        }
+        Query q = em.createQuery(cq);
+        if (compra != 0) {
+            q.setParameter("compra", compra);
+        }
+        if (!q.getResultList().isEmpty()) {
+            pagos = (Long)q.getSingleResult();
+        }else{
+            pagos = 0;
+        }
+        return pagos;
     }
 }
