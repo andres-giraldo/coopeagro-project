@@ -34,7 +34,7 @@ public class Inventario implements Serializable{
     @Column(name="DNI")
     private Integer id;
     @Basic(optional = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="FEFECHA")
     private Date fecha;
     @ManyToOne

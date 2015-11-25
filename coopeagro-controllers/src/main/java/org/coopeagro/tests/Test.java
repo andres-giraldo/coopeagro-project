@@ -7,14 +7,18 @@
 package org.coopeagro.tests;
 
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import org.coopeagro.controladores.CompraJpaController;
 import org.coopeagro.controladores.InventarioJpaController;
 import org.coopeagro.controladores.ProductoJpaController;
+import org.coopeagro.controladores.UsuarioJpaController;
 import org.coopeagro.controladores.VentaJpaController;
 import org.coopeagro.entidades.DetalleCompra;
-import org.coopeagro.entidades.TiposDocumento;
+import org.coopeagro.entidades.Perfiles;
+import org.coopeagro.entidades.Usuario;
 
 /**
  *
@@ -24,9 +28,16 @@ public class Test {
     public static void main(String[] args) {
         
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("coopeagroPU");
-        ProductoJpaController productoJpaController = new ProductoJpaController(emf);
+        /*ProductoJpaController productoJpaController = new ProductoJpaController(emf);
         for (Object[] pa : productoJpaController.getProductsAgricultor("2000", TiposDocumento.CC)) {
             System.out.println(pa[1]);
+        }*/
+        
+        UsuarioJpaController usuarioJpaController = new UsuarioJpaController(emf);
+        try {
+            usuarioJpaController.create(new Usuario("admin", "123", Perfiles.ADMINISTRADOR));
+        } catch (Exception ex) {
+            Logger.getLogger(Test.class.getName()).log(Level.SEVERE, null, ex);
         }
             
         CompraJpaController compraJpaController = new CompraJpaController(emf);
@@ -48,14 +59,14 @@ public class Test {
         }
         
         //VentaJpaController ventaJpaController = new VentaJpaController(emf);
-        for (Object[] tve : ventaJpaController.getTotalVentasEmpleado()) {
+        /*for (Object[] tve : ventaJpaController.getTotalVentasEmpleado()) {
             System.out.println("Ventas x empleado"+tve[0]);
             System.out.println("Ventas x empleado"+tve[1]);
             System.out.println("Ventas x empleado"+tve[2]);
             System.out.println("Ventas x empleado"+tve[3]);
             System.out.println("Ventas x empleado"+tve[4]);
             System.out.println("Ventas x empleado"+tve[5]);
-        }
+        }*/
         
         InventarioJpaController inventarioJpaController = new InventarioJpaController(emf);
         double dp = inventarioJpaController.getDisponibilidad(1);

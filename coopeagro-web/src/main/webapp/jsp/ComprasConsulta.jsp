@@ -64,8 +64,11 @@
                                 <input class="form-control" type="text" id="total" name="total" value="${total}" readonly="true"/>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
-                                <label for="promedio">$ Promedio:</label> 
-                                <input class="form-control" type="text" id="promedio" name="promedio" value="${promedio}" readonly="true"/>
+                                <label for="promedio">Promedio:</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input class="form-control" type="text" id="promedio" name="promedio" value="${promedio}" readonly="true"/>
+                                </div>
                             </div>
                         </div>
                         <div class="row form-group" align="center">

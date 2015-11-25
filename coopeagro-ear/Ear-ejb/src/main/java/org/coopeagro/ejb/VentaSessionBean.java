@@ -104,11 +104,11 @@ public class VentaSessionBean implements VentaSessionBeanRemote {
         return ventaJpaController.getTotalVentasCliente();
     }
 
-    @Override
+    /*@Override
     public List<Object[]> getTotalVentasEmpleado() {
         VentaJpaController ventaJpaController = new VentaJpaController(emf);
         return ventaJpaController.getTotalVentasEmpleado();
-    }
+    }*/
 
     @Override
     public double getPromedioVentas() {

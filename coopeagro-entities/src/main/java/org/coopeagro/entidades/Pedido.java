@@ -6,9 +6,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -16,15 +13,9 @@ import javax.persistence.TemporalType;
 @MappedSuperclass
 public class Pedido implements Serializable{
     @Basic(optional = false)
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name="FEFECHAPEDIDO")
     private Date fechaPedido;
-    @ManyToOne
-    @JoinColumns({
-        @JoinColumn(name = "DNI_EMPLEADO", referencedColumnName = "DNI", nullable = false),
-        @JoinColumn(name = "DSTIPODOCUMENTO_EMPLEADO", referencedColumnName = "DSTIPODOCUMENTO", nullable = false)
-    })
-    private Empleado empleado;
     @Basic(optional = false)
     @Enumerated(EnumType.STRING)
     @Column(name="DSESTADO")
@@ -33,13 +24,11 @@ public class Pedido implements Serializable{
     private Double total;
     
     public Pedido(){
-        this.empleado = new Empleado();
         this.total = 0.0;
     }
 
-    public Pedido(Date fechaPedido, Empleado empleado, EstadosPedido estado, Double total) {
+    public Pedido(Date fechaPedido, EstadosPedido estado, Double total) {
         this.fechaPedido = fechaPedido;
-        this.empleado = empleado;
         this.estado = estado;
         this.total = total;
     }
@@ -60,14 +49,6 @@ public class Pedido implements Serializable{
         this.total = total;
     }
 
-    public Empleado getEmpleado() {
-        return empleado;
-    }
-
-    public void setEmpleado(Empleado empleado) {
-        this.empleado = empleado;
-    }
-
     public EstadosPedido getEstado() {
         return estado;
     }
@@ -78,6 +59,6 @@ public class Pedido implements Serializable{
 
     @Override
     public String toString() {
-        return "Pedido{fechaPedido=" + fechaPedido + ", empleado=" + empleado + ", estado=" + estado + ", total=" + total + '}';
+        return "Pedido{fechaPedido=" + fechaPedido + ", estado=" + estado + ", total=" + total + '}';
     }
 }

@@ -201,7 +201,11 @@ public class CompraJpaController implements Serializable {
             q = em.createQuery("select COUNT(c.numeroPedido) from Compra c where EXTRACT(MONTH from c.fechaPedido) = :mesPedido");
             q.setParameter("mesPedido", mes);
         }
-        count = (Long) q.getSingleResult();
+        if (!q.getResultList().isEmpty()) {
+            count = (Long)q.getSingleResult();
+        }else{
+            count = 0;
+        }
         return count;
     }
     

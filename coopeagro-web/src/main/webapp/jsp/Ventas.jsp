@@ -71,7 +71,7 @@
                         <div class="row form-group" align="center">
                             <button class="btn btn-default" type="submit" name="accion" id="totalVentas" value="total">Total</button>
                             <button class="btn btn-default" type="submit" name="accion" id="promedioVentas" value="promedio">Promedio</button>
-                            <button class="btn btn-default" type="submit" name="accion" id="filtrarEmpleado" value="empleado">Empleado</button>
+                            <!--<button class="btn btn-default" type="submit" name="accion" id="filtrarEmpleado" value="empleado">Empleado</button>-->
                             <button class="btn btn-default" type="submit" name="accion" id="filtrarCliente" value="cliente">Cliente</button>
                             <button class="btn btn-default" type="submit" name="accion" id="limpiar" value="limpiar">Limpiar</button>
                         </div>

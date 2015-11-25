@@ -244,7 +244,6 @@ public class InventarioServlet extends HttpServlet {
         out.println("<table class=\"table table-striped table-hover table-condensed bordo-tablas\">");
         out.println(    "<thead>");
         out.println(        "<tr>");
-        out.println(            "<th>Id</th>");
         out.println(            "<th>Fecha</th>");
         out.println(            "<th>Producto</th>");
         out.println(            "<th>Comprometida</th>");
@@ -256,14 +255,13 @@ public class InventarioServlet extends HttpServlet {
         if(listaInventarios != null && !listaInventarios.isEmpty()){
             for (Inventario inventario : listaInventarios) {
                 out.println("<tr>");			
-                out.println(    "<td>"+inventario.getId()+"</td>");
                 out.println(    "<td>"+sdf.format(inventario.getFecha())+"</td>");
                 out.println(    "<td>"+inventario.getProducto().getNombre()+"</td>");
                 out.println(    "<td>"+inventario.getCantidadComprometida()+" "+inventario.getProducto().getUnidadMedida()+"</td>");
                 out.println(    "<td>"+inventario.getCantidadTotal()+" "+inventario.getProducto().getUnidadMedida()+"</td>");
                 out.println(    "<td>");
-                out.println(        "<button class=\"btn btn-default\" type=\"button\" onclick=\"consultarInventario("+inventario.getId()+");\">Editar</button>");
-                out.println(        "<button class=\"btn btn-default\" type=\"button\" data-toggle=\"modal\" data-target=\"#confirmationMessage\" onclick=\"jQuery('#idInventario').val('"+inventario.getId()+"');\">Eliminar</button>");
+                //out.println(        "<button class=\"btn btn-default\" type=\"button\" onclick=\"consultarInventario("+inventario.getId()+");\">Editar</button>");
+                //out.println(        "<button class=\"btn btn-default\" type=\"button\" data-toggle=\"modal\" data-target=\"#confirmationMessage\" onclick=\"jQuery('#idInventario').val('"+inventario.getId()+"');\">Eliminar</button>");
                 out.println(    "</td>");
                 out.println("</tr>");
             }

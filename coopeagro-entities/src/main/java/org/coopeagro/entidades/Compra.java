@@ -33,6 +33,12 @@ public class Compra extends Pedido implements Serializable{
     private Integer numeroPedido;
     @ManyToOne
     @JoinColumns({
+        @JoinColumn(name = "DNI_EMPLEADO", referencedColumnName = "DNI", nullable = false),
+        @JoinColumn(name = "DSTIPODOCUMENTO_EMPLEADO", referencedColumnName = "DSTIPODOCUMENTO", nullable = false)
+    })
+    private Empleado empleado;
+    @ManyToOne
+    @JoinColumns({
         @JoinColumn(name = "DNI_AGRICULTOR", referencedColumnName = "DNI", nullable = false),
         @JoinColumn(name = "DSTIPODOCUMENTO_AGRICULTOR", referencedColumnName = "DSTIPODOCUMENTO", nullable = false)
     })
@@ -43,7 +49,8 @@ public class Compra extends Pedido implements Serializable{
     }
 
     public Compra(Agricultor proveedor, Date fechaPedido, Empleado empleado, EstadosPedido estado, Double total) {
-        super(fechaPedido, empleado, estado, total);
+        super(fechaPedido, estado, total);
+        this.empleado = empleado;
         this.agricultor = proveedor;
     }
 
@@ -61,6 +68,14 @@ public class Compra extends Pedido implements Serializable{
 
     public void setAgricultor(Agricultor agricultor) {
         this.agricultor = agricultor;
+    }
+    
+    public Empleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
     }
 
     @Override

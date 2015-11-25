@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.coopeagro.ejb.ClienteSessionBeanRemote;
 import org.coopeagro.ejb.DetalleVentaSessionBeanRemote;
-import org.coopeagro.ejb.EmpleadoSessionBeanRemote;
 import org.coopeagro.ejb.InventarioSessionBeanRemote;
 import org.coopeagro.ejb.ProductoSessionBeanRemote;
 import org.coopeagro.ejb.VentaSessionBeanRemote;
@@ -38,8 +37,8 @@ public class VentaServlet extends HttpServlet {
     private VentaSessionBeanRemote ventaBean = null;
     @EJB
     private ClienteSessionBeanRemote clienteBean = null;
-    @EJB
-    private EmpleadoSessionBeanRemote empleadoBean = null;
+    /*@EJB
+    private EmpleadoSessionBeanRemote empleadoBean = null;*/
     @EJB
     private DetalleVentaSessionBeanRemote detalleVentaBean = null;
     @EJB
@@ -56,7 +55,7 @@ public class VentaServlet extends HttpServlet {
                 CoopeagroServiceLocator cesl = new CoopeagroServiceLocator(props);
                 ventaBean = cesl.<VentaSessionBeanRemote>getEJBInstance("ejb/VentaBean");
                 clienteBean = cesl.<ClienteSessionBeanRemote>getEJBInstance("ejb/ClienteBean");
-                empleadoBean = cesl.<EmpleadoSessionBeanRemote>getEJBInstance("ejb/EmpleadoBean");
+                //empleadoBean = cesl.<EmpleadoSessionBeanRemote>getEJBInstance("ejb/EmpleadoBean");
                 detalleVentaBean = cesl.<DetalleVentaSessionBeanRemote>getEJBInstance("ejb/DetalleVentaBean");
                 productoBean = cesl.<ProductoSessionBeanRemote>getEJBInstance("ejb/ProductoBean");
                 inventarioBean = cesl.<InventarioSessionBeanRemote>getEJBInstance("ejb/InventarioBean");
@@ -114,11 +113,11 @@ public class VentaServlet extends HttpServlet {
                     }
                 }
                 break;
-            case "empleado":
+            /*case "empleado":
                 //listarResultados(response, accion);
                 res = TotalVentasEmpleado();
                 //request.setAttribute("resultados", TotalVentasEmpleado());
-                break;
+                break;*/
             case "cliente":
                 //listarResultados(response, accion);
                 res = TotalVentasCliente();
@@ -191,11 +190,11 @@ public class VentaServlet extends HttpServlet {
         //return ventaJpaController.getTotalVentasCliente();
     }
     
-    private List<Object[]> TotalVentasEmpleado(){
+    /*private List<Object[]> TotalVentasEmpleado(){
         //VentaJpaController ventaJpaController = (VentaJpaController) getServletContext().getAttribute("ventaJpaController");
         return ventaBean.getTotalVentasEmpleado();
         //return ventaJpaController.getTotalVentasEmpleado();
-    }
+    }*/
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

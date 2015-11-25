@@ -24,7 +24,7 @@ public interface VentaSessionBeanRemote {
 
     List<Object[]> getTotalVentasCliente();
 
-    List<Object[]> getTotalVentasEmpleado();
+    //List<Object[]> getTotalVentasEmpleado();
 
     double getPromedioVentas();
 

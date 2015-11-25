@@ -455,7 +455,7 @@ public class CompraServlet extends HttpServlet {
         //ProductoJpaController productoJpaController = (ProductoJpaController) getServletContext().getAttribute("productoJpaController");
         List<Compra> listaCompras = compraBean.findCompraEntities(10, 0);
         //List<Producto> listaProductos = productoJpaController.findProductoEntities(10, 0);
-        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
+        //SimpleDateFormat formatoDelTexto = new SimpleDateFormat("dd/MM/yyyy");
         PrintWriter out = response.getWriter();
         out.println("<table class=\"table table-striped table-hover table-condensed bordo-tablas\">");
         out.println(    "<thead>");
@@ -472,7 +472,7 @@ public class CompraServlet extends HttpServlet {
         if(listaCompras != null && !listaCompras.isEmpty()){
             for (Compra compra : listaCompras) {
                 out.println("<tr>");			
-                out.println(    "<td>"+formatoDelTexto.format(compra.getFechaPedido())+"</td>");
+                out.println(    "<td>"+sdf.format(compra.getFechaPedido())+"</td>");
                 out.println(    "<td>"+compra.getAgricultor().getLlavePrimaria().getDocumento()+" - "+
                         compra.getAgricultor().getLlavePrimaria().getTipoDocumento().getTipoDocumento()+"</td>");
                 out.println(    "<td>"+compra.getEmpleado().getLlavePrimaria().getDocumento()+" - "+

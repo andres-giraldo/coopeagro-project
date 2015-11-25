@@ -200,7 +200,11 @@ public class VentaJpaController implements Serializable {
             q = em.createQuery("select COUNT(v.numeroPedido) from Venta v where EXTRACT(MONTH from v.fechaPedido) = :mesPedido");
             q.setParameter("mesPedido", mes);
         }
-        count = (Long) q.getSingleResult();
+        if (!q.getResultList().isEmpty()) {
+            count = (Long)q.getSingleResult();
+        }else{
+            count = 0;
+        }
         return count;
     }
     
@@ -210,11 +214,11 @@ public class VentaJpaController implements Serializable {
         return q.getResultList();
     }
     
-    public List<Object[]> getTotalVentasEmpleado(){
+    /*public List<Object[]> getTotalVentasEmpleado(){
         EntityManager em = getEntityManager();
         Query q = em.createQuery("select e.llavePrimaria.documento, e.llavePrimaria.tipoDocumento, e.nombre, e.apellidoUno, e.apellidoDos, COUNT(v.numeroPedido) from Venta v JOIN v.empleado e GROUP BY e");
         return q.getResultList();
-    }
+    }*/
     
     public double getPromedioVentas(){
         double promedio;
