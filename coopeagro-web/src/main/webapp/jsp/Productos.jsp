@@ -48,8 +48,11 @@
                                 </select>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
-                                <label for="valor">* Precio de venta:</label> 
-                                <input class="form-control" type="text" id="valor" name="valor" value="${valor}" />
+                                <label for="valor">* Precio de venta:</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input class="form-control" type="text" id="valor" name="valor" value="${valor}" />
+                                </div>
                             </div>
                         </div>
                         <div class="row form-group" align="center">
