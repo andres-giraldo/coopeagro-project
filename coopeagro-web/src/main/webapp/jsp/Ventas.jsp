@@ -71,7 +71,7 @@
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 form-group">
                                 <label for="cliente">* Cliente:</label> 
-                                <input class="form-control" type="text" id="agricultor" name="cliente" value="${cliente}" />
+                                <input class="form-control" type="text" id="cliente" name="cliente" value="${cliente}" />
                                 <input class="form-control" type="hidden" id="idCliente" name="idCliente" value="${idCliente}" />
                             </div>
                         </div>

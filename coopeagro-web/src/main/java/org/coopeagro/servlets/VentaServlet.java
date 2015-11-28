@@ -221,7 +221,7 @@ public class VentaServlet extends HttpServlet {
             default:
                 break;
         }
-        if (!accion.equals("completarAgricultor") && !accion.equals("completarEmpleado") && !accion.equals("completarProducto") && !accion.equals("listar")) {
+        if (!accion.equals("completarCliente") && !accion.equals("completarProducto") && !accion.equals("listar")) {
             request.setAttribute("mensajeError", mensajeError);
             request.setAttribute("mensajeExito", mensajeExito);
             request.setAttribute("mensajeAlerta", mensajeAlerta);
