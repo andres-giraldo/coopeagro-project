@@ -14,10 +14,10 @@ import javax.jms.MessageListener;
  *
  * @author YEISSON
  */
-@MessageDriven(mappedName = "jms/CoopeagroQueue", activationConfig = {
-    @ActivationConfigProperty(propertyName = "connectionFactoryJndiName",propertyValue = "jms/CoopeagroQueue"),
-    @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")
-})
+//@MessageDriven(mappedName = "jms/CoopeagroQueue", activationConfig = {
+//    @ActivationConfigProperty(propertyName = "connectionFactoryJndiName",propertyValue = "jms/CoopeagroQueue"),
+//    @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")
+//})
 public class AgricultorMDB implements MessageListener{
 
     public void onMessage(Message msg) {
