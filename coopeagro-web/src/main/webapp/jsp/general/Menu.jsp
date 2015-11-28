@@ -18,7 +18,7 @@
             <ul class="hidden-xs nav nav-pills nav-stacked">
                 <li><a href="#">Inicio</a></li>
                 <li><a href="Agricultor">Agricultores</a></li>
-                <li><a href="#">Empleados</a></li>
+                <!--<li><a href="#">Empleados</a></li>-->
                 <li><a href="Producto">Productos</a></li>
                 <li><a href="Inventario">Inventario</a></li>
                 <li><a href="Compra">Informe compras</a></li>
@@ -27,7 +27,7 @@
             <ul class="hidden-sm hidden-md hidden-lg nav nav-pills">
                 <li><a href="#">Inicio</a></li>
                 <li><a href="Agricultor">Agricultores</a></li>
-                <li><a href="#">Empleados</a></li>
+                <!--<li><a href="#">Empleados</a></li>-->
                 <li><a href="Producto">Productos</a></li>
                 <li><a href="Inventario">Inventario</a></li>
                 <li><a href="Compra">Informe compras</a></li>

@@ -28,5 +28,7 @@ public interface ClienteSessionBeanRemote {
     Cliente findCliente(PersonaPK id);
 
     List<Cliente> findClienteEntities(int maxResults, int firstResult);
+
+    List<Cliente> completarCliente(String parametro);
     
 }

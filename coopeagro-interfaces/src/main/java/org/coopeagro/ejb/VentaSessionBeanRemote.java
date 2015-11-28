@@ -45,5 +45,7 @@ public interface VentaSessionBeanRemote {
     Venta getMaxOrder();
 
     List<DetalleVenta> getDetalles(int venta);
+
+    long pagosVenta(int venta);
     
 }

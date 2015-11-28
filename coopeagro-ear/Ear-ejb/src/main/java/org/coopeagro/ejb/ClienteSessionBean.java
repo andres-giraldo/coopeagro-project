@@ -72,4 +72,10 @@ public class ClienteSessionBean implements ClienteSessionBeanRemote {
         ClienteJpaController clienteJpaController = new ClienteJpaController(emf);
         return clienteJpaController.findClienteEntities(maxResults, firstResult);
     }
+
+    @Override
+    public List<Cliente> completarCliente(String parametro) {
+        ClienteJpaController clienteJpaController = new ClienteJpaController(emf);
+        return clienteJpaController.completarCliente(parametro);
+    }
 }

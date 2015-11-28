@@ -22,6 +22,8 @@ import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.entidades.Cliente;
 import org.coopeagro.entidades.DetalleVenta;
 import org.coopeagro.entidades.Empleado;
+import org.coopeagro.entidades.PagoCompra;
+import org.coopeagro.entidades.PagoVenta;
 import org.coopeagro.entidades.Venta;
 
 /**
@@ -269,5 +271,33 @@ public class VentaJpaController implements Serializable {
             q.setParameter("venta", venta);
         }
         return q.getResultList();
+    }
+    
+    public long pagosVenta(int venta){
+        long pagos;
+        EntityManager em = getEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<PagoVenta> pc = cq.from(PagoVenta.class);
+        cq.select(cb.countDistinct(pc));
+        Predicate criteria = cb.conjunction();
+        cq.where(cb.and(criteria));
+        if (venta != 0) {
+            ParameterExpression<Integer> compraParameter = cb.parameter(Integer.class, "venta");
+            criteria = cb.and(criteria, cb.equal(pc.get("venta").get("numeroPedido"), compraParameter));
+        }
+        if (!criteria.getExpressions().isEmpty()) {
+            cq.where(cb.and(criteria));
+        }
+        Query q = em.createQuery(cq);
+        if (venta != 0) {
+            q.setParameter("venta", venta);
+        }
+        if (!q.getResultList().isEmpty()) {
+            pagos = (Long)q.getSingleResult();
+        }else{
+            pagos = 0;
+        }
+        return pagos;
     }
 }

@@ -128,4 +128,10 @@ public class VentaSessionBean implements VentaSessionBeanRemote {
         VentaJpaController ventaJpaController = new VentaJpaController(emf);
         return ventaJpaController.getDetalles(venta);
     }
+
+    @Override
+    public long pagosVenta(int venta) {
+        VentaJpaController ventaJpaController = new VentaJpaController(emf);
+        return ventaJpaController.pagosVenta(venta);
+    }
 }

@@ -12,10 +12,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Root;
 import org.coopeagro.controladores.exceptions.NonexistentEntityException;
 import org.coopeagro.controladores.exceptions.PreexistingEntityException;
+import org.coopeagro.entidades.Agricultor;
 import org.coopeagro.entidades.Cliente;
 import org.coopeagro.entidades.PersonaPK;
 
@@ -146,4 +149,28 @@ public class ClienteJpaController implements Serializable {
         }
     }
     
+    public List<Cliente> completarCliente(String parametro) {
+        EntityManager em = getEntityManager();
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Cliente> cq = cb.createQuery(Cliente.class);
+            Root<Cliente> aw = cq.from(Cliente.class);
+            cq.select(aw);
+            Expression<String> nombre = cb.concat(aw.<String>get("nombre"), " ");
+            Expression<String> apellidoUno = cb.concat(aw.<String>get("apellidoUno"), " ");
+            if (parametro != null && !parametro.isEmpty()) {
+                cq.where(cb.or(
+                        cb.like(cb.lower(aw.get("llavePrimaria").<String>get("documento")), "%" + parametro.toLowerCase() + "%"),
+                        cb.like(cb.lower(cb.concat(nombre, cb.concat(apellidoUno, aw.<String>get("apellidoDos")))), "%" + parametro.toLowerCase() + "%")
+                ));
+            }
+            Query query = em.createQuery(cq);
+            query.setMaxResults(10);
+            return query.getResultList();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 }
