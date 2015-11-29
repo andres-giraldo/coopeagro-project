@@ -28,12 +28,8 @@ import org.coopeagro.ejb.DetalleVentaSessionBeanRemote;
 import org.coopeagro.ejb.InventarioSessionBeanRemote;
 import org.coopeagro.ejb.ProductoSessionBeanRemote;
 import org.coopeagro.ejb.VentaSessionBeanRemote;
-import org.coopeagro.entidades.Agricultor;
 import org.coopeagro.entidades.Cliente;
-import org.coopeagro.entidades.Compra;
-import org.coopeagro.entidades.DetalleCompra;
 import org.coopeagro.entidades.DetalleVenta;
-import org.coopeagro.entidades.Empleado;
 import org.coopeagro.entidades.EstadosPedido;
 import org.coopeagro.entidades.Inventario;
 import org.coopeagro.entidades.PersonaPK;
@@ -183,7 +179,7 @@ public class VentaServlet extends HttpServlet {
                 response.getWriter().write(array.toJSONString());
                 break;
             case "guardarVenta":
-                mensajeAlerta = validarGuardado(fecha, fechaEntrega, idCliente, idProductos, direccion, remitente);
+                mensajeAlerta = validarGuardado(fecha, fechaEntrega, idCliente, idProductos, direccion, remitente, cantidades);
                 if (mensajeAlerta.isEmpty()) {
                     mensajeError = guardarVenta(fecha, fechaEntrega, idCliente, idProductos, valores, cantidades, direccion, remitente);
                     if(mensajeError.isEmpty()){
@@ -192,6 +188,9 @@ public class VentaServlet extends HttpServlet {
                     }
                 }
                 request.setAttribute("fecha", fecha);
+                request.setAttribute("fechaEntrega", fechaEntrega);
+                request.setAttribute("direccion", direccion);
+                request.setAttribute("remitente", remitente);
                 request.setAttribute("idCliente", idCliente);
                 request.setAttribute("cliente", cliente);
                 redireccion = "jsp/Ventas.jsp";
@@ -207,9 +206,13 @@ public class VentaServlet extends HttpServlet {
                 }
                 break;
             case "detalles":
+                SimpleDateFormat sdfe = new SimpleDateFormat("dd/MM/yyyy");
                 Venta venta = ventaBean.findVenta(Integer.parseInt(id));
                 request.setAttribute("idVenta", venta.getNumeroPedido());
                 request.setAttribute("fecha", sdf.format(venta.getFechaPedido()));
+                request.setAttribute("fechaEntrega", sdfe.format(venta.getFechaEstimadaEntrega()));
+                request.setAttribute("direccion", venta.getDireccion());
+                request.setAttribute("remitente", venta.getRemitente());
                 request.setAttribute("totalPedido", venta.getTotal());
                 request.setAttribute("cliente", venta.getCliente().getNombre() + " " + venta.getCliente().getApellidoUno() + 
                         " " + venta.getCliente().getApellidoDos());
@@ -307,7 +310,7 @@ public class VentaServlet extends HttpServlet {
         //return ventaJpaController.getTotalVentasCliente();
     }
     
-    private String validarGuardado(String fecha, String fechaEntrega, String cliente, String[] idProductos, String direccion, String remitente) {
+    private String validarGuardado(String fecha, String fechaEntrega, String cliente, String[] idProductos, String direccion, String remitente, String[] cantidades) {
         SimpleDateFormat sdfe = new SimpleDateFormat("dd/MM/yyyy");
         String error = "";
         if (fecha == null || fecha.isEmpty()) {
@@ -354,16 +357,24 @@ public class VentaServlet extends HttpServlet {
             }
         }
         if (idProductos == null || idProductos.length == 0) {
-            error = "Debe adicionar algún producto a la venta \n";
+            error += "Debe adicionar algún producto a la venta \n";
+        }else{
+            for (int i = 0; i < cantidades.length; i++) {
+                Inventario inventario = inventarioBean.getMax(Integer.valueOf(idProductos[i]));
+                if (Double.valueOf(cantidades[i]) > (inventario.getCantidadTotal()-inventario.getCantidadComprometida())) {
+                    error += "La cantidad del producto no debe ser superior a la registrada en el inventario \n";
+                }
+            }
         }
         return error;
     }
 
-    private String guardarVenta(String fecha, String cliente, String fechaEntrega, String[] idProductos, String[] valores, String[] cantidades, String direccion, String remitente) {
+    private String guardarVenta(String fecha, String fechaEntrega, String cliente, String[] idProductos, String[] valores, String[] cantidades, String direccion, String remitente) {
         SimpleDateFormat sdfe = new SimpleDateFormat("dd/MM/yyyy");
         String error = "";
         try {
             //CompraJpaController compraJpaController = (CompraJpaController) getServletContext().getAttribute("compraJpaController");
+            System.out.println(cliente);
             String[] llavePrimariaE = cliente.split(",");
             //EmpleadoJpaController empleadoJpaController = (EmpleadoJpaController) getServletContext().getAttribute("empleadoJpaController");
             Cliente c = clienteBean.findCliente(new PersonaPK(llavePrimariaE[1], TiposDocumento.valueOf(llavePrimariaE[0])));
