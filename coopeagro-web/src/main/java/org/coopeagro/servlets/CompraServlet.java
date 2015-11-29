@@ -11,12 +11,23 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.jms.JMSException;
+import javax.jms.ObjectMessage;
+import javax.jms.Queue;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueSender;
+import javax.jms.QueueSession;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.coopeagro.auxiliar.Transaccion;
 import org.coopeagro.ejb.AgricultorSessionBeanRemote;
 import org.coopeagro.ejb.CompraSessionBeanRemote;
 import org.coopeagro.ejb.DetalleCompraSessionBeanRemote;
@@ -58,6 +69,12 @@ public class CompraServlet extends HttpServlet {
     private ProductoSessionBeanRemote productoBean = null;
     @EJB
     private InventarioSessionBeanRemote inventarioBean = null;
+    
+    @Resource(mappedName = "jms/CoopeagroQueue")
+    private Queue coopeagroQueue;
+
+    @Resource(mappedName = "jms/CoopeagroQueueConnectionFactory")
+    private QueueConnectionFactory connectionFactory;
 
     public CompraServlet() {
         Properties props = new Properties();
@@ -421,6 +438,7 @@ public class CompraServlet extends HttpServlet {
             compra.setTotal(totalPedido);
             compraBean.edit(compra);
             //compraJpaController.edit(compra);
+            sendMessage(compra.getTotal(), compra.getAgricultor().getLlavePrimaria(), new PersonaPK("458", TiposDocumento.NIT));
         } catch (Exception ex) {
             error += "La compra no pudo ser guardada";
         }
@@ -492,6 +510,60 @@ public class CompraServlet extends HttpServlet {
         }
         out.println(    "</tbody>");
         out.println("</table>");
+    }
+    
+    private void sendMessage(double total, PersonaPK agricultor, PersonaPK cooperativa) {
+        QueueConnection connection = null;
+        QueueSession session = null;
+        QueueSender sender = null;
+        Transaccion transaccion = new Transaccion();
+        try {
+            connection = connectionFactory.createQueueConnection();
+            connection.start();
+            session = connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+            sender = session.createSender(coopeagroQueue);
+            ObjectMessage msg = session.createObjectMessage();
+//            transaccion.setPersonaDestino(agricultor);
+//            transaccion.setPersonaOrigen(cooperativa);
+//            transaccion.setTotal(total);
+            msg.setObject(transaccion);
+            msg.setDoubleProperty("total", total);
+            msg.setJMSReplyTo(coopeagroQueue);
+            /*TextMessage msg = session.createTextMessage();
+            msg.setText("Mensaje de prueba");
+            msg.setDoubleProperty("total", total);
+            msg.setStringProperty("RECIPIENT", "MDB");
+            msg.setJMSReplyTo(coopeagroQueue);*/
+            sender.send(msg);
+            //out.println("<h1>Message sent successfully</h1>");
+            System.out.println("Message sent successfully");
+        } catch (JMSException ex) {
+            Logger.getLogger(VentaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            //out.println("<h1>Sending message failed</h1>");
+            System.out.println("Sending message failed");
+        } finally {
+            if (sender != null) {
+                try {
+                    sender.close();
+                } catch (JMSException ex) {
+                    Logger.getLogger(VentaServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (session != null) {
+                try {
+                    session.close();
+                } catch (JMSException ex) {
+                    Logger.getLogger(VentaServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (JMSException ex) {
+                    Logger.getLogger(VentaServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 
     /**

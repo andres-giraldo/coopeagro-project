@@ -17,7 +17,16 @@ import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.jms.JMSException;
+import javax.jms.Queue;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueSender;
+import javax.jms.QueueSession;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -60,6 +69,12 @@ public class VentaServlet extends HttpServlet {
     private ProductoSessionBeanRemote productoBean = null;
     @EJB
     private InventarioSessionBeanRemote inventarioBean = null;
+    
+    @Resource(mappedName = "jms/CoopeagroQueue")
+    private Queue coopeagroQueue;
+
+    @Resource(mappedName = "jms/CoopeagroQueueConnectionFactory")
+    private QueueConnectionFactory connectionFactory;
 
     public VentaServlet() {
         Properties props = new Properties();
@@ -409,6 +424,7 @@ public class VentaServlet extends HttpServlet {
             venta.setTotal(totalPedido);
             ventaBean.edit(venta);
             //compraJpaController.edit(compra);
+            sendMessage();
         } catch (Exception ex) {
             error += "La venta no pudo ser guardada";
         }
@@ -481,6 +497,51 @@ public class VentaServlet extends HttpServlet {
         }
         out.println(    "</tbody>");
         out.println("</table>");
+    }
+    
+    private void sendMessage() {
+        QueueConnection connection = null;
+        QueueSession session = null;
+        QueueSender sender = null;
+        try {
+            connection = connectionFactory.createQueueConnection();
+            connection.start();
+            session = connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+            sender = session.createSender(coopeagroQueue);
+            TextMessage msg = session.createTextMessage();
+            msg.setText("Mensaje de prueba");
+            msg.setStringProperty("RECIPIENT", "MDB");
+            msg.setJMSReplyTo(coopeagroQueue);
+            sender.send(msg);
+            //out.println("<h1>Message sent successfully</h1>");
+            System.out.println("Message sent successfully");
+        } catch (JMSException ex) {
+            Logger.getLogger(VentaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            //out.println("<h1>Sending message failed</h1>");
+            System.out.println("Sending message failed");
+        } finally {
+            if (sender != null) {
+                try {
+                    sender.close();
+                } catch (JMSException ex) {
+                    Logger.getLogger(VentaServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (session != null) {
+                try {
+                    session.close();
+                } catch (JMSException ex) {
+                    Logger.getLogger(VentaServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (JMSException ex) {
+                    Logger.getLogger(VentaServlet.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
     
     /*private List<Object[]> TotalVentasEmpleado(){
